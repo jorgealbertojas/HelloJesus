@@ -10,7 +10,7 @@
     <!-- String Tab Fragment  -->
     <string name="category_bible">Bible</string>
     <string name="category_music">Music</string>
-    <string name="category_interpretation">Interp</string>
+    <string name="category_interpretation">Ask</string>
     <string name="category_exercise">Exercise</string>
     <string name="category_write">Write</string>
 

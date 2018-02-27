@@ -29,14 +29,14 @@ import java.util.List;
  * Created by jorge on 23/02/2018.
  */
 
-public class MusicFragment  extends Fragment implements TopicContract.View {
+public class ExerciseFragment extends Fragment implements TopicContract.View {
 
     public static String EXTRA_PRODUCT = "PRODUCT";
     public static String EXTRA_BUNDLE_PRODUCT = "BUNDLE_PRODUCT";
 
     private TopicContract.UserActionsListener mActionsListener;
 
-    private MusicFragment.TopicsAdapter mListAdapter;
+    private ExerciseFragment.TopicsAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -47,18 +47,18 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     private static List<Integer> mIdTopics;
 
-    public MusicFragment() {
+    public ExerciseFragment() {
     }
 
-    public static BibleFragment newInstance(List<Integer> topicList) {
+    public static ExerciseFragment newInstance(List<Integer> topicList) {
         mIdTopics = topicList;
-        return new BibleFragment();
+        return new ExerciseFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListAdapter = new MusicFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
+        mListAdapter = new ExerciseFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
     }
 
@@ -127,12 +127,12 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     @Override
     public void showTopicMusic(List<Topic> topics) {
-        mListAdapter.replaceData(topics);
+
     }
 
     @Override
     public void showTopicExercise(List<Topic> topics) {
-
+        mListAdapter.replaceData(topics);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
 
 
-    private static class TopicsAdapter extends RecyclerView.Adapter<MusicFragment.TopicsAdapter.ViewHolder> {
+    private static class TopicsAdapter extends RecyclerView.Adapter<ExerciseFragment.TopicsAdapter.ViewHolder> {
 
         private List<Topic> mTopics;
         private BibleFragment.ItemListener mItemListener;
@@ -164,16 +164,16 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
         }
 
         @Override
-        public MusicFragment.TopicsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ExerciseFragment.TopicsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View noteView = inflater.inflate(R.layout.item_topic, parent, false);
 
-            return new MusicFragment.TopicsAdapter.ViewHolder(noteView, mItemListener);
+            return new ExerciseFragment.TopicsAdapter.ViewHolder(noteView, mItemListener);
         }
 
         @Override
-        public void onBindViewHolder(MusicFragment.TopicsAdapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(ExerciseFragment.TopicsAdapter.ViewHolder viewHolder, int position) {
             Topic topic = mTopics.get(position);
 
             viewHolder.topicName.setText(topic.getName());
@@ -245,3 +245,4 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 }
+

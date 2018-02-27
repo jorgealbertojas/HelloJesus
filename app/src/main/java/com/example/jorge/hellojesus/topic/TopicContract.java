@@ -15,9 +15,16 @@ public interface TopicContract {
 
     interface View {
 
-        void setLoading(boolean isActive);
 
-        void showTopic(List<Topic> topics);
+        void showTopicBible(List<Topic> topics);
+
+        void showTopicMusic(List<Topic> topics);
+
+        void showTopicExercise(List<Topic> topics);
+
+        void showTopicQuestion(List<Topic> topics);
+
+
 
         void showAllTopics();
     }
@@ -27,5 +34,6 @@ public interface TopicContract {
         void loadingTopic();
 
         void openDetail();
+
     }
 }

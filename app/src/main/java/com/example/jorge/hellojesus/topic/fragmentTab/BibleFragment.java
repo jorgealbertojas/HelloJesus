@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,10 +47,13 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     private TopicContract.UserActionsListener mPresenter;
 
+    private static List<Integer> mIdTopics;
+
     public BibleFragment() {
     }
 
-    public static BibleFragment newInstance() {
+    public static BibleFragment newInstance(List<Integer> topicList) {
+        mIdTopics = topicList;
         return new BibleFragment();
     }
 
@@ -90,7 +94,16 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         });
 
 
-
+        if (savedInstanceState== null){
+            initRecyclerView(root);
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+        }else{
+            initRecyclerView(root);
+            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+        }
 
 
 
@@ -109,24 +122,24 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     };
 
     @Override
-    public void setLoading(final boolean isActive) {
-        if (getView() == null) {
-            return;
-        }
-        final SwipeRefreshLayout srl =
-                (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
+    public void showTopicBible(List<Topic> topics) {
+        mListAdapter.replaceData(topics);
 
-        srl.post(new Runnable() {
-            @Override
-            public void run() {
-                srl.setRefreshing(isActive);
-            }
-        });
     }
 
     @Override
-    public void showTopic(List<Topic> productList) {
-        mListAdapter.replaceData(productList);
+    public void showTopicMusic(List<Topic> topics) {
+
+    }
+
+    @Override
+    public void showTopicExercise(List<Topic> topics) {
+
+    }
+
+    @Override
+    public void showTopicQuestion(List<Topic> topics) {
+
     }
 
     @Override
@@ -147,8 +160,8 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         private List<Topic> mTopics;
         private BibleFragment.ItemListener mItemListener;
 
-        public TopicsAdapter(List<Topic> products, BibleFragment.ItemListener itemListener) {
-            setList(products);
+        public TopicsAdapter(List<Topic> topicList, BibleFragment.ItemListener itemListener) {
+            setList(topicList);
             mItemListener = itemListener;
         }
 
@@ -163,15 +176,9 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
         @Override
         public void onBindViewHolder(BibleFragment.TopicsAdapter.ViewHolder viewHolder, int position) {
-            Topic product = mTopics.get(position);
+            Topic topic = mTopics.get(position);
 
-          /*  Picasso.with(viewHolder.productImage.getContext())
-                    .load(product.getUrl_image_small())
-                    .fit().centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
-                    .into(viewHolder.productImage);*/
-
-            viewHolder.productName.setText(product.getName());
+            viewHolder.topicName.setText(topic.getName());
         }
 
         public void replaceData(List<Topic> notes) {
@@ -194,15 +201,14 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            public ImageView productImage;
-            public TextView productName;
+            public TextView topicName;
             private BibleFragment.ItemListener mItemListener;
 
             public ViewHolder(View itemView, BibleFragment.ItemListener listener) {
                 super(itemView);
                 mItemListener = listener;
-                // productName= (TextView) itemView.findViewById(R.id.tv_topic_name);
-                //productImage = (ImageView) itemView.findViewById(R.id.im_product_image);
+                topicName = (TextView) itemView.findViewById(R.id.tv_topic_name);
+
                 itemView.setOnClickListener(this);
             }
 
@@ -229,6 +235,16 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     public interface ItemListener {
 
         void onTopicClick(Topic clickedNote);
+    }
+
+    private void initRecyclerView(View root){
+        mRecyclerView= (RecyclerView) root.findViewById(R.id.rv_topic_list);
+        mRecyclerView.setAdapter(mListAdapter);
+
+        int numColumns = 1;
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 }
 

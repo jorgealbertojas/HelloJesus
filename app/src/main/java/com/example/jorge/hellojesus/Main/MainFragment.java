@@ -18,8 +18,10 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +33,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MainFragment extends Fragment implements MainContract.View {
 
-    private static String EXTRA_MAIN = "EXTRA_MAIN";
-    private static String EXTRA_BUNDLE_MAIN = "EXTRA_BUNDLE_MAIN";
+    public static String EXTRA_MAIN = "EXTRA_MAIN";
+    public static String EXTRA_BUNDLE_MAIN = "EXTRA_BUNDLE_MAIN";
 
 
     private MainContract.UserActionsListener mPresenter;
@@ -41,6 +43,8 @@ public class MainFragment extends Fragment implements MainContract.View {
     private RecyclerView mRecyclerView;
 
     private Main mMain;
+
+    private int mPosition = 0;
 
 
     public MainFragment() {
@@ -122,11 +126,11 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void openViewTopic(Main main) {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
+        List<Integer> ii = main.getTopics();
+
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_MAIN, main);
-
+        bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
         intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
-
         startActivity(intent);
 
     }

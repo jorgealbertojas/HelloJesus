@@ -1,12 +1,13 @@
 package com.example.jorge.hellojesus.data.onLine.topic.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jorge on 21/02/2018.
  */
 
-public class Topic {
+public class Topic implements Serializable {
 
     private int id;
     private String name;

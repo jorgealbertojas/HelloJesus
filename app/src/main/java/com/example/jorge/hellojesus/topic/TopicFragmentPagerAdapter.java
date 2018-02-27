@@ -5,12 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment;
-import com.example.jorge.hellojesus.topic.fragmentTab.ExcerciseFragemnt;
-import com.example.jorge.hellojesus.topic.fragmentTab.InterpretationFragment;
+import com.example.jorge.hellojesus.topic.fragmentTab.ExerciseFragment;
+
 import com.example.jorge.hellojesus.topic.fragmentTab.MusicFragment;
-import com.example.jorge.hellojesus.topic.fragmentTab.WriteFragment;
+import com.example.jorge.hellojesus.topic.fragmentTab.QuestionFragment;
 
 /**
  * Created by jorge on 23/02/2018.
@@ -33,38 +32,30 @@ public class TopicFragmentPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 1){
             return new MusicFragment();
         } else if (position == 2){
-            return new ExcerciseFragemnt();
+            return new ExerciseFragment();
         } else if (position == 3){
-            return new InterpretationFragment();
+            return new QuestionFragment();
         } else {
-            return new WriteFragment();
+            return null;
         }
+
+
     }
 
     // This determines the number of tabs
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
-    // This determines the title for each tab
-    @Override
-    public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
-        switch (position) {
-            case 0:
-                return mContext.getString(R.string.category_bible);
-            case 1:
-                return mContext.getString(R.string.category_music);
-            case 2:
-                return mContext.getString(R.string.category_interpretation);
-            case 3:
-                return mContext.getString(R.string.category_exercise);
-            case 4:
-                return mContext.getString(R.string.category_write);
-            default:
-                return null;
-        }
-    }
+
+
+
+
+
+
+
+
+
 
 }
