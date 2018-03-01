@@ -1,4 +1,4 @@
-package com.example.jorge.hellojesus.Main;
+package com.example.jorge.hellojesus.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 
 import java.io.Serializable;

@@ -17,13 +17,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.content.ContentActivity;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
 import com.example.jorge.hellojesus.topic.TopicPresenter;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +36,9 @@ import java.util.List;
 
 public class BibleFragment extends Fragment implements TopicContract.View {
 
-    public static String EXTRA_PRODUCT = "PRODUCT";
-    public static String EXTRA_BUNDLE_PRODUCT = "BUNDLE_PRODUCT";
+    public static String EXTRA_CONTENT = "CONTENT";
+    public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT" +
+            "";
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -115,10 +119,11 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     BibleFragment.ItemListener mItemListener = new BibleFragment.ItemListener() {
         @Override
-        public void onTopicClick(Topic product) {
-
+        public void onTopicClick(List<Content> clickedNote) {
             mActionsListener.openDetail();
         }
+
+
     };
 
     @Override
@@ -215,16 +220,16 @@ public class BibleFragment extends Fragment implements TopicContract.View {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                //   Topic product = getItem(position);
-                //   mItemListener.onTopicClick(product);
+                List<Content> contents = getItem(position).getContent();
+                mItemListener.onTopicClick(contents);
 
-                //   Intent intent = new Intent(v.getContext(), ShoppingActivity.class);
+                Intent intent = new Intent(v.getContext(), ContentActivity.class);
 
-                //   Bundle bundle = new Bundle();
-                //   bundle.putSerializable(EXTRA_PRODUCT, product );
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
 
-                //   intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
-                //   v.getContext().startActivity(intent);
+                intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                v.getContext().startActivity(intent);
 
 
 
@@ -234,7 +239,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     public interface ItemListener {
 
-        void onTopicClick(Topic clickedNote);
+        void onTopicClick(List<Content> clickedNote);
     }
 
     private void initRecyclerView(View root){

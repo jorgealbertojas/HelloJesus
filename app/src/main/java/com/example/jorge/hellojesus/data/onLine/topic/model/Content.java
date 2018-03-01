@@ -1,17 +1,18 @@
 package com.example.jorge.hellojesus.data.onLine.topic.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jorge on 21/02/2018.
  */
 
-public class Content {
+public class Content implements Serializable{
     private int id_content;
     private String content_english;
     private String content_portuguese;
     private int time;
-    private String corret_option;
+    private String correct_option;
     private List<String> stringList;
 
 
@@ -48,11 +49,11 @@ public class Content {
     }
 
     public String getCorret_option() {
-        return corret_option;
+        return correct_option;
     }
 
     public void setCorret_option(String corret_option) {
-        this.corret_option = corret_option;
+        this.correct_option = corret_option;
     }
 }
 

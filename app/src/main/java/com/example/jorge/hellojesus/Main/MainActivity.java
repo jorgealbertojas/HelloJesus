@@ -1,4 +1,4 @@
-package com.example.jorge.hellojesus.Main;
+package com.example.jorge.hellojesus.main;
 
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
+
+
 
         initFragment(MainFragment.newInstance());
 

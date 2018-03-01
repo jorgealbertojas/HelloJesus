@@ -1,10 +1,9 @@
-package com.example.jorge.hellojesus.Main;
+package com.example.jorge.hellojesus.main;
 
 import android.support.annotation.NonNull;
 
 import com.example.jorge.hellojesus.BasePresenter;
 import com.example.jorge.hellojesus.BaseView;
-import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 
 import java.util.List;

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
@@ -113,10 +114,11 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     BibleFragment.ItemListener mItemListener = new BibleFragment.ItemListener() {
         @Override
-        public void onTopicClick(Topic product) {
-
+        public void onTopicClick(List<Content> clickedNote) {
             mActionsListener.openDetail();
         }
+
+
     };
 
     @Override

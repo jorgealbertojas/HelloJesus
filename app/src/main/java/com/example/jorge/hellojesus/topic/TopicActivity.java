@@ -1,28 +1,17 @@
 package com.example.jorge.hellojesus.topic;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
-import com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment;
-import com.example.jorge.hellojesus.util.ActivityUtils;
-import com.example.jorge.hellojesus.util.Common;
 
 import java.util.List;
 
-import static com.example.jorge.hellojesus.Main.MainFragment.EXTRA_BUNDLE_MAIN;
-import static com.example.jorge.hellojesus.Main.MainFragment.EXTRA_MAIN;
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_BUNDLE_MAIN;
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_MAIN;
 
 public class TopicActivity extends AppCompatActivity {
 

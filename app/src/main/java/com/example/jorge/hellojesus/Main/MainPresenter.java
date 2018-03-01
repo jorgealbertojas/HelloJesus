@@ -1,12 +1,10 @@
-package com.example.jorge.hellojesus.Main;
+package com.example.jorge.hellojesus.main;
 
 import android.support.annotation.NonNull;
 
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceApi;
 import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
-
-import java.util.List;
 
 /**
  * Created by jorge on 22/02/2018.

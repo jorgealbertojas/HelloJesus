@@ -6,13 +6,18 @@
     <string name="item_home">Home</string>
     <string name="item_setting">Setting</string>
 
-
     <!-- String Tab Fragment  -->
     <string name="category_bible">Bible</string>
     <string name="category_music">Music</string>
     <string name="category_interpretation">Ask</string>
     <string name="category_exercise">Exercise</string>
     <string name="category_write">Write</string>
+
+    <!-- String For Button  -->
+    <string name="button_save">Salve</string>
+    <string name="button_explanation">Explanation</string>
+    <string name="button_images">Images</string>
+
 
 
 </resources>
