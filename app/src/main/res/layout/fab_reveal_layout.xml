@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fabContainerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
     android:background="#ff1e00"
     android:orientation="horizontal"
-    android:visibility="gone">
+    android:visibility="invisible">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,17 +21,20 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
                 android:padding="2dp">
 
-                <ImageView
-                    android:id="@+id/fab_back30"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="10dp"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_collections_white_24dp" />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin_open"
+                    android:src="@drawable/ic_collections_white_24dp"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/NoAccent"
+                    app:fabSize="normal" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,17 +48,19 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
                 android:padding="2dp">
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_explanation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin_open"
+                    android:src="@drawable/ic_g_translate_white_24dp"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/NoAccent"
+                    app:fabSize="normal" />
 
-                <ImageView
-                    android:id="@+id/fab_back5"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="10dp"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_translate_white_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,29 +74,39 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
                 android:padding="2dp">
 
-                <ImageView
-                    android:id="@+id/fab_back"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="10dp"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_save_white_24dp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_translate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_margin_open"
+                    android:src="@drawable/ic_translate_white_24dp"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/NoAccent"
+                    app:fabSize="normal" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:elevation="8dp"
-                    android:text="@string/button_save"
+                    android:text="@string/button_translate"
                     android:textColor="#fff" />
             </FrameLayout>
 
 
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/tv_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:text="444 ffff"
+            android:textSize="20sp"
+            android:textColor="#fff" />
     </LinearLayout>
 </LinearLayout>

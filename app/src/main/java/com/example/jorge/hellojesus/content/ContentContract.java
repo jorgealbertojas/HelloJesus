@@ -1,8 +1,10 @@
 package com.example.jorge.hellojesus.content;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.animation.Animation;
+import android.widget.TextView;
 
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
@@ -31,6 +33,16 @@ public interface ContentContract {
             void ShowFabButton(FloatingActionButton floatingActionButton, Animation animation);
 
             void HideFabButton(FloatingActionButton floatingActionButton, Animation animation);
+
+            Boolean isActiveFabButton(FloatingActionButton floatingActionButton);
+
+            void openBrowserImage(Context context, TextView word);
+
+            void openBrowserExplanation(Context context, TextView word);
+
+            void openBrowserTranslate(Context context, TextView word);
+
+
 
             void openDetail();
 

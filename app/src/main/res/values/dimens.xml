@@ -8,6 +8,7 @@
     <dimen name="activity_horizontal_margin_content">4dp</dimen>
 
     <dimen name="fab_margin">24dp</dimen>
+    <dimen name="fab_margin_open">16dp</dimen>
     <dimen name="fab_margin_content">6dp</dimen>
 
     <dimen name="tab_max_width">200dp</dimen>
