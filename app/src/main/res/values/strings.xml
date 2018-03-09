@@ -18,6 +18,12 @@
     <string name="button_explanation">Explanation</string>
     <string name="button_images">Images</string>
 
+    <!-- String For Play Audio  -->
+    <string name="notification_text">Control for Audio!</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="restart">Restart</string>
+
 
 
 </resources>

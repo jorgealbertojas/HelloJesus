@@ -14,11 +14,13 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_BUNDLE_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
-public class ContentActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity  {
 
     private List<Content> mContents;
     private Bundle mBundle;
+    private int mTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +29,11 @@ public class ContentActivity extends AppCompatActivity {
 
         mBundle = getIntent().getBundleExtra(EXTRA_BUNDLE_CONTENT);
         mContents = (List<Content>) mBundle.getSerializable(EXTRA_CONTENT);
+        mTime = (int) mBundle.getInt(EXTRA_CONTENT_TIME);
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(ContentFragment.newInstance(mContents));
+                initFragment(ContentFragment.newInstance(mContents,mTime));
             }
         }
 

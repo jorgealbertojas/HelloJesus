@@ -22,6 +22,7 @@ import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.main.MainContract;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by jorge on 27/02/2018.
@@ -38,7 +39,74 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
     }
 
     @Override
-    public void loadingContent(List<Content> contents) {
+    public void loadingContent(List<Content> contents,int mTimeLast) {
+
+        long[] listTime = new long[contents.size()];
+
+        int second, minute, sum = 0;
+        int secondNext, minuteNext, sumNext = 0;
+
+        for (int i = 0; i < contents.size() ; i++){
+
+
+            if (i < (contents.size() - 1)) {
+
+                if (contents.get(i + 1).getTime() > 59){
+                    secondNext = Integer.parseInt(Integer.toString(contents.get(i + 1).getTime()).substring(1));
+                    minuteNext = 60 * Integer.parseInt(Integer.toString(contents.get(i + 1).getTime()).substring(0,1));
+                    sumNext = 1000 * (minuteNext + secondNext);
+                }else{
+                    secondNext = 1000 * (contents.get(i + 1).getTime());
+                    minuteNext = 0;
+                    sumNext = minuteNext + secondNext;
+                }
+
+                if (contents.get(i).getTime() > 59){
+                    second = Integer.parseInt(Integer.toString(contents.get(i).getTime()).substring(1));
+                    minute = 60 * Integer.parseInt(Integer.toString(contents.get(i).getTime()).substring(0,1));
+                    sum = 1000 * (minute + second);
+                }else{
+                    second = 1000 * (contents.get(i).getTime());
+                    minute = 0;
+                    sum = minute + second;
+                }
+
+
+                 listTime[i] = sumNext - sum;
+            }else{
+
+                if (mTimeLast > 59){
+                    secondNext = Integer.parseInt(Integer.toString(mTimeLast).substring(1));
+                    minuteNext = 60 * Integer.parseInt(Integer.toString(mTimeLast).substring(0,1));
+                    sumNext = 1000 * (minuteNext + secondNext);
+                }else{
+                    secondNext = 1000 * (mTimeLast);
+                    minuteNext = 0;
+                    sumNext = minuteNext + secondNext;
+                }
+
+
+                if (contents.get(i).getTime() > 59){
+                    second = Integer.parseInt(Integer.toString(contents.get(i).getTime()).substring(1));
+                    minute = 60 * Integer.parseInt(Integer.toString(contents.get(i).getTime()).substring(0,1));
+                    sum = 1000 * (minute + second);
+                }else{
+                    second = 1000 * (contents.get(i).getTime());
+                    minute = 0;
+                    sum = minute + second;
+                }
+                if (sumNext > sum) {
+                    listTime[i] = sumNext - sum;
+                }
+            }
+
+
+
+
+        }
+
+        mContentContractView.setListTime(listTime);
+
         mContentContractView.showContent(contents);
 
 
@@ -127,6 +195,56 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
 
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl((Activity) context, Uri.parse(url));
+    }
+
+    @Override
+    public void initAudio() {
+
+    }
+
+    @Override
+    public void playAudio() {
+
+    }
+
+    @Override
+    public void pauseAudio() {
+
+    }
+
+    @Override
+    public void stopAudio() {
+
+    }
+
+    @Override
+    public void back5Audio() {
+
+    }
+
+    @Override
+    public void back30Audio() {
+
+    }
+
+    @Override
+    public void backAudio() {
+
+    }
+
+    @Override
+    public void next30Audio() {
+
+    }
+
+    @Override
+    public void showNotification() {
+
+    }
+
+    @Override
+    public void releasePlayer() {
+
     }
 
 

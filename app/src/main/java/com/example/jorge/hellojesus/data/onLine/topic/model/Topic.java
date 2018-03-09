@@ -13,6 +13,7 @@ public class Topic implements Serializable {
     private String name;
     private String audio;
     private String type;
+    private String time;
     private String youtube;
     private String glossary;
     private List<Content> content;
@@ -71,6 +72,15 @@ public class Topic implements Serializable {
 
     public void setContent(List<Content> content) {
         this.content = content;
+    }
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
 

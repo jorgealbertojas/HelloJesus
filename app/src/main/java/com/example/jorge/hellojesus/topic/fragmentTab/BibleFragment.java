@@ -36,6 +36,7 @@ import java.util.List;
 
 public class BibleFragment extends Fragment implements TopicContract.View {
 
+    public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
     public static String EXTRA_CONTENT = "CONTENT";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT" +
             "";
@@ -221,13 +222,14 @@ public class BibleFragment extends Fragment implements TopicContract.View {
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 List<Content> contents = getItem(position).getContent();
+                int time = Integer.parseInt(getItem(position).getTime());
                 mItemListener.onTopicClick(contents);
 
                 Intent intent = new Intent(v.getContext(), ContentActivity.class);
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
-
+                bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                 intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                 v.getContext().startActivity(intent);
 

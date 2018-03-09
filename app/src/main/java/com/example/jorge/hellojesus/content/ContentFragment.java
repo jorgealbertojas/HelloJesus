@@ -1,34 +1,53 @@
 package com.example.jorge.hellojesus.content;
 
+import android.Manifest;
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.session.MediaButtonReceiver;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,21 +60,54 @@ import com.example.jorge.hellojesus.main.MainFragment;
 import com.example.jorge.hellojesus.main.MainPresenter;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.util.Common;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import jp.shts.android.storiesprogressview.StoriesProgressView;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 27/02/2018.
  */
 
-public class ContentFragment extends Fragment implements ContentContract.View {
+public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, StoriesProgressView.StoriesListener {
 
-    public static String EXTRA_MAIN = "EXTRA_MAIN";
-    public static String EXTRA_BUNDLE_MAIN = "EXTRA_BUNDLE_MAIN";
+    public static final String MESSAGE_PROGRESS = "message_progress";
+    public static final String BASE_STORAGE =  Environment.DIRECTORY_DOWNLOADS;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
+    private SimpleExoPlayer mExoPlayerAudio;
+    private Handler durationHandler = new Handler();
+    private SeekBar seekbar;
+
+    private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
+
+    private SimpleExoPlayerView mPlayerView;
+    private MediaSessionCompat mMediaSession;
+    private PlaybackStateCompat.Builder mStateBuilder;
+    private NotificationManager mNotificationManager;
 
 
     private static ContentContract.UserActionsListener mPresenter;
@@ -64,8 +116,9 @@ public class ContentFragment extends Fragment implements ContentContract.View {
     private RecyclerView mRecyclerView;
 
     public static List<Content> mContents;
+    public static int mTime;
 
-    private int mPosition = 0;
+    private static final int PROGRESS_COUNT = 18;
 
     private static Animation mShowFab;
     private static Animation mHideFab;
@@ -84,11 +137,47 @@ public class ContentFragment extends Fragment implements ContentContract.View {
 
     private static TextView mWord;
 
+    private StoriesProgressView storiesProgressView;
+
+
+    private int counter = 0;
+
+    private ProgressBar mProgressBar;
+    private ObjectAnimator mAnimation;
+
+    private long[] durations;
+
+
+    long pressTime = 0;
+    long limit = 5000;
+
+    private int position = 0;
+
+    int second;
+
 
     public ContentFragment() {
     }
 
-    public static ContentFragment newInstance(List<Content> contents) {
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    pressTime = System.currentTimeMillis();
+                    storiesProgressView.pause();
+                    return false;
+                case MotionEvent.ACTION_UP:
+                    long now = System.currentTimeMillis();
+                    storiesProgressView.resume();
+                    return limit < now - pressTime;
+            }
+            return false;
+        }
+    };
+
+    public static ContentFragment newInstance(List<Content> contents, int time) {
+        mTime = time;
         mContents = contents;
         return new ContentFragment();
     }
@@ -103,15 +192,10 @@ public class ContentFragment extends Fragment implements ContentContract.View {
     }
 
 
-
-
-
-
-
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadingContent(mContents);
+        mPresenter.loadingContent(mContents, second);
     }
 
 
@@ -123,7 +207,7 @@ public class ContentFragment extends Fragment implements ContentContract.View {
         mHideFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_hide);
         mRotateFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_rotate);
 
-
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         View root = inflater.inflate(R.layout.fragment_content, container, false);
 
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
@@ -133,11 +217,17 @@ public class ContentFragment extends Fragment implements ContentContract.View {
         mFabExplanation = (FloatingActionButton) root.findViewById(R.id.fab_explanation);
         mFabTranslate = (FloatingActionButton) root.findViewById(R.id.fab_translate);
 
-
+        // Initialize the player view.
+        mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
+        seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
+        mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         mWord = (TextView) root.findViewById(R.id.tv_word);
 
-       // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
 
+
+
+
+       // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
 
 
 
@@ -151,20 +241,17 @@ public class ContentFragment extends Fragment implements ContentContract.View {
             @Override
             public void onRefresh() {
 
-                mPresenter.loadingContent(mContents);
+                mPresenter.loadingContent(mContents,second);
             }
         });
 
 
-        // Set up floating action button
-   //     FloatingActionButton fab =
-       //         (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
 
-        //mFloatingActionButton.setImageResource(R.drawable.ic_chevron_right_white_24dp);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleFabMenu();
+                mPlayerView.showController();
 
 
 
@@ -199,9 +286,18 @@ public class ContentFragment extends Fragment implements ContentContract.View {
         });
 
 
-        mPresenter.loadingContent(mContents);
 
         initRecyclerView(root);
+
+        requestPermission();
+        initializeMediaSession();
+        initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + "Mattew_1.mp3"));
+
+
+        mPresenter.loadingContent(mContents, mTime);
+
+        showAnimation();
+        showProgress(root);
 
 
         return root;
@@ -283,8 +379,75 @@ public class ContentFragment extends Fragment implements ContentContract.View {
 
 
 
+    /**
+     * Reset Session the Audio and the Video
+     */
+    private void resetSession() {
+
+        if (mExoPlayerAudio != null) {
+            mExoPlayerAudio.stop();
+        }
+
+        mExoPlayerAudio = null;
+
+    }
+
+    /**
+     * Shows Media Style notification, with actions that depend on the current MediaSession
+     * PlaybackState.
+     */
+    private void showNotification(PlaybackStateCompat state) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+
+        int icon;
+        String play_pause;
+        if(state.getState() == PlaybackStateCompat.STATE_PLAYING){
+            icon = R.drawable.exo_controls_pause;
+            play_pause = getString(R.string.pause);
+        } else {
+            icon = R.drawable.exo_controls_play;
+            play_pause = getString(R.string.play);
+        }
 
 
+        NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
+                icon, play_pause,
+                MediaButtonReceiver.buildMediaButtonPendingIntent(this.getActivity(),
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE));
+
+        NotificationCompat.Action restartAction = new android.support.v4.app.NotificationCompat
+                .Action(R.drawable.exo_controls_previous, getString(R.string.restart),
+                MediaButtonReceiver.buildMediaButtonPendingIntent
+                        (this.getActivity(), PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
+
+        PendingIntent contentPendingIntent = PendingIntent.getActivity
+                (this.getActivity(), 0, new Intent(this.getActivity(), ContentActivity.class), 0);
+
+
+        builder.setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notification_text))
+                .setContentIntent(contentPendingIntent)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .addAction(restartAction)
+                .addAction(playPauseAction)
+                .setStyle(new NotificationCompat.MediaStyle()
+                        .setMediaSession(mMediaSession.getSessionToken())
+                        .setShowActionsInCompactView(0,1));
+
+        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, builder.build());
+
+
+    }
+
+    /**
+     * Request Permission download for the user .
+     */
+    private void requestPermission(){
+
+        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
+    }
 
     @Override
     public void showContent(List<Content> contents) {
@@ -292,9 +455,233 @@ public class ContentFragment extends Fragment implements ContentContract.View {
     }
 
     @Override
+    public void showProgress(View root) {
+        storiesProgressView = (StoriesProgressView) root.findViewById(R.id.stories);
+        storiesProgressView.setStoriesCount(PROGRESS_COUNT);
+        storiesProgressView.setStoriesCountWithDurations(durations);
+        storiesProgressView.animate().translationX(20);
+        storiesProgressView.setStoriesListener(this);
+        storiesProgressView.startStories();
+    }
+
+    @Override
+    public void showAnimation() {
+        mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
+        mAnimation.setDuration (durations[position]); //in milliseconds
+        mAnimation.setInterpolator (new DecelerateInterpolator());
+        mAnimation.start ();
+    }
+
+    @Override
     public void showAllContent() {
 
     }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                    mExoPlayerAudio.getCurrentPosition(), 1f);
+        } else if((playbackState == ExoPlayer.STATE_READY)){
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayerAudio.getCurrentPosition(), 1f);
+        }
+        mMediaSession.setPlaybackState(mStateBuilder.build());
+      //  showNotification(mStateBuilder.build());
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
+    }
+
+    /**
+     * Initializes the Media Session to be enabled with media buttons, transport controls, callbacks
+     * and media controller.
+     */
+    @Override
+    public void initializeMediaSession() {
+
+        // Create a MediaSessionCompat.
+        mMediaSession = new MediaSessionCompat(this.getActivity(), "BEBETO");
+
+        // Enable callbacks from MediaButtons and TransportControls.
+        mMediaSession.setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        // Do not let MediaButtons restart the player when the app is not visible.
+        mMediaSession.setMediaButtonReceiver(null);
+
+        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
+        mStateBuilder = new PlaybackStateCompat.Builder()
+                .setActions(
+                        PlaybackStateCompat.ACTION_PLAY |
+                                PlaybackStateCompat.ACTION_PAUSE |
+                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+                                PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
+
+        mMediaSession.setPlaybackState(mStateBuilder.build());
+
+
+        // MySessionCallback has methods that handle callbacks from a media controller.
+        mMediaSession.setCallback(new MySessionCallback());
+
+        // Start the Media Session since the activity is active.
+        mMediaSession.setActive(true);
+
+    }
+
+    /**
+     * Initialize ExoPlayer.
+     */
+    @Override
+    public void initializePlayer(Uri mediaUriAudio) {
+        if (mExoPlayerAudio == null) {
+
+            /**
+             * Create Audio.
+             */
+            // Create an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayerAudio = ExoPlayerFactory.newSimpleInstance(this.getActivity(), trackSelector, loadControl);
+
+
+            mPlayerView.setPlayer(mExoPlayerAudio);
+
+            // Set the ExoPlayer.EventListener to this activity.
+            mExoPlayerAudio.addListener(this);
+
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(this.getActivity(), "ClassicalMusicQuiz");
+            MediaSource mediaSourceAudio = new ExtractorMediaSource(mediaUriAudio, new DefaultDataSourceFactory(
+                    this.getActivity(), userAgent), new DefaultExtractorsFactory(), null,null);
+
+
+            mExoPlayerAudio.prepare(mediaSourceAudio);
+
+
+            durationHandler.postDelayed(updateSeekBarTime, 1);
+            mExoPlayerAudio.setPlayWhenReady(true);
+
+        }
+    }
+
+    @Override
+    public void setListTime(long[] listTime) {
+
+            durations = listTime;
+
+
+    }
+
+    /**
+     * Control the time for Put TXTs in TextView with this information.
+     */
+    private Runnable updateSeekBarTime = new Runnable() {
+        public void run() {
+            if (mExoPlayerAudio != null) {
+                //get current position
+                mTimeElapsed = mExoPlayerAudio.getCurrentPosition();
+                mTimeLast = mExoPlayerAudio.getDuration();
+
+                double timeRemaining = mFinalTime - mTimeElapsed;
+                String second = Float.toString(1000 * (-1 * TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining)));
+
+
+                //repeat yourself that again in 100 milliseconds
+                durationHandler.postDelayed(this, 100);
+            }
+        }
+    };
+
+    /**
+     * Release ExoPlayer.
+     */
+    private void releasePlayer() {
+        mNotificationManager.cancelAll();
+        mExoPlayerAudio.stop();
+        mExoPlayerAudio.release();
+        mExoPlayerAudio = null;
+
+    }
+
+    @Override
+    public void onNext() {
+        mProgressBar.clearAnimation();
+        position ++;
+        mRecyclerView.scrollToPosition(position);
+        showAnimation();
+
+    }
+
+    @Override
+    public void onPrev() {
+        if ((counter - 1) < 0) return;
+
+    }
+
+    @Override
+    public void onComplete() {
+
+    }
+
+    /**
+     * Media Session Callbacks, where all external clients control the player.
+     */
+    private class MySessionCallback extends MediaSessionCompat.Callback {
+        @Override
+        public void onPlay() {
+            mExoPlayerAudio.setPlayWhenReady(true);
+
+        }
+
+        @Override
+        public void onPause() {
+            mExoPlayerAudio.setPlayWhenReady(false);
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            mExoPlayerAudio.seekTo(0);
+        }
+    }
+
+    /**
+     * Broadcast Receiver registered to receive the MEDIA_BUTTON intent coming from clients.
+     */
+    public class MediaReceiver extends BroadcastReceiver {
+
+        public MediaReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            MediaButtonReceiver.handleIntent(mMediaSession, intent);
+        }
+    }
+
 
 
     private static class ContentAdapter extends RecyclerView.Adapter<ContentFragment.ContentAdapter.ViewHolder> {
@@ -310,6 +697,10 @@ public class ContentFragment extends Fragment implements ContentContract.View {
         @Override
         public ContentFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
+
+
+
+
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View noteView = inflater.inflate(R.layout.item_content, parent, false);
 
@@ -465,8 +856,48 @@ public class ContentFragment extends Fragment implements ContentContract.View {
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
+
+
     }
 
+
+
+    /**
+     * Function to convert milliseconds time to
+     * Timer Format
+     * Hours:Minutes:Seconds
+     */
+    public static String formateMilliSeccond(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        //      return  String.format("%02d Min, %02d Sec",
+        //                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+        //                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+        //                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+
+        // return timer string
+        return finalTimerString;
+    }
 
 }
 
