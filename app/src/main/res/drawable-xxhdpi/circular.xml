@@ -1,7 +1,29 @@
-<shape android:useLevel="true"
-    android:innerRadiusRatio="2.3"
-    android:shape="ring"
-    android:thickness="3.8sp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorAccent" />
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@android:id/background">
+    <shape>
+        <corners android:radius="10dip" />
+        <gradient
+            android:startColor="#808080"
+            android:centerColor="#808080"
+            android:centerY="1.0"
+            android:endColor="#B0B0B0"
+            android:angle="180"
+            />
+    </shape>
+</item>
+<item android:id="@android:id/progress">
+    <clip>
+        <shape>
+            <corners android:radius="10dip" />
+            <gradient
+                android:startColor="@color/colorAccent"
+                android:centerColor="@color/colorAccent"
+                android:centerY="1.0"
+                android:endColor="#F0F0F0"
+                android:angle="270"
+                />
+        </shape>
+    </clip>
+</item>
+</layer-list>

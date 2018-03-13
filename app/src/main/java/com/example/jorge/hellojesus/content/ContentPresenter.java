@@ -1,9 +1,11 @@
 package com.example.jorge.hellojesus.content;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -20,9 +23,13 @@ import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.main.MainContract;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import jp.shts.android.storiesprogressview.StoriesProgressView;
 
 /**
  * Created by jorge on 27/02/2018.
@@ -113,7 +120,7 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
     }
 
     @Override
-    public void ShowFabButton(FloatingActionButton floatingActionButton, Animation animation) {
+    public void ShowFabButton(FloatingActionButton floatingActionButton, Animation animation, Button button) {
         if (!isActiveFabButton(floatingActionButton)) {
             floatingActionButton.setVisibility(View.VISIBLE);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) floatingActionButton.getLayoutParams();
@@ -122,12 +129,13 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
             floatingActionButton.setLayoutParams(layoutParams);
             floatingActionButton.startAnimation(animation);
             floatingActionButton.setClickable(true);
+            button.setVisibility(View.VISIBLE);
         }
 
     }
 
     @Override
-    public void HideFabButton(FloatingActionButton floatingActionButton, Animation animation) {
+    public void HideFabButton(FloatingActionButton floatingActionButton, Animation animation, Button button) {
         if (isActiveFabButton(floatingActionButton)) {
             floatingActionButton.setVisibility(View.INVISIBLE);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) floatingActionButton.getLayoutParams();
@@ -136,6 +144,7 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
             floatingActionButton.setLayoutParams(layoutParams);
             floatingActionButton.startAnimation(animation);
             floatingActionButton.setClickable(false);
+            button.setVisibility(View.GONE);
         }
 
 
@@ -203,13 +212,23 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
     }
 
     @Override
-    public void playAudio() {
-
+    public void playAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator animation, StoriesProgressView storiesProgressView) {
+        if (animation != null) {
+            animation.start();
+            ExoPlayerAudio.setPlayWhenReady(true);
+            storiesProgressView.resume();
+        }
     }
 
     @Override
-    public void pauseAudio() {
-
+    public void pauseAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator animation, StoriesProgressView storiesProgressView) {
+        if (animation != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                animation.pause();
+            }
+            ExoPlayerAudio.setPlayWhenReady(false);
+            storiesProgressView.pause();
+        }
     }
 
     @Override
@@ -251,7 +270,12 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
     @Override
         public void openDetail () {
 
-        }
+    }
+
+    @Override
+    public void ShowControllerAudio(SimpleExoPlayerView simpleExoPlayerView) {
+        simpleExoPlayerView.showController();
+    }
 
 
 }

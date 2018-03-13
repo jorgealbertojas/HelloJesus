@@ -71,11 +71,8 @@ dependencies {
 
     compile 'com.android.support:customtabs:' + project.supportLibraryVersion
 
-
     compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
 
-
-
-
     compile project(path: ':library')
+
 }

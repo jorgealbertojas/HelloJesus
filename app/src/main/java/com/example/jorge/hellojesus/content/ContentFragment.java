@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -41,6 +42,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,6 +84,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;
@@ -104,7 +108,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
 
-    private SimpleExoPlayerView mPlayerView;
+    private static SimpleExoPlayerView mPlayerView;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
     private NotificationManager mNotificationManager;
@@ -135,7 +139,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private static Context mContext;
 
-    private static TextView mWord;
+    private static Button mWord;
 
     private StoriesProgressView storiesProgressView;
 
@@ -151,9 +155,12 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     long pressTime = 0;
     long limit = 5000;
 
-    private int position = 0;
+    private static int mPosition = 0;
 
     int second;
+
+    private TextView mValueStart;
+    private TextView mValueEnd;
 
 
     public ContentFragment() {
@@ -221,7 +228,19 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
         seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
         mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
-        mWord = (TextView) root.findViewById(R.id.tv_word);
+        mWord = (Button) root.findViewById(R.id.tv_word);
+        mValueStart = (TextView) root.findViewById(R.id.tv_start);
+        mValueEnd = (TextView) root.findViewById(R.id.tv_end);
+
+        mWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!((TextView) v).getTag().toString().equals("0")){
+                    ((TextView) v).setText(nextSpace(((TextView) v).getTag().toString(),((TextView) v)));
+                }
+
+            }
+        });
 
 
 
@@ -251,9 +270,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             @Override
             public void onClick(View v) {
                 toggleFabMenu();
-                mPlayerView.showController();
-
-
 
             }
         });
@@ -435,8 +451,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                         .setMediaSession(mMediaSession.getSessionToken())
                         .setShowActionsInCompactView(0,1));
 
-        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, builder.build());
+//        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(0, builder.build());
 
 
     }
@@ -467,9 +483,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void showAnimation() {
         mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
-        mAnimation.setDuration (durations[position]); //in milliseconds
+        mAnimation.setDuration (durations[mPosition]); //in milliseconds
         mAnimation.setInterpolator (new DecelerateInterpolator());
-        mAnimation.start ();
+        mAnimation.start();
+
+
     }
 
     @Override
@@ -502,7 +520,15 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                     mExoPlayerAudio.getCurrentPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
-      //  showNotification(mStateBuilder.build());
+
+
+        if (!playWhenReady){
+            mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+        }else{
+            mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+
+        }
+        showNotification(mStateBuilder.build());
     }
 
     @Override
@@ -550,6 +576,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
 
+
+
     }
 
     /**
@@ -590,11 +618,13 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     @Override
     public void setListTime(long[] listTime) {
-
-            durations = listTime;
+        mValueEnd.setText(Integer.toString(listTime.length));
+        durations = listTime;
 
 
     }
+
+
 
     /**
      * Control the time for Put TXTs in TextView with this information.
@@ -630,8 +660,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void onNext() {
         mProgressBar.clearAnimation();
-        position ++;
-        mRecyclerView.scrollToPosition(position);
+        mPosition ++;
+        mRecyclerView.scrollToPosition(mPosition);
+        mValueStart.setText(Integer.toString(mPosition + 1));
         showAnimation();
 
     }
@@ -694,6 +725,18 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             mItemListener = itemListener;
         }
 
+        private void setAnimation(View viewToAnimate, int position)
+        {
+            // If the bound view wasn't previously displayed on screen, it's animated
+          //  if (position > lastPosition)
+           // {
+            ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(new Random().nextInt(501));//to make duration random number between [0,501)
+            viewToAnimate.startAnimation(anim);
+             //   lastPosition = position;
+         //   }
+        }
+
         @Override
         public ContentFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
@@ -711,11 +754,18 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         public void onBindViewHolder(ContentFragment.ContentAdapter.ViewHolder viewHolder, int position) {
             Content content = mContent.get(position);
 
+            setAnimation(viewHolder.itemView, position);
+
             viewHolder.mContentEnglish.setText(content.getContent_english());
             viewHolder.mContentPortuguese.setText(content.getContent_portuguese());
 
+
+            viewHolder.mContentEnglish.setTypeface(Typeface.DEFAULT_BOLD);
+
+
             viewHolder.mContentEnglish.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
+                   mPresenter.ShowControllerAudio(mPlayerView);
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         Layout layout = ((TextView) v).getLayout();
                         int x = (int)event.getX();
@@ -728,18 +778,26 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                             String phaseRight = phase.toString().substring(offset, phase.length());
 
                             int index1 = firstSpace(phaseRight);
+                            if (index1 < 0){
+                                index1 = phaseRight.length();
+                            }
+
                             int index2 = 0;
                             if (offset < phase.length()){
+                                index2 = priorSpace(phase, offset);
+                            }else{
+                                offset = phase.length() - 1;
                                 index2 = priorSpace(phase, offset);
                             }
 
                             if (index2 + 1 < index1 + offset) {
+                                mWord.setTag(phase.toString().substring(index2 + 1, phase.length()));
                                 String word = phase.toString().substring(index2 + 1, index1 + offset);
-                                mWord.setText(word);
-                                mPresenter.ShowFabButton(mFloatingActionButton, mShowFab);
+                                mWord.setText(word.replace(",",""));
+                                mPresenter.ShowFabButton(mFloatingActionButton, mShowFab, mWord);
                             }else{
                                 mWord.setText("");
-                                mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
+                                mPresenter.HideFabButton(mFloatingActionButton, mHideFab, mWord);
                                 mFabMenuOpen = true;
                                 toggleFabMenu();
                             }
@@ -788,6 +846,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         }
 
+
+
         public void replaceData(List<Content> notes) {
             setList(notes);
             notifyDataSetChanged();
@@ -810,7 +870,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
             public TextView mContentEnglish;
             public TextView mContentPortuguese;
-            public RelativeLayout mRelativeLayout;
 
             private ContentFragment.ItemListener mItemListener;
 
@@ -820,7 +879,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
                 mContentPortuguese = (TextView) itemView.findViewById(R.id.tv_content_portuguese);
 
-                mRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.rl_topic);
 
                 itemView.setOnClickListener(this);
             }
@@ -858,46 +916,40 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
 
+
+
+    }
+
+    private String nextSpace(String phrase, TextView TextView){
+        int i = 0;
+        int count = 0;
+        int countWord = 1;
+
+
+        while (i < TextView.getText().toString().length()){
+
+            if ((TextView.getText().toString().toString().substring(i,i+1).indexOf(" ")==0)){
+                countWord ++;
+            }
+            i++;
+        }
+
+        i = 0;
+        while (i < phrase.length()){
+
+            if ((phrase.toString().substring(i,i+1).indexOf(" ")==0)){
+                count ++;
+                if (count > countWord) {
+                    return phrase.substring(0,i);
+                }
+            }
+            i++;
+        }
+        return phrase.substring(0,i);
+
     }
 
 
-
-    /**
-     * Function to convert milliseconds time to
-     * Timer Format
-     * Hours:Minutes:Seconds
-     */
-    public static String formateMilliSeccond(long milliseconds) {
-        String finalTimerString = "";
-        String secondsString = "";
-
-        // Convert total duration into time
-        int hours = (int) (milliseconds / (1000 * 60 * 60));
-        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
-        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
-
-        // Add hours if there
-        if (hours > 0) {
-            finalTimerString = hours + ":";
-        }
-
-        // Prepending 0 to seconds if it is one digit
-        if (seconds < 10) {
-            secondsString = "0" + seconds;
-        } else {
-            secondsString = "" + seconds;
-        }
-
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
-
-        //      return  String.format("%02d Min, %02d Sec",
-        //                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
-        //                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-        //                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
-
-        // return timer string
-        return finalTimerString;
-    }
 
 }
 

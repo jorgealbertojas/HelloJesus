@@ -18,57 +18,75 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="30dp">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingTop="4dp">
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                    <TextView
+                        android:id="@+id/tv_start"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.01"
+                        android:paddingRight="6dp"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+
+                    <RelativeLayout
                         android:id="@+id/teste"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
                         android:layout_marginTop="4dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:id="@+id/image"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:contentDescription="@null"
-                            android:scaleType="centerCrop"
-                            tools:src="@drawable/sample1" />
+                        android:layout_weight="0.02"
+                        android:orientation="vertical">
+
+                        <jp.shts.android.storiesprogressview.StoriesProgressView
+                            android:id="@+id/stories"
+                            android:layout_width="100dp"
+                            android:layout_height="1dp"
+                            android:layout_centerInParent="true">
+
+                        </jp.shts.android.storiesprogressview.StoriesProgressView>
 
                         <ProgressBar
                             android:id="@+id/progressBar"
                             style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="12dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
                             android:max="500"
                             android:progress="0"
+                            android:textAlignment="center"
                             android:progressDrawable="@drawable/circular" />
 
-                        <jp.shts.android.storiesprogressview.StoriesProgressView
-                            android:id="@+id/stories"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:layout_width="fill_parent"
-                            android:layout_height="20dp"
-                            android:layout_gravity="top"
-                            android:layout_marginTop="8dp" >
 
-                        </jp.shts.android.storiesprogressview.StoriesProgressView>
+                    </RelativeLayout>
 
-                    </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/tv_end"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.01"
+                        android:paddingRight="6dp"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -101,6 +119,9 @@
 
                             <include layout="@layout/fab_reveal_layout" />
 
+
+
+
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/fab_function"
                                 android:layout_width="wrap_content"
@@ -110,6 +131,16 @@
                                 android:src="@drawable/ic_add_circle_outline_white_24dp"
                                 app:fabSize="normal"
                                 />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:paddingTop="15dp"
+                                android:text="eeeeee"
+                                android:elevation="8dp"
+                                android:id="@+id/tv_word"
+                                android:textColor="@color/colorPrimaryDark" />
 
 
                         </FrameLayout>
