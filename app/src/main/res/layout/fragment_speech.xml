@@ -4,10 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -15,6 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:context=".purchaseDetail.PurchaseDetailActivity">
+            <include layout="@layout/item_result" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,50 +105,66 @@
                     android:layout_height="wrap_content">
 
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
 
                     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/rv_content_list"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="200dp"
 
                         android:paddingBottom="@dimen/activity_horizontal_margin_content"
                         android:paddingLeft="@dimen/activity_horizontal_margin_content"
                         android:paddingRight="@dimen/activity_horizontal_margin_content"
                         android:paddingTop="@dimen/activity_horizontal_margin_content"></android.support.v7.widget.RecyclerView>
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_gravity="bottom"
-                            android:layout_height="wrap_content">
 
-                            <include layout="@layout/fab_reveal_layout" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:clipToPadding="false"
 
+                        app:behavior_overlapTop="128dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_gravity="bottom"
+                        android:layout_height="wrap_content">
 
-
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/fab_function"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom|right"
-                                android:layout_margin="@dimen/fab_margin"
-                                android:src="@drawable/ic_add_circle_outline_white_24dp"
-                                app:fabSize="normal"
-                                />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom|right"
-                                android:paddingTop="15dp"
-                                android:text="eeeeee"
-                                android:elevation="8dp"
-                                android:id="@+id/tv_word"
-                                android:textColor="@color/colorPrimaryDark" />
+                        <include layout="@layout/fab_reveal_layout" />
 
 
-                        </FrameLayout>
+
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_function"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|right"
+                            android:layout_margin="@dimen/fab_margin"
+                            android:src="@drawable/ic_add_circle_outline_white_24dp"
+                            app:fabSize="normal"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|right"
+                            android:paddingTop="15dp"
+                            android:text="testettttttt"
+                            android:elevation="8dp"
+                            android:id="@+id/tv_word"
+                            android:textColor="@color/colorPrimaryDark" />
+
+
+                    </FrameLayout>
                 </FrameLayout>
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

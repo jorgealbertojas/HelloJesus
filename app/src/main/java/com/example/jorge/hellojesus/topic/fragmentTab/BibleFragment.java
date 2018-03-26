@@ -37,9 +37,9 @@ import java.util.List;
 public class BibleFragment extends Fragment implements TopicContract.View {
 
     public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
+    public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
     public static String EXTRA_CONTENT = "CONTENT";
-    public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT" +
-            "";
+    public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -223,6 +223,8 @@ public class BibleFragment extends Fragment implements TopicContract.View {
                 int position = getAdapterPosition();
                 List<Content> contents = getItem(position).getContent();
                 int time = Integer.parseInt(getItem(position).getTime());
+                String mp3 = (getItem(position).getAudio());
+
                 mItemListener.onTopicClick(contents);
 
                 Intent intent = new Intent(v.getContext(), ContentActivity.class);
@@ -230,6 +232,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
                 bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                bundle.putString(EXTRA_CONTENT_MP3, mp3);
                 intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                 v.getContext().startActivity(intent);
 

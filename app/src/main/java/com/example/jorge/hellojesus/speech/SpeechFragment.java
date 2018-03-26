@@ -1,4 +1,14 @@
-package com.example.jorge.hellojesus.content;
+package com.example.jorge.hellojesus.speech;
+
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -31,7 +41,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -61,6 +73,9 @@ import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.main.MainContract;
 import com.example.jorge.hellojesus.main.MainFragment;
 import com.example.jorge.hellojesus.main.MainPresenter;
+import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
+import com.example.jorge.hellojesus.speech.support.SpeechService;
+import com.example.jorge.hellojesus.speech.support.VoiceRecorder;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.util.Common;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -89,24 +104,44 @@ import java.util.concurrent.TimeUnit;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static android.content.Context.BIND_AUTO_CREATE;
+
 
 /**
- * Created by jorge on 27/02/2018.
+ * Created by jorge on 16/03/2018.
  */
 
-public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, StoriesProgressView.StoriesListener {
+public class SpeechFragment extends Fragment implements SpeechContract.View, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
+    private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
+    private static final String STATE_RESULTS = "results";
+    private SpeechService mSpeechService;
+    // Resource caches
+    private int mColorHearing;
+    private int mColorNotHearing;
+    // View references
+    private TextView mStatus;
+    private TextView mText;
+    private ResultAdapter mAdapter;
+    private RecyclerView mRecyclerViewSpeech;
+
+
+
+
+
+
+
+
 
     public static final String MESSAGE_PROGRESS = "message_progress";
-    public static final String BASE_STORAGE =  Environment.DIRECTORY_DOWNLOADS;
+    public static final String BASE_STORAGE = Environment.DIRECTORY_DOWNLOADS;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private SimpleExoPlayer mExoPlayerAudio;
     private Handler durationHandler = new Handler();
     private SeekBar seekbar;
 
-    private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
+    private static double mTimeElapsed = 0, mFinalTime = 0, mTimeLast = 0;
 
     private static SimpleExoPlayerView mPlayerView;
     private MediaSessionCompat mMediaSession;
@@ -114,9 +149,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private NotificationManager mNotificationManager;
 
 
-    private static ContentContract.UserActionsListener mPresenter;
+    private static SpeechContract.UserActionsListener mPresenter;
 
-    private ContentFragment.ContentAdapter mListAdapter;
+    private SpeechFragment.ContentAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     public static List<Content> mContents;
@@ -134,7 +169,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private static FloatingActionButton mFabExplanation;
     private static FloatingActionButton mFabTranslate;
 
-    private static  Boolean mFabMenuOpen = false;
+    private static Boolean mFabMenuOpen = false;
 
     private static LinearLayout mLinearLayout;
 
@@ -164,8 +199,23 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private TextView mValueEnd;
 
 
-    public ContentFragment() {
+    public SpeechFragment() {
     }
+
+    @Override
+    public void onMessageDialogDismissed() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
+                REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+    public interface Listener {
+        /**
+         * Called when the dialog is dismissed.
+         */
+        void onMessageDialogDismissed();
+    }
+
+
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
@@ -184,19 +234,23 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         }
     };
 
-    public static ContentFragment newInstance(List<Content> contents, int time, String mp3) {
+
+
+    public static SpeechFragment newInstance(List<Content> contents, int time, String mp3) {
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
-        return new ContentFragment();
+        return new SpeechFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mListAdapter = new ContentFragment.ContentAdapter(new ArrayList<Content>(0), mItemListener);
-        mPresenter = new ContentPresenter( this);
+        mListAdapter = new SpeechFragment.ContentAdapter(new ArrayList<Content>(0));
+        mPresenter = new SpeechPresenter(this);
+
+
 
     }
 
@@ -217,7 +271,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRotateFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_rotate);
 
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        View root = inflater.inflate(R.layout.fragment_content, container, false);
+        View root = inflater.inflate(R.layout.fragment_speech, container, false);
 
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
 
@@ -237,19 +291,15 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!((TextView) v).getTag().toString().equals("0")){
-                    ((TextView) v).setText(nextSpace(((TextView) v).getTag().toString(),((TextView) v)));
+                if (!((TextView) v).getTag().toString().equals("0")) {
+                    ((TextView) v).setText(nextSpace(((TextView) v).getTag().toString(), ((TextView) v)));
                 }
 
             }
         });
 
 
-
-
-
-       // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
-
+        // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
 
 
         SwipeRefreshLayout swipeRefreshLayout =
@@ -262,16 +312,16 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             @Override
             public void onRefresh() {
 
-                mPresenter.loadingContent(mContents,second);
+                mPresenter.loadingContent(mContents, second);
             }
         });
-
 
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleFabMenu();
+                mSpeechService.recognizeInputStream(getResources().openRawResource(R.raw.audio));
+               // toggleFabMenu();
 
             }
         });
@@ -279,8 +329,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mFabImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 toggleFabMenu();
-                mPresenter.openBrowserImage(mContext,mWord);
+                mPresenter.openBrowserImage(mContext, mWord);
 
             }
         });
@@ -289,7 +340,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             @Override
             public void onClick(View v) {
                 toggleFabMenu();
-                mPresenter.openBrowserExplanation(mContext,mWord);
+                mPresenter.openBrowserExplanation(mContext, mWord);
 
             }
         });
@@ -298,11 +349,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             @Override
             public void onClick(View v) {
                 toggleFabMenu();
-                mPresenter.openBrowserTranslate(mContext,mWord);
+                mPresenter.openBrowserTranslate(mContext, mWord);
 
             }
         });
-
 
 
         initRecyclerView(root);
@@ -314,11 +364,49 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         mPresenter.loadingContent(mContents, mTime);
 
+
+
+
+        final Resources resources = getResources();
+        final Resources.Theme theme = getActivity().getTheme();
+        mColorHearing = ResourcesCompat.getColor(resources, R.color.colorAccent, theme);
+        mColorNotHearing = ResourcesCompat.getColor(resources, R.color.colorAccent, theme);
+
+        mStatus = (TextView)  root.findViewById(R.id.status);
+        mText = (TextView) root.findViewById(R.id.text);
+
+        mRecyclerViewSpeech = (RecyclerView) root.findViewById(R.id.recycler_view);
+        mRecyclerViewSpeech.setLayoutManager(new LinearLayoutManager(getContext()));
+        final ArrayList<String> results = savedInstanceState == null ? null :
+                savedInstanceState.getStringArrayList(STATE_RESULTS);
+        mAdapter = new ResultAdapter(results);
+        mRecyclerViewSpeech.setAdapter(mAdapter);
+
+      //  onStart();
+        // atençãotttttttttttttttttttt
+
+
+
         showAnimation();
         showProgress(root);
 
 
         return root;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (permissions.length == 1 && grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startVoiceRecorder();
+            } else {
+                showPermissionMessageDialog();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -332,7 +420,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             int startRadius = 0;
             int endRadius = (int) Math.hypot(mLinearLayout.getWidth(), mLinearLayout.getHeight()) / 2;
 
-           // mLinearLayout.setVisibility(View.VISIBLE);
+            // mLinearLayout.setVisibility(View.VISIBLE);
             ViewAnimationUtils
                     .createCircularReveal(
                             mLinearLayout,
@@ -382,19 +470,18 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mFabMenuOpen = !mFabMenuOpen;
     }
 
-   // @Override
-  //  public void openViewContent(Content content) {
-    //    Intent intent = new Intent(getActivity(), TopicActivity.class);
+// @Override
+//  public void openViewContent(Content content) {
+//    Intent intent = new Intent(getActivity(), TopicActivity.class);
 
-   //     List<Integer> ii = content.getTopics();
+//     List<Integer> ii = content.getTopics();
 
-    //    Bundle bundle = new Bundle();
-   //     bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
-   //     intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
-  //      startActivity(intent);
+//    Bundle bundle = new Bundle();
+//     bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
+//     intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
+//      startActivity(intent);
 
-  //  }
-
+//  }
 
 
     /**
@@ -419,7 +506,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         int icon;
         String play_pause;
-        if(state.getState() == PlaybackStateCompat.STATE_PLAYING){
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
             icon = R.drawable.exo_controls_pause;
             play_pause = getString(R.string.pause);
         } else {
@@ -439,7 +526,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                         (this.getActivity(), PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
 
         PendingIntent contentPendingIntent = PendingIntent.getActivity
-                (this.getActivity(), 0, new Intent(this.getActivity(), ContentActivity.class), 0);
+                (this.getActivity(), 0, new Intent(this.getActivity(), SpeechActivity.class), 0);
 
 
         builder.setContentTitle(getString(R.string.app_name))
@@ -451,7 +538,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 .addAction(playPauseAction)
                 .setStyle(new NotificationCompat.MediaStyle()
                         .setMediaSession(mMediaSession.getSessionToken())
-                        .setShowActionsInCompactView(0,1));
+                        .setShowActionsInCompactView(0, 1));
 
 //        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
 //        mNotificationManager.notify(0, builder.build());
@@ -462,9 +549,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     /**
      * Request Permission download for the user .
      */
-    private void requestPermission(){
+    private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -484,9 +571,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     @Override
     public void showAnimation() {
-        mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
-        mAnimation.setDuration (durations[mPosition]); //in milliseconds
-        mAnimation.setInterpolator (new DecelerateInterpolator());
+        mAnimation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
+        mAnimation.setDuration(durations[mPosition]); //in milliseconds
+        mAnimation.setInterpolator(new DecelerateInterpolator());
         mAnimation.start();
 
 
@@ -497,51 +584,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     }
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mExoPlayerAudio.getCurrentPosition(), 1f);
-        } else if((playbackState == ExoPlayer.STATE_READY)){
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mExoPlayerAudio.getCurrentPosition(), 1f);
-        }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
-
-
-        if (!playWhenReady){
-            mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
-        }else{
-            mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
-
-        }
-        showNotification(mStateBuilder.build());
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
-
-    }
 
     /**
      * Initializes the Media Session to be enabled with media buttons, transport controls, callbacks
@@ -579,19 +621,23 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mMediaSession.setActive(true);
 
 
+    }
+
+    @Override
+    public void initializePlayer(Uri mediaUriAudio) {
 
     }
 
-    /**
+   /* *//**
      * Initialize ExoPlayer.
-     */
+     *//*
     @Override
     public void initializePlayer(Uri mediaUriAudio) {
         if (mExoPlayerAudio == null) {
 
-            /**
+            *//**
              * Create Audio.
-             */
+             *//*
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -606,7 +652,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(this.getActivity(), "ClassicalMusicQuiz");
             MediaSource mediaSourceAudio = new ExtractorMediaSource(mediaUriAudio, new DefaultDataSourceFactory(
-                    this.getActivity(), userAgent), new DefaultExtractorsFactory(), null,null);
+                    this.getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
 
 
             mExoPlayerAudio.prepare(mediaSourceAudio);
@@ -616,7 +662,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             mExoPlayerAudio.setPlayWhenReady(true);
 
         }
-    }
+    }*/
 
     @Override
     public void setListTime(long[] listTime) {
@@ -625,7 +671,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
 
     }
-
 
 
     /**
@@ -662,7 +707,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void onNext() {
         mProgressBar.clearAnimation();
-        mPosition ++;
+        mPosition++;
         mRecyclerView.scrollToPosition(mPosition);
         mValueStart.setText(Integer.toString(mPosition + 1));
         showAnimation();
@@ -679,6 +724,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     public void onComplete() {
 
     }
+
+
 
     /**
      * Media Session Callbacks, where all external clients control the player.
@@ -716,44 +763,40 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     }
 
 
-
-    private static class ContentAdapter extends RecyclerView.Adapter<ContentFragment.ContentAdapter.ViewHolder> {
+    private static class ContentAdapter extends RecyclerView.Adapter<SpeechFragment.ContentAdapter.ViewHolder> {
 
         private List<Content> mContent;
-        private ContentFragment.ItemListener mItemListener;
+       // private SpeechFragment.ItemListener mItemListener;
 
-        public ContentAdapter(List<Content> contents, ContentFragment.ItemListener itemListener) {
+        public ContentAdapter(List<Content> contents) {
             setList(contents);
-            mItemListener = itemListener;
+        //    mItemListener = itemListener;
         }
 
-        private void setAnimation(View viewToAnimate, int position)
-        {
+        private void setAnimation(View viewToAnimate, int position) {
             // If the bound view wasn't previously displayed on screen, it's animated
-          //  if (position > lastPosition)
-           // {
+            //  if (position > lastPosition)
+            // {
             ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             anim.setDuration(new Random().nextInt(501));//to make duration random number between [0,501)
             viewToAnimate.startAnimation(anim);
-             //   lastPosition = position;
-         //   }
+            //   lastPosition = position;
+            //   }
         }
 
         @Override
-        public ContentFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public SpeechFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
-
-
 
 
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View noteView = inflater.inflate(R.layout.item_content, parent, false);
 
-            return new ContentFragment.ContentAdapter.ViewHolder(noteView, mItemListener);
+            return new SpeechFragment.ContentAdapter.ViewHolder(noteView);
         }
 
         @Override
-        public void onBindViewHolder(ContentFragment.ContentAdapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(SpeechFragment.ContentAdapter.ViewHolder viewHolder, int position) {
             Content content = mContent.get(position);
 
             setAnimation(viewHolder.itemView, position);
@@ -767,12 +810,12 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
             viewHolder.mContentEnglish.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                   mPresenter.ShowControllerAudio(mPlayerView);
+                    mPresenter.ShowControllerAudio(mPlayerView);
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         Layout layout = ((TextView) v).getLayout();
-                        int x = (int)event.getX();
-                        int y = (int)event.getY();
-                        if (layout!=null) {
+                        int x = (int) event.getX();
+                        int y = (int) event.getY();
+                        if (layout != null) {
                             int line = layout.getLineForVertical(y);
                             int offset = layout.getOffsetForHorizontal(line, x);
 
@@ -780,14 +823,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                             String phaseRight = phase.toString().substring(offset, phase.length());
 
                             int index1 = firstSpace(phaseRight);
-                            if (index1 < 0){
+                            if (index1 < 0) {
                                 index1 = phaseRight.length();
                             }
 
                             int index2 = 0;
-                            if (offset < phase.length()){
+                            if (offset < phase.length()) {
                                 index2 = priorSpace(phase, offset);
-                            }else{
+                            } else {
                                 offset = phase.length() - 1;
                                 index2 = priorSpace(phase, offset);
                             }
@@ -795,9 +838,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                             if (index2 + 1 < index1 + offset) {
                                 mWord.setTag(phase.toString().substring(index2 + 1, phase.length()));
                                 String word = phase.toString().substring(index2 + 1, index1 + offset);
-                                mWord.setText(word.replace(",",""));
+                                mWord.setText(word.replace(",", ""));
                                 mPresenter.ShowFabButton(mFloatingActionButton, mShowFab, mWord);
-                            }else{
+                            } else {
                                 mWord.setText("");
                                 mPresenter.HideFabButton(mFloatingActionButton, mHideFab, mWord);
                                 mFabMenuOpen = true;
@@ -810,12 +853,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             });
 
 
-
             String s = content.getContent_english();
 
             String[] arr = s.split(" ");
 
-            for ( String ss : arr) {
+            for (String ss : arr) {
 
                 System.out.println(ss);
             }
@@ -826,7 +868,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         }
 
-        private int firstSpace(String textView){
+        private int firstSpace(String textView) {
 
             int i = textView.indexOf(" ");
 
@@ -835,11 +877,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         }
 
 
-        private int priorSpace(String textView, int off){
+        private int priorSpace(String textView, int off) {
             int i = off;
-            while (i > 0){
+            while (i > 0) {
 
-                if ((textView.toString().substring(i,i+1).indexOf(" ")==0)){
+                if ((textView.toString().substring(i, i + 1).indexOf(" ") == 0)) {
                     return i;
                 }
                 i--;
@@ -847,7 +889,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             return i;
 
         }
-
 
 
         public void replaceData(List<Content> notes) {
@@ -873,11 +914,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             public TextView mContentEnglish;
             public TextView mContentPortuguese;
 
-            private ContentFragment.ItemListener mItemListener;
+           // private SpeechFragment.ItemListener mItemListener;
 
-            public ViewHolder(View itemView, ContentFragment.ItemListener listener) {
+            public ViewHolder(View itemView) {
                 super(itemView);
-                mItemListener = listener;
+              //  mItemListener = listener;
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
                 mContentPortuguese = (TextView) itemView.findViewById(R.id.tv_content_portuguese);
 
@@ -889,27 +930,16 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 Content content = getItem(position);
-                mItemListener.onMainClick(content);
+             //   mItemListener.onMainClick(content);
 
             }
         }
     }
 
-    public interface ItemListener {
 
-        void onMainClick(Content clickedNote);
-    }
 
-    ContentFragment.ItemListener mItemListener = new ContentFragment.ItemListener() {
-        @Override
-        public void onMainClick(Content content) {
-
-            //mContent = content;
-        }
-    };
-
-    private void initRecyclerView(View root){
-        mRecyclerView= (RecyclerView) root.findViewById(R.id.rv_content_list);
+    private void initRecyclerView(View root) {
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.rv_content_list);
         mRecyclerView.setAdapter(mListAdapter);
 
         int numColumns = 1;
@@ -918,41 +948,214 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
 
-
-
     }
 
-    private String nextSpace(String phrase, TextView TextView){
+    private String nextSpace(String phrase, TextView TextView) {
         int i = 0;
         int count = 0;
         int countWord = 1;
 
 
-        while (i < TextView.getText().toString().length()){
+        while (i < TextView.getText().toString().length()) {
 
-            if ((TextView.getText().toString().toString().substring(i,i+1).indexOf(" ")==0)){
-                countWord ++;
+            if ((TextView.getText().toString().toString().substring(i, i + 1).indexOf(" ") == 0)) {
+                countWord++;
             }
             i++;
         }
 
         i = 0;
-        while (i < phrase.length()){
+        while (i < phrase.length()) {
 
-            if ((phrase.toString().substring(i,i+1).indexOf(" ")==0)){
-                count ++;
+            if ((phrase.toString().substring(i, i + 1).indexOf(" ") == 0)) {
+                count++;
                 if (count > countWord) {
-                    return phrase.substring(0,i);
+                    return phrase.substring(0, i);
                 }
             }
             i++;
         }
-        return phrase.substring(0,i);
+        return phrase.substring(0, i);
 
     }
 
+    private VoiceRecorder mVoiceRecorder;
+    private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
 
+        @Override
+        public void onVoiceStart() {
+            showStatus(true);
+            if (mSpeechService != null) {
+                mSpeechService.startRecognizing(mVoiceRecorder.getSampleRate());
+            }
+        }
+
+        @Override
+        public void onVoice(byte[] data, int size) {
+            if (mSpeechService != null) {
+                mSpeechService.recognize(data, size);
+            }
+        }
+
+        @Override
+        public void onVoiceEnd() {
+            showStatus(false);
+            if (mSpeechService != null) {
+                mSpeechService.finishRecognizing();
+            }
+        }
+
+    };
+
+    private final SpeechService.Listener mSpeechServiceListener =
+            new SpeechService.Listener() {
+                @Override
+                public void onSpeechRecognized(final String text, final boolean isFinal) {
+                    if (isFinal) {
+                        mVoiceRecorder.dismiss();
+                    }
+                    if (mText != null && !TextUtils.isEmpty(text)) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isFinal) {
+                                    mText.setText(null);
+                                    mAdapter.addResult(text);
+                                    mRecyclerViewSpeech.smoothScrollToPosition(0);
+                                } else {
+                                    mText.setText(text);
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView text;
+
+        ViewHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.item_result, parent, false));
+            text = (TextView) itemView.findViewById(R.id.text);
+        }
+
+    }
+
+    private static class ResultAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+        private final ArrayList<String> mResults = new ArrayList<>();
+
+        ResultAdapter(ArrayList<String> results) {
+            if (results != null) {
+                mResults.addAll(results);
+            }
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.text.setText(mResults.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mResults.size();
+        }
+
+        void addResult(String result) {
+            mResults.add(0, result);
+            notifyItemInserted(0);
+        }
+
+        public ArrayList<String> getResults() {
+            return mResults;
+        }
+
+    }
+
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            mSpeechService = SpeechService.from(binder);
+            mSpeechService.addListener(mSpeechServiceListener);
+            mStatus.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mSpeechService = null;
+        }
+
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Prepare Cloud Speech API
+        this.getActivity().bindService(new Intent(this.getActivity(), SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
+
+        // Start listening to voices
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            startVoiceRecorder();
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.RECORD_AUDIO)) {
+            showPermissionMessageDialog();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        // Stop listening to voice
+        stopVoiceRecorder();
+
+        // Stop Cloud Speech API
+        mSpeechService.removeListener(mSpeechServiceListener);
+        getActivity().unbindService(mServiceConnection);
+        mSpeechService = null;
+
+        super.onStop();
+    }
+
+    private void startVoiceRecorder() {
+        if (mVoiceRecorder != null) {
+            mVoiceRecorder.stop();
+        }
+        mVoiceRecorder = new VoiceRecorder(mVoiceCallback);
+        mVoiceRecorder.start();
+    }
+
+    private void stopVoiceRecorder() {
+        if (mVoiceRecorder != null) {
+            mVoiceRecorder.stop();
+            mVoiceRecorder = null;
+        }
+    }
+
+    private void showPermissionMessageDialog() {
+        MessageDialogFragment
+                .newInstance(getString(R.string.permission_message))
+                .show(getActivity().getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);
+    }
+
+    private void showStatus(final boolean hearingVoice) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mStatus.setTextColor(hearingVoice ? mColorHearing : mColorNotHearing);
+            }
+        });
+    }
 
 }
-
 

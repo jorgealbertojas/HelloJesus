@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".topic.TopicActivity" />
-        <activity android:name=".content.ContentActivity"></activity>
+        <activity android:name=".content.ContentActivity" />
+        <activity android:name=".speech.SpeechActivity"></activity>
+
+        <service android:name=".speech.support.SpeechService"/>
     </application>
 
 </manifest>

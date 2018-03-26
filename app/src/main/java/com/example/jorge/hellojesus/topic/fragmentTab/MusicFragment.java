@@ -16,15 +16,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.content.ContentActivity;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
+import com.example.jorge.hellojesus.speech.SpeechActivity;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
 import com.example.jorge.hellojesus.topic.TopicPresenter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 
 /**
  * Created by jorge on 23/02/2018.
@@ -32,8 +38,9 @@ import java.util.List;
 
 public class MusicFragment  extends Fragment implements TopicContract.View {
 
-    public static String EXTRA_PRODUCT = "PRODUCT";
-    public static String EXTRA_BUNDLE_PRODUCT = "BUNDLE_PRODUCT";
+    public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
+    public static String EXTRA_CONTENT = "CONTENT";
+    public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -215,19 +222,29 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                //   Topic product = getItem(position);
-                //   mItemListener.onTopicClick(product);
+                List<Content> contents = getItem(position).getContent();
+                int time = Integer.parseInt(getItem(position).getTime());
+                String mp3 = (getItem(position).getAudio());
 
-                //   Intent intent = new Intent(v.getContext(), ShoppingActivity.class);
-
-                //   Bundle bundle = new Bundle();
-                //   bundle.putSerializable(EXTRA_PRODUCT, product );
-
-                //   intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
-                //   v.getContext().startActivity(intent);
-
-
-
+                if (mp3.toString().equals(KEY_SING)){
+                    mItemListener.onTopicClick(contents);
+                    Intent intent = new Intent(v.getContext(), SpeechActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
+                    bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                    bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+                    intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                    v.getContext().startActivity(intent);
+                }else{
+                    mItemListener.onTopicClick(contents);
+                    Intent intent = new Intent(v.getContext(), ContentActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
+                    bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                    bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+                    intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                    v.getContext().startActivity(intent);
+                }
             }
         }
     }
@@ -242,6 +259,8 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
         mRecyclerView.setAdapter(mListAdapter);
 
         int numColumns = 1;
+
+
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));

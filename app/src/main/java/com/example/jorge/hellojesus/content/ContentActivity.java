@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_BUNDLE_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
 public class ContentActivity extends AppCompatActivity  {
@@ -21,6 +22,7 @@ public class ContentActivity extends AppCompatActivity  {
     private List<Content> mContents;
     private Bundle mBundle;
     private int mTime;
+    private String mMp3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +32,11 @@ public class ContentActivity extends AppCompatActivity  {
         mBundle = getIntent().getBundleExtra(EXTRA_BUNDLE_CONTENT);
         mContents = (List<Content>) mBundle.getSerializable(EXTRA_CONTENT);
         mTime = (int) mBundle.getInt(EXTRA_CONTENT_TIME);
+        mMp3 = (String) mBundle.getString(EXTRA_CONTENT_MP3);
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(ContentFragment.newInstance(mContents,mTime));
+                initFragment(ContentFragment.newInstance(mContents,mTime,mMp3));
             }
         }
 
@@ -44,7 +47,6 @@ public class ContentActivity extends AppCompatActivity  {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.contentFrame, productFragment);
         transaction.commit();
+   }
 
-
-    }
 }

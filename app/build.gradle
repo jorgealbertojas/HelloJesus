@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.protobuf'
 
 android {
     compileSdkVersion 26
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.example.jorge.hellojesus"
         minSdkVersion 15
@@ -17,7 +19,69 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file(project.properties.storeFile)
+            storePassword project.properties.storePassword
+            keyAlias project.properties.keyAlias
+            keyPassword project.properties.keyPassword
+        }
+    }
 
+    productFlavors {
+        dev {
+            // Minimum version with platform multi-dex support
+            minSdkVersion 21
+        }
+        prod {
+            // Minimum version that can run gRPC (TLS extension)
+            minSdkVersion 16
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            multiDexEnabled true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
+        resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+    }
+
+
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.3.0'
+    }
+    plugins {
+        javalite {
+            artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0"
+        }
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                javalite {}
+                grpc {
+                    // Options added to --grpc_out
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -73,6 +137,28 @@ dependencies {
 
     compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
 
+    // gRPC
+    compile "io.grpc:grpc-okhttp:$rootProject.grpcVersion"
+    compile "io.grpc:grpc-protobuf-lite:$rootProject.grpcVersion"
+    compile "io.grpc:grpc-stub:$rootProject.grpcVersion"
+    compile 'javax.annotation:javax.annotation-api:1.2'
+    protobuf 'com.google.protobuf:protobuf-java:3.3.1'
+
+    // OAuth2 for Google API
+    compile('com.google.auth:google-auth-library-oauth2-http:0.7.0') {
+        exclude module: 'httpclient'
+    }
+
+
     compile project(path: ':library')
 
 }
+
+task copySecretKey(type: Copy) {
+    def File secretKey = file "$System.env.GOOGLE_APPLICATION_CREDENTIALS"
+    from secretKey.getParent()
+    include secretKey.getName()
+    into 'src/main/res/raw'
+    rename secretKey.getName(), "credential.json"
+}
+preBuild.dependsOn(copySecretKey)
