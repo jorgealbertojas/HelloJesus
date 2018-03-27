@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <!-- Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
@@ -12,6 +10,28 @@
     <dimen name="fab_margin_content">6dp</dimen>
 
     <dimen name="tab_max_width">200dp</dimen>
+
+
+    <!-- Material Design guides lines  -->
+
+    <!-- Components – Lists - Only text -->
+    <dimen name="card_list_height">88dp</dimen>
+
+    <dimen name="text1_list_size">16sp</dimen>
+    <dimen name="text1_list_padding_left">4dp</dimen>
+    <dimen name="text1_list_padding_top">4dp</dimen>
+    <dimen name="text1_list_padding_bottom">4dp</dimen>
+    <dimen name="text1_list_padding">8dp</dimen>
+
+    <dimen name="text2_list_size">14sp</dimen>
+    <dimen name="text2_list_height">88dp</dimen>
+    <dimen name="text2_list_padding_left">4dp</dimen>
+    <dimen name="text2_list_padding_top">4dp</dimen>
+    <dimen name="text2_list_padding_bottom">4dp</dimen>
+    <dimen name="text2_list_padding">4dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="card_forecast_list_item_vertical_padding">16dp</dimen>
 
 
 

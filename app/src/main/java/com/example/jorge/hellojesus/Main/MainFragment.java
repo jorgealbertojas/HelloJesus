@@ -2,6 +2,9 @@ package com.example.jorge.hellojesus.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
@@ -153,6 +157,7 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         private List<Main> mMains;
         private ItemListener mItemListener;
+        Context context;
 
         public MainAdapter(List<Main> main, ItemListener itemListener) {
             setList(main);
@@ -161,7 +166,7 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
+            context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View noteView = inflater.inflate(R.layout.item_main, parent, false);
 
@@ -175,6 +180,12 @@ public class MainFragment extends Fragment implements MainContract.View {
             viewHolder.mName.setText(product.getName());
             viewHolder.mTime.setText(product.getTime());
             viewHolder.mDescription.setText(product.getDescripition());
+
+            viewHolder.mDescription.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/RobotoCondensed-Regular.ttf"));
+
+            Resources res = context.getResources();
+            final int newColor = res.getColor(R.color.colorAccent);
+            viewHolder.mImageList.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
         }
 
         public void replaceData(List<Main> notes) {
@@ -200,6 +211,7 @@ public class MainFragment extends Fragment implements MainContract.View {
             public TextView mName;
             public TextView mTime;
             public TextView mDescription;
+            public ImageView mImageList;
 
 
             private ItemListener mItemListener;
@@ -210,6 +222,10 @@ public class MainFragment extends Fragment implements MainContract.View {
                 mName = (TextView) itemView.findViewById(R.id.tv_main_name);
                 mTime = (TextView) itemView.findViewById(R.id.tv_main_time);
                 mDescription = (TextView) itemView.findViewById(R.id.tv_main_description);
+
+                mImageList = (ImageView) itemView.findViewById(R.id.iv_image_list);
+
+
 
                 itemView.setOnClickListener(this);
             }
