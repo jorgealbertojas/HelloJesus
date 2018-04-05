@@ -10,7 +10,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -162,6 +164,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private TextView mValueStart;
     private TextView mValueEnd;
+
+    private int selected_item;
+
+    private static android.support.constraint.ConstraintLayout mText;
 
 
     public ContentFragment() {
@@ -664,9 +670,28 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mProgressBar.clearAnimation();
         mPosition ++;
         mRecyclerView.scrollToPosition(mPosition);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
         mValueStart.setText(Integer.toString(mPosition + 1));
         showAnimation();
 
+
+
+        //mRecyclerView.setFocusable(true);
+
+     //   mText = (android.support.constraint.ConstraintLayout) mRecyclerView.findViewHolderForPosition(mPosition).itemView.findViewById(R.id.cl_content);
+      //  mText.setBackground(getActivity().getResources().getDrawable(android.R.color.darker_gray));
+       // mText.setTypeface(null, Typeface.BOLD);
+
+
+
+      //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+       //     mText.setTextColor(getActivity().getResources().getColor(android.R.color.white, getActivity().getTheme()));
+     //   }else {
+       //     mText.setTextColor(getActivity().getResources().getColor(android.R.color.white));
+    //    }
+
+       // mText = mRecyclerView.findViewHolderForPosition(mPosition).itemView.findViewById(R.id.tv_content_english);
+       // mText.setTypeface(null, Typeface.BOLD);
     }
 
     @Override
@@ -743,9 +768,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         public ContentFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
 
-
-
-
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View noteView = inflater.inflate(R.layout.item_content, parent, false);
 
@@ -756,14 +778,17 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         public void onBindViewHolder(ContentFragment.ContentAdapter.ViewHolder viewHolder, int position) {
             Content content = mContent.get(position);
 
-            setAnimation(viewHolder.itemView, position);
+           // setAnimation(viewHolder.itemView, position);
+
+            if(position == mPosition) {
+                viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
+
+            } else {
+                viewHolder.mContentEnglish.setTypeface(null, Typeface.NORMAL);
+            }
 
             viewHolder.mContentEnglish.setText(content.getContent_english());
             viewHolder.mContentPortuguese.setText(content.getContent_portuguese());
-
-
-            viewHolder.mContentEnglish.setTypeface(Typeface.DEFAULT_BOLD);
-
 
             viewHolder.mContentEnglish.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -808,7 +833,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                     return true;
                 }
             });
-
 
 
             String s = content.getContent_english();
@@ -881,6 +905,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
                 mContentPortuguese = (TextView) itemView.findViewById(R.id.tv_content_portuguese);
 
+                mContentEnglish.setTypeface(null, Typeface.NORMAL);
 
                 itemView.setOnClickListener(this);
             }
@@ -917,9 +942,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
-
-
-
     }
 
     private String nextSpace(String phrase, TextView TextView){
@@ -950,8 +972,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         return phrase.substring(0,i);
 
     }
-
-
 
 }
 

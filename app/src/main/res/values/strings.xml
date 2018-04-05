@@ -26,8 +26,20 @@
 
 
     <!-- String For Other  -->
-    <string name="listening">Listening…</string>
+    <string name="listening">No listening. Wait...  </string>
     <string name="permission_message">This app needs to record audio and recognize your speech.</string>
+    <string name="verses">Verses</string>
+    <string name="phases">Phases</string>
+    <string name="exercises">Exercises</string>
+    <string name="seconds">sec</string>
+
+    <string name="total">Total</string>
+    <string name="total_said">Said</string>
+    <string name="total_mistake">Mistake</string>
+    <string name="total_correct">Correct</string>
+    <string name="total_missing">Missing</string>
+
+    <string name="format_until">" / "</string>
 
 
 </resources>

@@ -1,85 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:background="@drawable/card_touch_selector"
-android:paddingBottom="@dimen/card_forecast_list_item_vertical_padding"
-android:paddingTop="@dimen/card_forecast_list_item_vertical_padding">
-
-<android.support.constraint.Guideline
-    android:id="@+id/horizontal_middle"
-    android:layout_width="wrap_content"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_constraintGuide_percent="0.5"
-    tools:layout_editor_absoluteX="192dp"
-    tools:layout_editor_absoluteY="0dp"/>
+    android:layout_marginBottom="@dimen/card_padding"
+    android:layout_marginLeft="@dimen/card_padding"
+    android:layout_marginRight="@dimen/card_padding"
+    android:theme="@style/ThemeOverlay.AppCompat.Light"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-<TextView
-    android:id="@+id/tv_topic_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:fontFamily="sans-serif"
-    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-    android:textSize="20sp"
-    app:layout_constraintBottom_toTopOf="@+id/iv_topic"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    tools:text="Today, April 03"/>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_touch_selector"
+        android:paddingBottom="@dimen/card_padding"
+        android:paddingTop="@dimen/card_padding">
 
-<ImageView
-    android:id="@+id/iv_topic"
-    android:layout_width="96dp"
-    android:layout_height="96dp"
-    android:adjustViewBounds="true"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toLeftOf="@+id/horizontal_middle"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:src="@drawable/ic_launcher_background"/>
+        <android.support.constraint.Guideline
+            android:id="@+id/horizontal_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            tools:layout_editor_absoluteX="192dp"
+            tools:layout_editor_absoluteY="0dp" />
 
-<TextView
-    android:id="@+id/tv_topic_glossary"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:textColor="@color/white"
-    android:textSize="20sp"
-    app:layout_constraintHorizontal_bias="0.52"
-    app:layout_constraintLeft_toLeftOf="@+id/iv_topic"
-    app:layout_constraintRight_toRightOf="@+id/iv_topic"
-    app:layout_constraintTop_toBottomOf="@+id/iv_topic"
-    tools:text="Rainy"/>
+        <TextView
+            android:id="@+id/tv_topic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/iv_topic"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="Today, April 03" />
 
+        <ImageView
+            android:id="@+id/iv_topic"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_play_circle_filled_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/horizontal_middle"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<TextView
-    android:id="@+id/tv_topic_time"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:fontFamily="sans-serif-light"
-    android:textColor="@color/white"
-    android:textSize="72sp"
-    app:layout_constraintBottom_toBottomOf="@+id/iv_topic"
-    app:layout_constraintHorizontal_bias="0.45"
-    app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/iv_topic"
-    tools:text="19\u00b0"/>
+        <TextView
+            android:id="@+id/tv_topic_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_topic"
+            app:layout_constraintRight_toRightOf="@+id/iv_topic"
+            app:layout_constraintTop_toBottomOf="@+id/iv_topic"
+            tools:text="Rainy" />
 
-<TextView
-    android:id="@+id/low_temperature1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:fontFamily="sans-serif-light"
-    android:textColor="@color/white"
-    android:textSize="36sp"
-    app:layout_constraintBaseline_toBaselineOf="@+id/tv_topic_glossary"
-    app:layout_constraintLeft_toLeftOf="@+id/tv_topic_time"
-    app:layout_constraintRight_toRightOf="@+id/tv_topic_time"
-    tools:text="10\u00b0"/>
+        <TextView
+            android:id="@+id/tv_topic_glossary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="72sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_topic"
+            app:layout_constraintHorizontal_bias="0.45"
+            app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_topic"
+            android:textStyle="bold"
+            tools:text="19\u00b0" />
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_phases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="36sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_topic_time"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_topic_glossary"
+            app:layout_constraintRight_toRightOf="@+id/tv_topic_glossary"
+            tools:text="10\u00b0" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

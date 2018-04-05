@@ -17,79 +17,61 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:context=".purchaseDetail.PurchaseDetailActivity">
-            <include layout="@layout/item_result" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp">
+                android:layout_height="wrap_content">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingTop="4dp">
 
-
-                    <TextView
-                        android:id="@+id/tv_start"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.01"
-                        android:paddingRight="6dp"
-                        android:text="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-
                     <RelativeLayout
                         android:id="@+id/teste"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.02"
                         android:orientation="vertical">
 
+
+
                         <jp.shts.android.storiesprogressview.StoriesProgressView
                             android:id="@+id/stories"
-                            android:layout_width="100dp"
+                            android:layout_width="50dp"
                             android:layout_height="1dp"
                             android:layout_centerInParent="true">
 
                         </jp.shts.android.storiesprogressview.StoriesProgressView>
 
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="?android:attr/progressBarStyleHorizontal"
+
+                        <include
+                            android:id="@+id/include_result"
+                            layout="@layout/item_result"
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginStart="4dp"
-                            android:max="500"
-                            android:progress="0"
-                            android:textAlignment="center"
-                            android:progressDrawable="@drawable/circular" />
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_function"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/progressBar"
+                            android:layout_gravity="bottom|right"
+                            android:src="@drawable/ic_mic_white_24dp"
+                            app:fabSize="normal" />
 
 
                     </RelativeLayout>
 
-
-                    <TextView
-                        android:id="@+id/tv_end"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.01"
-                        android:paddingRight="6dp"
-                        android:text="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -104,89 +86,74 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
-
-                    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/rv_content_list"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="match_parent">
 
-                        android:paddingBottom="@dimen/activity_horizontal_margin_content"
-                        android:paddingLeft="@dimen/activity_horizontal_margin_content"
-                        android:paddingRight="@dimen/activity_horizontal_margin_content"
-                        android:paddingTop="@dimen/activity_horizontal_margin_content"></android.support.v7.widget.RecyclerView>
+                        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/rv_content_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true">
+                       </android.support.v7.widget.RecyclerView>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:clipToPadding="false"
+                        <android.support.v7.widget.RecyclerView
 
-                        app:behavior_overlapTop="128dp"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-            </LinearLayout>
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:layout_below="@+id/rv_content_list"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    </RelativeLayout>
+
+
+
+
+
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_gravity="bottom"
-                        android:layout_height="wrap_content">
-
-                        <include layout="@layout/fab_reveal_layout" />
-
-
-
-
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/fab_function"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|right"
-                            android:layout_margin="@dimen/fab_margin"
-                            android:src="@drawable/ic_add_circle_outline_white_24dp"
-                            app:fabSize="normal"
-                            />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|right"
-                            android:paddingTop="15dp"
-                            android:text="testettttttt"
-                            android:elevation="8dp"
-                            android:id="@+id/tv_word"
-                            android:textColor="@color/colorPrimaryDark" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top">
 
 
                     </FrameLayout>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fab_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_end"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_toStartOf="@+id/fab_function"
+                        android:src="@drawable/exo_controls_next"
+                        app:fabSize="normal" />
                 </FrameLayout>
+
+
+
             </LinearLayout>
 
 
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/tv_result_speech"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:orientation="vertical">
-                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                    android:id="@+id/sep_playerView_Audio"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@null"
-                    app:player_layout_id="@layout/exo_player_background"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
-            </LinearLayout>
-
-
+                android:layout_marginEnd="2dp"
+                android:lineSpacingExtra="16dp"
+                android:layout_marginStart="2dp"
+                android:padding="2dp"
+                android:textColor="@color/black"
+                android:textSize="23sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </LinearLayout>
+
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

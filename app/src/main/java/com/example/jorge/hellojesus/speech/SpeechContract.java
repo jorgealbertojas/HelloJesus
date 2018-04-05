@@ -28,8 +28,6 @@ public interface SpeechContract {
 
         void showProgress(android.view.View root);
 
-        void showAnimation();
-
         void initializeMediaSession();
 
         void initializePlayer(Uri mediaUriAudio);
@@ -48,27 +46,19 @@ public interface SpeechContract {
 
         void loadingContent(List<Content> contents, int mTimeLast);
 
-        void ShowFabButton(FloatingActionButton floatingActionButton, Animation animation, Button button);
+        void onStart();
 
-        void HideFabButton(FloatingActionButton floatingActionButton, Animation animation, Button button);
+        void onStop();
 
         Boolean isActiveFabButton(FloatingActionButton floatingActionButton);
-
-        void openBrowserImage(Context context, TextView word);
-
-        void openBrowserExplanation(Context context, TextView word);
-
-        void openBrowserTranslate(Context context, TextView word);
-
-
 
 
         // Play audio
         void initAudio();
 
-        void playAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator objectAnimator, StoriesProgressView storiesProgressView);
+        void playAudio(StoriesProgressView storiesProgressView);
 
-        void pauseAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator objectAnimator, StoriesProgressView storiesProgressView);
+        void pauseAudio(StoriesProgressView storiesProgressView);
 
         void ShowControllerAudio(SimpleExoPlayerView simpleExoPlayerView);
 

@@ -151,6 +151,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.0'
 
+    compile 'com.timqi.sectorprogressview:library:2.0.1'
 
     compile project(path: ':library')
 

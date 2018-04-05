@@ -2,6 +2,8 @@ package com.example.jorge.hellojesus.topic.fragmentTab;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -52,6 +54,8 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     private TopicContract.UserActionsListener mPresenter;
 
+    private static Context mContext;
+
     private static List<Integer> mIdTopics;
 
     public BibleFragment() {
@@ -66,6 +70,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mListAdapter = new BibleFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
+        mContext =  getContext();
         mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
     }
 
@@ -185,6 +190,15 @@ public class BibleFragment extends Fragment implements TopicContract.View {
             Topic topic = mTopics.get(position);
 
             viewHolder.topicName.setText(topic.getName());
+            viewHolder.topicTime.setText(topic.getTime() + " " + mContext.getResources().getString(R.string.seconds) );
+            viewHolder.topicGlossary.setText(Integer.toString(topic.getContent().size()));
+            viewHolder.topicPhases.setText(mContext.getResources().getString(R.string.verses));
+
+           // topic.getContent().size();
+
+            Resources res = mContext.getResources();
+            final int newColor = res.getColor(R.color.colorAccent);
+            viewHolder.topicImage.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
         }
 
         public void replaceData(List<Topic> notes) {
@@ -208,12 +222,21 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView topicName;
+            public TextView topicGlossary;
+            public TextView topicTime;
+            public ImageView topicImage;
+            public TextView topicPhases;
+
             private BibleFragment.ItemListener mItemListener;
 
             public ViewHolder(View itemView, BibleFragment.ItemListener listener) {
                 super(itemView);
                 mItemListener = listener;
                 topicName = (TextView) itemView.findViewById(R.id.tv_topic_name);
+                topicGlossary = (TextView) itemView.findViewById(R.id.tv_topic_glossary);
+                topicTime = (TextView) itemView.findViewById(R.id.tv_topic_time);
+                topicImage = (ImageView) itemView.findViewById(R.id.iv_topic);
+                topicPhases = (TextView) itemView.findViewById(R.id.tv_phases);
 
                 itemView.setOnClickListener(this);
             }

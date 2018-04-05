@@ -14,37 +14,25 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,53 +42,28 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
-import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.main.MainContract;
-import com.example.jorge.hellojesus.main.MainFragment;
-import com.example.jorge.hellojesus.main.MainPresenter;
+import com.example.jorge.hellojesus.speech.progress.ProgressActivity;
 import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
 import com.example.jorge.hellojesus.speech.support.SpeechService;
 import com.example.jorge.hellojesus.speech.support.VoiceRecorder;
-import com.example.jorge.hellojesus.topic.TopicActivity;
-import com.example.jorge.hellojesus.util.Common;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.timqi.sectorprogressview.ColorfulRingProgressView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
@@ -112,6 +75,13 @@ import static android.content.Context.BIND_AUTO_CREATE;
  */
 
 public class SpeechFragment extends Fragment implements SpeechContract.View, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
+
+    public static final String EXTRA_TOTAL = "EXTRA_TOTAL";
+    public static final String EXTRA_TOTAL_MISTAKE = "EXTRA_TOTAL_MISTAKE";
+    public static final String EXTRA_TOTAL_MISSING = "EXTRA_TOTAL_MISSING";
+    public static final String EXTRA_TOTAL_SAID = "EXTRA_TOTAL_SAID";
+    public static final String EXTRA_TOTAL_CORRECT = "EXTRA_TOTAL_CORRECT";
+
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
     private static final String STATE_RESULTS = "results";
@@ -121,11 +91,13 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private int mColorNotHearing;
     // View references
     private TextView mStatus;
+    private ImageView mLoadingGif;
     private TextView mText;
     private ResultAdapter mAdapter;
     private RecyclerView mRecyclerViewSpeech;
 
-
+    private static List<String> ListCorrect;
+    private static List<String> ListListen;
 
 
 
@@ -164,10 +136,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private static Animation mHideFab;
     private static Animation mRotateFab;
 
+
+
+
     private static FloatingActionButton mFloatingActionButton;
-    private static FloatingActionButton mFabImage;
-    private static FloatingActionButton mFabExplanation;
-    private static FloatingActionButton mFabTranslate;
+    private static FloatingActionButton mFabNext;
 
     private static Boolean mFabMenuOpen = false;
 
@@ -175,15 +148,10 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private static Context mContext;
 
-    private static Button mWord;
-
     private StoriesProgressView storiesProgressView;
 
 
     private int counter = 0;
-
-    private ProgressBar mProgressBar;
-    private ObjectAnimator mAnimation;
 
     private long[] durations;
 
@@ -197,6 +165,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private TextView mValueStart;
     private TextView mValueEnd;
+    private TextView mResultSpeech;
+
+    private static boolean statusPlay = false;
 
 
     public SpeechFragment() {
@@ -207,14 +178,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
                 REQUEST_RECORD_AUDIO_PERMISSION);
     }
-
-    public interface Listener {
-        /**
-         * Called when the dialog is dismissed.
-         */
-        void onMessageDialogDismissed();
-    }
-
 
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -250,8 +213,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mListAdapter = new SpeechFragment.ContentAdapter(new ArrayList<Content>(0));
         mPresenter = new SpeechPresenter(this);
 
-
-
     }
 
 
@@ -276,27 +237,24 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
 
         mFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.fab_function);
-        mFabImage = (FloatingActionButton) root.findViewById(R.id.fab_image);
-        mFabExplanation = (FloatingActionButton) root.findViewById(R.id.fab_explanation);
-        mFabTranslate = (FloatingActionButton) root.findViewById(R.id.fab_translate);
+        mFabNext = (FloatingActionButton) root.findViewById(R.id.fab_next);
 
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
         seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
-        mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
-        mWord = (Button) root.findViewById(R.id.tv_word);
         mValueStart = (TextView) root.findViewById(R.id.tv_start);
         mValueEnd = (TextView) root.findViewById(R.id.tv_end);
 
-        mWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!((TextView) v).getTag().toString().equals("0")) {
-                    ((TextView) v).setText(nextSpace(((TextView) v).getTag().toString(), ((TextView) v)));
-                }
+        mValueStart.setText("1 / ");
 
-            }
-        });
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.rv_content_list);
+
+        mResultSpeech = (TextView) root.findViewById(R.id.tv_result_speech);
+
+
+        mContext = getContext();
+
+
 
 
         // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
@@ -320,52 +278,31 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if ()
                 mSpeechService.recognizeInputStream(getResources().openRawResource(R.raw.audio));
-               // toggleFabMenu();
+                if (statusPlay){
+                    stopVoiceRecorder();
+                    changeStatus(false);
+                }else{
+                    startVoiceRecorder();
+                    changeStatus(true);
+                }
+
+
 
             }
         });
 
-        mFabImage.setOnClickListener(new View.OnClickListener() {
+        mFabNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if ()
+               onNext();
 
-                toggleFabMenu();
-                mPresenter.openBrowserImage(mContext, mWord);
+
 
             }
         });
-
-        mFabExplanation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
-                mPresenter.openBrowserExplanation(mContext, mWord);
-
-            }
-        });
-
-        mFabTranslate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
-                mPresenter.openBrowserTranslate(mContext, mWord);
-
-            }
-        });
-
-
-        initRecyclerView(root);
-
-        requestPermission();
-        initializeMediaSession();
-        initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + mMp3 + ".mp3"));
-
-
-        mPresenter.loadingContent(mContents, mTime);
-
-
-
 
         final Resources resources = getResources();
         final Resources.Theme theme = getActivity().getTheme();
@@ -373,6 +310,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mColorNotHearing = ResourcesCompat.getColor(resources, R.color.colorAccent, theme);
 
         mStatus = (TextView)  root.findViewById(R.id.status);
+        mLoadingGif = (ImageView) root.findViewById(R.id.iv_loading_gif);
         mText = (TextView) root.findViewById(R.id.text);
 
         mRecyclerViewSpeech = (RecyclerView) root.findViewById(R.id.recycler_view);
@@ -382,13 +320,27 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mAdapter = new ResultAdapter(results);
         mRecyclerViewSpeech.setAdapter(mAdapter);
 
-      //  onStart();
-        // atençãotttttttttttttttttttt
+
+        initRecyclerView();
+
+        requestPermission();
+        initializeMediaSession();
+        //  initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + mMp3 + ".mp3"));
 
 
+        mPresenter.loadingContent(mContents, mTime);
 
-        showAnimation();
         showProgress(root);
+
+        mPresenter.pauseAudio(storiesProgressView);
+
+
+
+
+
+        onStart();
+
+        changeStatus(false);
 
 
         return root;
@@ -470,81 +422,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mFabMenuOpen = !mFabMenuOpen;
     }
 
-// @Override
-//  public void openViewContent(Content content) {
-//    Intent intent = new Intent(getActivity(), TopicActivity.class);
-
-//     List<Integer> ii = content.getTopics();
-
-//    Bundle bundle = new Bundle();
-//     bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
-//     intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
-//      startActivity(intent);
-
-//  }
 
 
-    /**
-     * Reset Session the Audio and the Video
-     */
-    private void resetSession() {
-
-        if (mExoPlayerAudio != null) {
-            mExoPlayerAudio.stop();
-        }
-
-        mExoPlayerAudio = null;
-
-    }
-
-    /**
-     * Shows Media Style notification, with actions that depend on the current MediaSession
-     * PlaybackState.
-     */
-    private void showNotification(PlaybackStateCompat state) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
-
-        int icon;
-        String play_pause;
-        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            icon = R.drawable.exo_controls_pause;
-            play_pause = getString(R.string.pause);
-        } else {
-            icon = R.drawable.exo_controls_play;
-            play_pause = getString(R.string.play);
-        }
-
-
-        NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
-                icon, play_pause,
-                MediaButtonReceiver.buildMediaButtonPendingIntent(this.getActivity(),
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE));
-
-        NotificationCompat.Action restartAction = new android.support.v4.app.NotificationCompat
-                .Action(R.drawable.exo_controls_previous, getString(R.string.restart),
-                MediaButtonReceiver.buildMediaButtonPendingIntent
-                        (this.getActivity(), PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
-
-        PendingIntent contentPendingIntent = PendingIntent.getActivity
-                (this.getActivity(), 0, new Intent(this.getActivity(), SpeechActivity.class), 0);
-
-
-        builder.setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.notification_text))
-                .setContentIntent(contentPendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(restartAction)
-                .addAction(playPauseAction)
-                .setStyle(new NotificationCompat.MediaStyle()
-                        .setMediaSession(mMediaSession.getSessionToken())
-                        .setShowActionsInCompactView(0, 1));
-
-//        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(0, builder.build());
-
-
-    }
 
     /**
      * Request Permission download for the user .
@@ -569,19 +448,10 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         storiesProgressView.startStories();
     }
 
-    @Override
-    public void showAnimation() {
-        mAnimation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
-        mAnimation.setDuration(durations[mPosition]); //in milliseconds
-        mAnimation.setInterpolator(new DecelerateInterpolator());
-        mAnimation.start();
 
-
-    }
 
     @Override
     public void showAllContent() {
-
     }
 
 
@@ -591,36 +461,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
      */
     @Override
     public void initializeMediaSession() {
-
-        // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(this.getActivity(), "BEBETO");
-
-        // Enable callbacks from MediaButtons and TransportControls.
-        mMediaSession.setFlags(
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-        // Do not let MediaButtons restart the player when the app is not visible.
-        mMediaSession.setMediaButtonReceiver(null);
-
-        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-        mStateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(
-                        PlaybackStateCompat.ACTION_PLAY |
-                                PlaybackStateCompat.ACTION_PAUSE |
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
-
-        mMediaSession.setPlaybackState(mStateBuilder.build());
-
-
-        // MySessionCallback has methods that handle callbacks from a media controller.
-        mMediaSession.setCallback(new MySessionCallback());
-
-        // Start the Media Session since the activity is active.
-        mMediaSession.setActive(true);
-
-
     }
 
     @Override
@@ -628,41 +468,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     }
 
-   /* *//**
-     * Initialize ExoPlayer.
-     *//*
-    @Override
-    public void initializePlayer(Uri mediaUriAudio) {
-        if (mExoPlayerAudio == null) {
-
-            *//**
-             * Create Audio.
-             *//*
-            // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayerAudio = ExoPlayerFactory.newSimpleInstance(this.getActivity(), trackSelector, loadControl);
-
-
-            mPlayerView.setPlayer(mExoPlayerAudio);
-
-            // Set the ExoPlayer.EventListener to this activity.
-            mExoPlayerAudio.addListener(this);
-
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(this.getActivity(), "ClassicalMusicQuiz");
-            MediaSource mediaSourceAudio = new ExtractorMediaSource(mediaUriAudio, new DefaultDataSourceFactory(
-                    this.getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-
-
-            mExoPlayerAudio.prepare(mediaSourceAudio);
-
-
-            durationHandler.postDelayed(updateSeekBarTime, 1);
-            mExoPlayerAudio.setPlayWhenReady(true);
-
-        }
-    }*/
 
     @Override
     public void setListTime(long[] listTime) {
@@ -672,45 +477,55 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     }
 
-
-    /**
-     * Control the time for Put TXTs in TextView with this information.
-     */
-    private Runnable updateSeekBarTime = new Runnable() {
-        public void run() {
-            if (mExoPlayerAudio != null) {
-                //get current position
-                mTimeElapsed = mExoPlayerAudio.getCurrentPosition();
-                mTimeLast = mExoPlayerAudio.getDuration();
-
-                double timeRemaining = mFinalTime - mTimeElapsed;
-                String second = Float.toString(1000 * (-1 * TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining)));
-
-
-                //repeat yourself that again in 100 milliseconds
-                durationHandler.postDelayed(this, 100);
-            }
-        }
-    };
-
-    /**
-     * Release ExoPlayer.
-     */
-    private void releasePlayer() {
-        mNotificationManager.cancelAll();
-        mExoPlayerAudio.stop();
-        mExoPlayerAudio.release();
-        mExoPlayerAudio = null;
-
-    }
-
     @Override
     public void onNext() {
-        mProgressBar.clearAnimation();
-        mPosition++;
-        mRecyclerView.scrollToPosition(mPosition);
-        mValueStart.setText(Integer.toString(mPosition + 1));
-        showAnimation();
+        if (statusPlay) {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mPosition++;
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(mPosition);
+                    mValueStart.setText(Integer.toString(mPosition + 1) + getResources().getString(R.string.format_until));
+                    mRecyclerView.setSelected(true);
+
+                    if (mPosition == mListAdapter.mContent.size()){
+
+                        ListCorrect = verifyTheWord(changeForAdpter(mListAdapter.mContent));
+
+                        ListListen = verifyTheWord(changeForAdpter(mAdapter.getResults()));
+
+                        int total = ListCorrect.size();
+                        int totalSaid = ListListen.size();
+
+                        List<String> result = new ArrayList<>();
+                        result = countPoint(ListCorrect,ListListen,0);
+
+                        int totalSaidCorrect = total - result.size();
+                        int totalMistake = totalSaid - totalSaidCorrect;
+                        int totalMissing = total - totalSaidCorrect;
+
+
+                        Intent intent = new Intent(getActivity(), ProgressActivity.class);
+                        intent.putExtra(EXTRA_TOTAL, Integer.toString(total));
+                        intent.putExtra(EXTRA_TOTAL_CORRECT, Integer.toString(totalSaidCorrect) );
+                        intent.putExtra(EXTRA_TOTAL_MISSING, Integer.toString(totalMissing) );
+                        intent.putExtra(EXTRA_TOTAL_MISTAKE, Integer.toString(totalMistake) );
+                        intent.putExtra(EXTRA_TOTAL_SAID, Integer.toString(totalSaid) );
+                        startActivity(intent);
+
+
+                        stopVoiceRecorder();
+                        changeStatus(false);
+
+
+
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -725,64 +540,32 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     }
 
-
-
-    /**
-     * Media Session Callbacks, where all external clients control the player.
-     */
-    private class MySessionCallback extends MediaSessionCompat.Callback {
-        @Override
-        public void onPlay() {
-            mExoPlayerAudio.setPlayWhenReady(true);
-
+    public List<String> changeForAdpter(List<Content> contentList){
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < contentList.size(); i++){
+            stringList.add(contentList.get(i).getContent_english());
         }
-
-        @Override
-        public void onPause() {
-            mExoPlayerAudio.setPlayWhenReady(false);
-        }
-
-        @Override
-        public void onSkipToPrevious() {
-            mExoPlayerAudio.seekTo(0);
-        }
+        return stringList;
     }
 
-    /**
-     * Broadcast Receiver registered to receive the MEDIA_BUTTON intent coming from clients.
-     */
-    public class MediaReceiver extends BroadcastReceiver {
-
-        public MediaReceiver() {
+    public List<String> changeForAdpter(ArrayList<String> stringArrayList){
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < stringArrayList.size(); i++){
+            stringList.add(stringArrayList.get(i).toString());
         }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            MediaButtonReceiver.handleIntent(mMediaSession, intent);
-        }
+        return stringList;
     }
+
 
 
     private static class ContentAdapter extends RecyclerView.Adapter<SpeechFragment.ContentAdapter.ViewHolder> {
 
         private List<Content> mContent;
-       // private SpeechFragment.ItemListener mItemListener;
 
         public ContentAdapter(List<Content> contents) {
             setList(contents);
-        //    mItemListener = itemListener;
         }
 
-        private void setAnimation(View viewToAnimate, int position) {
-            // If the bound view wasn't previously displayed on screen, it's animated
-            //  if (position > lastPosition)
-            // {
-            ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setDuration(new Random().nextInt(501));//to make duration random number between [0,501)
-            viewToAnimate.startAnimation(anim);
-            //   lastPosition = position;
-            //   }
-        }
 
         @Override
         public SpeechFragment.ContentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -790,7 +573,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
 
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            View noteView = inflater.inflate(R.layout.item_content, parent, false);
+            View noteView = inflater.inflate(R.layout.item_speech, parent, false);
 
             return new SpeechFragment.ContentAdapter.ViewHolder(noteView);
         }
@@ -799,94 +582,15 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         public void onBindViewHolder(SpeechFragment.ContentAdapter.ViewHolder viewHolder, int position) {
             Content content = mContent.get(position);
 
-            setAnimation(viewHolder.itemView, position);
-
             viewHolder.mContentEnglish.setText(content.getContent_english());
-            viewHolder.mContentPortuguese.setText(content.getContent_portuguese());
 
-
-            viewHolder.mContentEnglish.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            viewHolder.mContentEnglish.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    mPresenter.ShowControllerAudio(mPlayerView);
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Layout layout = ((TextView) v).getLayout();
-                        int x = (int) event.getX();
-                        int y = (int) event.getY();
-                        if (layout != null) {
-                            int line = layout.getLineForVertical(y);
-                            int offset = layout.getOffsetForHorizontal(line, x);
-
-                            String phase = ((TextView) v).getText().toString();
-                            String phaseRight = phase.toString().substring(offset, phase.length());
-
-                            int index1 = firstSpace(phaseRight);
-                            if (index1 < 0) {
-                                index1 = phaseRight.length();
-                            }
-
-                            int index2 = 0;
-                            if (offset < phase.length()) {
-                                index2 = priorSpace(phase, offset);
-                            } else {
-                                offset = phase.length() - 1;
-                                index2 = priorSpace(phase, offset);
-                            }
-
-                            if (index2 + 1 < index1 + offset) {
-                                mWord.setTag(phase.toString().substring(index2 + 1, phase.length()));
-                                String word = phase.toString().substring(index2 + 1, index1 + offset);
-                                mWord.setText(word.replace(",", ""));
-                                mPresenter.ShowFabButton(mFloatingActionButton, mShowFab, mWord);
-                            } else {
-                                mWord.setText("");
-                                mPresenter.HideFabButton(mFloatingActionButton, mHideFab, mWord);
-                                mFabMenuOpen = true;
-                                toggleFabMenu();
-                            }
-                        }
-                    }
-                    return true;
-                }
-            });
-
-
-            String s = content.getContent_english();
-
-            String[] arr = s.split(" ");
-
-            for (String ss : arr) {
-
-                System.out.println(ss);
+            if (position == mPosition) {
+                viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
+                viewHolder.mContentEnglish.setTextSize(mContext.getResources().getDimension(R.dimen.text_big));
+            } else {
+                viewHolder.mContentEnglish.setTypeface(null, Typeface.NORMAL);
+                viewHolder.mContentEnglish.setTextSize(mContext.getResources().getDimension(R.dimen.text_normal));
             }
-
-
-            //viewHolder.mRelativeLayout = Common.createTagDynamic(viewHolder.mRelativeLayout,arr, mContext, true);
-
-
-        }
-
-        private int firstSpace(String textView) {
-
-            int i = textView.indexOf(" ");
-
-            return i;
-
-        }
-
-
-        private int priorSpace(String textView, int off) {
-            int i = off;
-            while (i > 0) {
-
-                if ((textView.toString().substring(i, i + 1).indexOf(" ") == 0)) {
-                    return i;
-                }
-                i--;
-            }
-            return i;
 
         }
 
@@ -912,17 +616,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView mContentEnglish;
-            public TextView mContentPortuguese;
 
-           // private SpeechFragment.ItemListener mItemListener;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-              //  mItemListener = listener;
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
-                mContentPortuguese = (TextView) itemView.findViewById(R.id.tv_content_portuguese);
-
-
                 itemView.setOnClickListener(this);
             }
 
@@ -930,24 +628,18 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 Content content = getItem(position);
-             //   mItemListener.onMainClick(content);
-
             }
         }
     }
 
 
-
-    private void initRecyclerView(View root) {
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.rv_content_list);
+    private void initRecyclerView() {
         mRecyclerView.setAdapter(mListAdapter);
 
         int numColumns = 1;
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
-
-
     }
 
     private String nextSpace(String phrase, TextView TextView) {
@@ -984,9 +676,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
         @Override
         public void onVoiceStart() {
-            showStatus(true);
             if (mSpeechService != null) {
                 mSpeechService.startRecognizing(mVoiceRecorder.getSampleRate());
+                showStatus(true);
             }
         }
 
@@ -1002,6 +694,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             showStatus(false);
             if (mSpeechService != null) {
                 mSpeechService.finishRecognizing();
+                onNext();
             }
         }
 
@@ -1012,7 +705,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                 @Override
                 public void onSpeechRecognized(final String text, final boolean isFinal) {
                     if (isFinal) {
-                        mVoiceRecorder.dismiss();
+                        if(mVoiceRecorder != null) {
+                            mVoiceRecorder.dismiss();
+                        }
                     }
                     if (mText != null && !TextUtils.isEmpty(text)) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -1098,6 +793,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     public void onStart() {
         super.onStart();
 
+
         // Prepare Cloud Speech API
         this.getActivity().bindService(new Intent(this.getActivity(), SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
 
@@ -1133,6 +829,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         }
         mVoiceRecorder = new VoiceRecorder(mVoiceCallback);
         mVoiceRecorder.start();
+
+
     }
 
     private void stopVoiceRecorder() {
@@ -1140,6 +838,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             mVoiceRecorder.stop();
             mVoiceRecorder = null;
         }
+        changeStatus(false);
+
     }
 
     private void showPermissionMessageDialog() {
@@ -1153,9 +853,114 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             @Override
             public void run() {
                 mStatus.setTextColor(hearingVoice ? mColorHearing : mColorNotHearing);
+                if (hearingVoice) {
+                    changeStatus(true);
+
+                }else{
+
+                }
+
             }
         });
     }
+
+    private void changeStatus(boolean status ){
+        if (status) {
+            mLoadingGif.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(R.drawable.sound_image).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().into(mLoadingGif);
+            mFloatingActionButton.setImageResource(R.drawable.ic_mic_white_24dp);
+            mStatus.setVisibility(View.GONE);
+            statusPlay = true;
+            mPresenter.playAudio(storiesProgressView);
+        }else{
+            mLoadingGif.setVisibility(View.GONE);
+            mFloatingActionButton.setImageResource(R.drawable.ic_mic_off_white_24dp);
+            mStatus.setVisibility(View.VISIBLE);
+            statusPlay = false;
+            mPresenter.pauseAudio(storiesProgressView);
+        }
+
+    }
+
+
+    private static List<String> verifyTheWord(List<String> eeee) {
+
+        List<String> listString = new ArrayList<String>();
+
+        for (int i = 0; i < eeee.size(); i++) {
+            listString.addAll(getWordInPhase(eeee.get(i)))
+            ;
+        }
+
+        Collections.sort(listString);
+        listString = EliminateDuplicate(listString);
+
+
+        return listString;
+    }
+
+
+    private static List<String> getWordInPhase(String phrase) {
+        List<String> mListResult = new ArrayList<String>();
+        int index = 0;
+
+        while (phrase.length() > 0) {
+
+
+            index = phrase.toString().indexOf(" ");
+
+            if ((index > 0)) {
+
+                mListResult.add(phrase.substring(0, index).toUpperCase());
+                phrase = phrase.toString().substring(index + 1,phrase.length());
+
+            }else{
+                mListResult.add(phrase.toString().toUpperCase());
+                phrase = "";
+            }
+
+        }
+
+        return mListResult;
+    }
+
+    private static  List<String> EliminateDuplicate(List<String> listString){
+
+        int i = 0;
+        while ( i < (listString.size() - 1)){
+            if (listString.get(i).toString().equals(listString.get(i+1).toString())){
+                listString.remove(i+1);
+                i--;
+            }
+            i++;
+        }
+
+        return listString;
+    }
+
+    private static  List<String> countPoint(List<String> correctList, List<String> myList, int i) {
+
+        if (correctList.size() == i) {
+            return correctList;
+        }
+        else if (myList.size() == 0) {
+            i ++;
+            myList = ListListen;
+            return countPoint(correctList, myList,i);
+        } else if (correctList.get(i).toString().equals(myList.get(0).toString())) {
+            correctList.remove(i);
+            myList.remove(0);
+            return countPoint(correctList, myList,i);
+        } else if (myList.size() > 0) {
+            return countPoint(correctList, myList.subList(1, myList.size()),i);
+        } else {
+            return countPoint(correctList, myList, i);
+
+        }
+
+    }
+
+
 
 }
 

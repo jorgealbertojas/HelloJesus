@@ -2,6 +2,8 @@ package com.example.jorge.hellojesus.topic.fragmentTab;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
@@ -48,6 +51,8 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
 
     private static List<Integer> mIdTopics;
 
+    private static Context mContext;
+
     public ExerciseFragment() {
     }
 
@@ -74,7 +79,7 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        mContext = getContext();
 
         View root = inflater.inflate(R.layout.fragment_topics, container, false);
 
@@ -179,6 +184,15 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
             Topic topic = mTopics.get(position);
 
             viewHolder.topicName.setText(topic.getName());
+            viewHolder.topicTime.setText(topic.getTime() + " " + mContext.getResources().getString(R.string.seconds) );
+            viewHolder.topicGlossary.setText(Integer.toString(topic.getContent().size()));
+            viewHolder.topicPhases.setText(mContext.getResources().getString(R.string.exercises));
+
+            // topic.getContent().size();
+
+            Resources res = mContext.getResources();
+            final int newColor = res.getColor(R.color.colorAccent);
+            viewHolder.topicImage.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
         }
 
         public void replaceData(List<Topic> notes) {
@@ -202,12 +216,20 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView topicName;
+            public TextView topicGlossary;
+            public TextView topicTime;
+            public ImageView topicImage;
+            public TextView topicPhases;
             private BibleFragment.ItemListener mItemListener;
 
             public ViewHolder(View itemView, BibleFragment.ItemListener listener) {
                 super(itemView);
                 mItemListener = listener;
                 topicName = (TextView) itemView.findViewById(R.id.tv_topic_name);
+                topicGlossary = (TextView) itemView.findViewById(R.id.tv_topic_glossary);
+                topicTime = (TextView) itemView.findViewById(R.id.tv_topic_time);
+                topicImage = (ImageView) itemView.findViewById(R.id.iv_topic);
+                topicPhases = (TextView) itemView.findViewById(R.id.tv_phases);
 
                 itemView.setOnClickListener(this);
             }

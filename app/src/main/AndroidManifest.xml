@@ -24,9 +24,11 @@
         </activity>
         <activity android:name=".topic.TopicActivity" />
         <activity android:name=".content.ContentActivity" />
-        <activity android:name=".speech.SpeechActivity"></activity>
+        <activity android:name=".speech.SpeechActivity" />
 
-        <service android:name=".speech.support.SpeechService"/>
+        <service android:name=".speech.support.SpeechService" />
+
+        <activity android:name=".speech.progress.ProgressActivity"></activity>
     </application>
 
 </manifest>

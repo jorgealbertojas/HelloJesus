@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.content.ContentFragment;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
 import com.example.jorge.hellojesus.util.Common;
