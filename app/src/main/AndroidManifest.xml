@@ -28,7 +28,8 @@
 
         <service android:name=".speech.support.SpeechService" />
 
-        <activity android:name=".speech.progress.ProgressActivity"></activity>
+        <activity android:name=".progress.ProgressActivity" />
+        <activity android:name=".write.WriteActivity"></activity>
     </application>
 
 </manifest>

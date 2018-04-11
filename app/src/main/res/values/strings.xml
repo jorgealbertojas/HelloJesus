@@ -27,6 +27,7 @@
 
     <!-- String For Other  -->
     <string name="listening">No listening. Wait...  </string>
+    <string name="writing">Write here.</string>
     <string name="permission_message">This app needs to record audio and recognize your speech.</string>
     <string name="verses">Verses</string>
     <string name="phases">Phases</string>

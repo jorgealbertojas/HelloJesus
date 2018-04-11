@@ -1,22 +1,28 @@
-package com.example.jorge.hellojesus.speech;
+package com.example.jorge.hellojesus.write;
+
+
 
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+
 import java.util.List;
-import jp.shts.android.storiesprogressview.StoriesProgressView;
+
+
 
 /**
- * Created by jorge on 16/03/2018.
- * Presenter implement contract Speech
+ * Created by jorge on 06/04/2018.
+ * Presenter implement contract Write
  */
 
-public class SpeechPresenter implements SpeechContract.UserActionsListener {
+public class WritePresenter implements WriteContract.UserActionsListener {
 
 
-    private final SpeechContract.View mSpeechContractView;
+    private final WriteContract.View mWriteContractView;
 
-    public SpeechPresenter(SpeechContract.View speechContract_View) {
 
-        this.mSpeechContractView = speechContract_View;
+    public WritePresenter(WriteContract.View writeContract_View) {
+
+        this.mWriteContractView = writeContract_View;
     }
 
     @Override
@@ -84,9 +90,9 @@ public class SpeechPresenter implements SpeechContract.UserActionsListener {
 
         }
 
-        mSpeechContractView.setListTime(listTime);
+        mWriteContractView.setListTime(listTime);
 
-        mSpeechContractView.showContent(contents);
+        mWriteContractView.showContent(contents);
 
 
     }
@@ -101,22 +107,26 @@ public class SpeechPresenter implements SpeechContract.UserActionsListener {
 
     }
 
-
     @Override
-    public void playAudio(StoriesProgressView storiesProgressView) {
+    public void playAudio(SimpleExoPlayer ExoPlayerAudio) {
 
-            storiesProgressView.resume();
-            onStart();
+            ExoPlayerAudio.setPlayWhenReady(true);
 
     }
 
     @Override
-    public void pauseAudio(StoriesProgressView storiesProgressView) {
+    public void pauseAudio(SimpleExoPlayer ExoPlayerAudio) {
 
-            storiesProgressView.pause();
-            onStop();
+            ExoPlayerAudio.setPlayWhenReady(false);
+
 
     }
+
+
+
+
+
+
 
 
 

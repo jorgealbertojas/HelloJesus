@@ -1,0 +1,221 @@
+package com.example.jorge.hellojesus.progress;
+
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_ARRAY_LIST_STRING;
+import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_BUNDLE;
+import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_LIST_CONTENT;
+
+/**
+ * Created by jorge on 06/04/2018.
+ * Progress Activity for support all app with
+ * Algorithm for count total word, mistake, missing, correct and word said
+ */
+
+public class ProgressActivity extends AppCompatActivity {
+
+    private static ProgressBar mProgressBar;
+    private static CountDownTimer mCountDownTimer;
+
+    private LinearLayout mLinearLayoutResult;
+    private TextView mCountSpeech;
+    private TextView mCountMissing;
+    private TextView mCountCorrect;
+    private TextView mCountSaid;
+    private TextView mCountMistake;
+
+    private static List<String> ListCorrect;
+    private static List<String> ListListen;
+
+    private static List<Content> ListContent;
+    private static ArrayList<String> ListArrayString;
+
+    private static int mTotal;
+
+    private static String mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake;
+
+    private  static int i=0;
+
+    private  static int j=5;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_progress);
+
+        Bundle bundle = new Bundle();
+        bundle = getIntent().getBundleExtra(EXTRA_BUNDLE);
+        ListContent = (List<Content>) bundle.getSerializable(EXTRA_LIST_CONTENT);
+        ListArrayString = (ArrayList<String>) bundle.getStringArrayList(EXTRA_ARRAY_LIST_STRING);
+
+        intCount(ListContent, ListArrayString);
+
+        mLinearLayoutResult = (LinearLayout) findViewById(R.id.ll_result);
+        mCountSpeech = (TextView) findViewById(R.id.tv_count_speech);
+        mCountMissing = (TextView) findViewById(R.id.tv_count_missing);
+        mCountCorrect = (TextView) findViewById(R.id.tv_count_correct);
+        mCountSaid = (TextView) findViewById(R.id.tv_count_said);
+        mCountMistake = (TextView) findViewById(R.id.tv_count_mistake);
+        mCountSpeech = (TextView) findViewById(R.id.tv_count_speech);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        mProgressBar.setProgress(i);
+        mCountDownTimer = new CountDownTimer(5000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.v("Log_tag", "Tick of Progress" + i + millisUntilFinished);
+                i++;
+                j--;
+                mProgressBar.setProgress((int) i * 100 / (5000 / 1000));
+                mCountSpeech.setText(Integer.toString(j));
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                i++;
+                mProgressBar.setProgress(100);
+                mProgressBar.setVisibility(View.GONE);
+                mCountSpeech.setBackground(getDrawable(R.drawable.circle_text_view_border));
+                mLinearLayoutResult.setVisibility(View.VISIBLE);
+                mCountSpeech.setText(Integer.toString(mTotal));
+
+            }
+        };
+        mCountDownTimer.start();
+        putValueInLabel(mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake);
+    }
+
+
+    private void intCount(List<Content> listContent, ArrayList<String> stringArrayList ){
+        ListCorrect = verifyTheWord(changeForAdpter(listContent));
+
+        ListListen = verifyTheWord(changeForAdpter(stringArrayList));
+
+        mTotal = ListCorrect.size();
+        mTotalSaid = Integer.toString(ListListen.size());
+
+        List<String> result = new ArrayList<>();
+        result = countPoint(ListCorrect,ListListen,0);
+
+        mTotalSaidCorrect = Integer.toString(mTotal - result.size());
+        mTotalMistake = Integer.toString(Integer.parseInt(mTotalSaid) - Integer.parseInt(mTotalSaidCorrect));
+        mTotalMissing = Integer.toString((mTotal) - Integer.parseInt(mTotalSaidCorrect));
+    }
+
+
+    private void putValueInLabel(String countMissing, String countCorrect, String countSaid, String countMistake ){
+
+        mCountMissing.setText(countMissing);
+        mCountCorrect.setText(countCorrect);
+        mCountSaid.setText(countSaid);
+        mCountMistake.setText(countMistake);
+    }
+
+    private static List<String> verifyTheWord(List<String> eeee) {
+
+        List<String> listString = new ArrayList<String>();
+
+        for (int i = 0; i < eeee.size(); i++) {
+            listString.addAll(getWordInPhase(eeee.get(i)))
+            ;
+        }
+
+        Collections.sort(listString);
+        listString = EliminateDuplicate(listString);
+
+
+        return listString;
+    }
+
+
+    private static List<String> getWordInPhase(String phrase) {
+        List<String> mListResult = new ArrayList<String>();
+        int index = 0;
+
+        while (phrase.length() > 0) {
+
+
+            index = phrase.toString().indexOf(" ");
+
+            if ((index > 0)) {
+
+                mListResult.add(phrase.substring(0, index).toUpperCase());
+                phrase = phrase.toString().substring(index + 1,phrase.length());
+
+            }else{
+                mListResult.add(phrase.toString().toUpperCase());
+                phrase = "";
+            }
+        }
+        return mListResult;
+    }
+
+    private static  List<String> EliminateDuplicate(List<String> listString){
+        int i = 0;
+        while ( i < (listString.size() - 1)){
+            if (listString.get(i).toString().equals(listString.get(i+1).toString())){
+                listString.remove(i+1);
+                i--;
+            }
+            i++;
+        }
+
+        return listString;
+    }
+
+    private static  List<String> countPoint(List<String> correctList, List<String> myList, int i) {
+
+        if (correctList.size() == i) {
+            return correctList;
+        }
+        else if (myList.size() == 0) {
+            i ++;
+            myList = ListListen;
+            return countPoint(correctList, myList,i);
+        } else if (correctList.get(i).toString().equals(myList.get(0).toString())) {
+            correctList.remove(i);
+            myList.remove(0);
+            return countPoint(correctList, myList,i);
+        } else if (myList.size() > 0) {
+            return countPoint(correctList, myList.subList(1, myList.size()),i);
+        } else {
+            return countPoint(correctList, myList, i);
+
+        }
+
+    }
+
+    public List<String> changeForAdpter(List<Content> contentList){
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < contentList.size(); i++){
+            stringList.add(contentList.get(i).getContent_english());
+        }
+        return stringList;
+    }
+
+    public List<String> changeForAdpter(ArrayList<String> stringArrayList){
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < stringArrayList.size(); i++){
+            stringList.add(stringArrayList.get(i).toString());
+        }
+        return stringList;
+    }
+
+}

@@ -1,5 +1,6 @@
 package com.example.jorge.hellojesus.speech;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -7,6 +8,8 @@ import android.content.res.Resources;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.media.session.MediaButtonReceiver;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -21,15 +24,11 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
@@ -41,28 +40,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.speech.progress.ProgressActivity;
+import com.example.jorge.hellojesus.progress.ProgressActivity;
 import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
 import com.example.jorge.hellojesus.speech.support.SpeechService;
 import com.example.jorge.hellojesus.speech.support.VoiceRecorder;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.timqi.sectorprogressview.ColorfulRingProgressView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;
@@ -72,15 +64,15 @@ import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * Created by jorge on 16/03/2018.
+ * Fragment for speech when write the word the user Talk
  */
 
 public class SpeechFragment extends Fragment implements SpeechContract.View, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
 
-    public static final String EXTRA_TOTAL = "EXTRA_TOTAL";
-    public static final String EXTRA_TOTAL_MISTAKE = "EXTRA_TOTAL_MISTAKE";
-    public static final String EXTRA_TOTAL_MISSING = "EXTRA_TOTAL_MISSING";
-    public static final String EXTRA_TOTAL_SAID = "EXTRA_TOTAL_SAID";
-    public static final String EXTRA_TOTAL_CORRECT = "EXTRA_TOTAL_CORRECT";
+    public static final String EXTRA_LIST_CONTENT = "EXTRA_LIST_CONTENT";
+    public static final String EXTRA_ARRAY_LIST_STRING = "EXTRA_ARRAY_LIST_STRING";
+    public static final String EXTRA_BUNDLE = "EXTRA_BUDLE";
+
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
     private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
@@ -96,30 +88,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private ResultAdapter mAdapter;
     private RecyclerView mRecyclerViewSpeech;
 
-    private static List<String> ListCorrect;
-    private static List<String> ListListen;
-
-
-
-
-
-
-
-    public static final String MESSAGE_PROGRESS = "message_progress";
-    public static final String BASE_STORAGE = Environment.DIRECTORY_DOWNLOADS;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
-    private SimpleExoPlayer mExoPlayerAudio;
-    private Handler durationHandler = new Handler();
-    private SeekBar seekbar;
-
-    private static double mTimeElapsed = 0, mFinalTime = 0, mTimeLast = 0;
-
-    private static SimpleExoPlayerView mPlayerView;
-    private MediaSessionCompat mMediaSession;
-    private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
-
 
     private static SpeechContract.UserActionsListener mPresenter;
 
@@ -132,12 +101,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private static final int PROGRESS_COUNT = 18;
 
-    private static Animation mShowFab;
-    private static Animation mHideFab;
     private static Animation mRotateFab;
-
-
-
 
     private static FloatingActionButton mFloatingActionButton;
     private static FloatingActionButton mFabNext;
@@ -145,16 +109,12 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private static Boolean mFabMenuOpen = false;
 
     private static LinearLayout mLinearLayout;
-
     private static Context mContext;
-
     private StoriesProgressView storiesProgressView;
-
 
     private int counter = 0;
 
     private long[] durations;
-
 
     long pressTime = 0;
     long limit = 5000;
@@ -165,10 +125,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private TextView mValueStart;
     private TextView mValueEnd;
-    private TextView mResultSpeech;
 
     private static boolean statusPlay = false;
-
 
     public SpeechFragment() {
     }
@@ -196,7 +154,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             return false;
         }
     };
-
 
 
     public static SpeechFragment newInstance(List<Content> contents, int time, String mp3) {
@@ -227,8 +184,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mShowFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_show);
-        mHideFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_hide);
         mRotateFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_rotate);
 
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -240,25 +195,13 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mFabNext = (FloatingActionButton) root.findViewById(R.id.fab_next);
 
         // Initialize the player view.
-        mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
-        seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
         mValueStart = (TextView) root.findViewById(R.id.tv_start);
         mValueEnd = (TextView) root.findViewById(R.id.tv_end);
 
         mValueStart.setText("1 / ");
-
         mRecyclerView = (RecyclerView) root.findViewById(R.id.rv_content_list);
 
-        mResultSpeech = (TextView) root.findViewById(R.id.tv_result_speech);
-
-
         mContext = getContext();
-
-
-
-
-        // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
-
 
         SwipeRefreshLayout swipeRefreshLayout =
                 (SwipeRefreshLayout) root.findViewById(R.id.refresh_layout);
@@ -287,9 +230,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                     startVoiceRecorder();
                     changeStatus(true);
                 }
-
-
-
             }
         });
 
@@ -298,9 +238,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             public void onClick(View v) {
                 //if ()
                onNext();
-
-
-
             }
         });
 
@@ -320,13 +257,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mAdapter = new ResultAdapter(results);
         mRecyclerViewSpeech.setAdapter(mAdapter);
 
-
         initRecyclerView();
 
         requestPermission();
-        initializeMediaSession();
-        //  initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + mMp3 + ".mp3"));
-
 
         mPresenter.loadingContent(mContents, mTime);
 
@@ -334,14 +267,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
         mPresenter.pauseAudio(storiesProgressView);
 
-
-
-
-
         onStart();
 
         changeStatus(false);
-
 
         return root;
     }
@@ -422,9 +350,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mFabMenuOpen = !mFabMenuOpen;
     }
 
-
-
-
     /**
      * Request Permission download for the user .
      */
@@ -451,29 +376,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
 
     @Override
-    public void showAllContent() {
-    }
-
-
-    /**
-     * Initializes the Media Session to be enabled with media buttons, transport controls, callbacks
-     * and media controller.
-     */
-    @Override
-    public void initializeMediaSession() {
-    }
-
-    @Override
-    public void initializePlayer(Uri mediaUriAudio) {
-
-    }
-
-
-    @Override
     public void setListTime(long[] listTime) {
         mValueEnd.setText(Integer.toString(listTime.length));
         durations = listTime;
-
 
     }
 
@@ -492,34 +397,17 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
                     if (mPosition == mListAdapter.mContent.size()){
 
-                        ListCorrect = verifyTheWord(changeForAdpter(mListAdapter.mContent));
-
-                        ListListen = verifyTheWord(changeForAdpter(mAdapter.getResults()));
-
-                        int total = ListCorrect.size();
-                        int totalSaid = ListListen.size();
-
-                        List<String> result = new ArrayList<>();
-                        result = countPoint(ListCorrect,ListListen,0);
-
-                        int totalSaidCorrect = total - result.size();
-                        int totalMistake = totalSaid - totalSaidCorrect;
-                        int totalMissing = total - totalSaidCorrect;
-
-
                         Intent intent = new Intent(getActivity(), ProgressActivity.class);
-                        intent.putExtra(EXTRA_TOTAL, Integer.toString(total));
-                        intent.putExtra(EXTRA_TOTAL_CORRECT, Integer.toString(totalSaidCorrect) );
-                        intent.putExtra(EXTRA_TOTAL_MISSING, Integer.toString(totalMissing) );
-                        intent.putExtra(EXTRA_TOTAL_MISTAKE, Integer.toString(totalMistake) );
-                        intent.putExtra(EXTRA_TOTAL_SAID, Integer.toString(totalSaid) );
-                        startActivity(intent);
 
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
+                        bundle.putStringArrayList (EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+
+                        intent.putExtra(EXTRA_BUNDLE, bundle);
+                        startActivity(intent);
 
                         stopVoiceRecorder();
                         changeStatus(false);
-
-
 
                     }
                 }
@@ -539,23 +427,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     public void onComplete() {
 
     }
-
-    public List<String> changeForAdpter(List<Content> contentList){
-        List<String> stringList = new ArrayList<>();
-        for (int i = 0; i < contentList.size(); i++){
-            stringList.add(contentList.get(i).getContent_english());
-        }
-        return stringList;
-    }
-
-    public List<String> changeForAdpter(ArrayList<String> stringArrayList){
-        List<String> stringList = new ArrayList<>();
-        for (int i = 0; i < stringArrayList.size(); i++){
-            stringList.add(stringArrayList.get(i).toString());
-        }
-        return stringList;
-    }
-
 
 
     private static class ContentAdapter extends RecyclerView.Adapter<SpeechFragment.ContentAdapter.ViewHolder> {
@@ -642,34 +513,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 
-    private String nextSpace(String phrase, TextView TextView) {
-        int i = 0;
-        int count = 0;
-        int countWord = 1;
-
-
-        while (i < TextView.getText().toString().length()) {
-
-            if ((TextView.getText().toString().toString().substring(i, i + 1).indexOf(" ") == 0)) {
-                countWord++;
-            }
-            i++;
-        }
-
-        i = 0;
-        while (i < phrase.length()) {
-
-            if ((phrase.toString().substring(i, i + 1).indexOf(" ") == 0)) {
-                count++;
-                if (count > countWord) {
-                    return phrase.substring(0, i);
-                }
-            }
-            i++;
-        }
-        return phrase.substring(0, i);
-
-    }
 
     private VoiceRecorder mVoiceRecorder;
     private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
@@ -829,8 +672,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         }
         mVoiceRecorder = new VoiceRecorder(mVoiceCallback);
         mVoiceRecorder.start();
-
-
     }
 
     private void stopVoiceRecorder() {
@@ -879,87 +720,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             statusPlay = false;
             mPresenter.pauseAudio(storiesProgressView);
         }
-
     }
-
-
-    private static List<String> verifyTheWord(List<String> eeee) {
-
-        List<String> listString = new ArrayList<String>();
-
-        for (int i = 0; i < eeee.size(); i++) {
-            listString.addAll(getWordInPhase(eeee.get(i)))
-            ;
-        }
-
-        Collections.sort(listString);
-        listString = EliminateDuplicate(listString);
-
-
-        return listString;
-    }
-
-
-    private static List<String> getWordInPhase(String phrase) {
-        List<String> mListResult = new ArrayList<String>();
-        int index = 0;
-
-        while (phrase.length() > 0) {
-
-
-            index = phrase.toString().indexOf(" ");
-
-            if ((index > 0)) {
-
-                mListResult.add(phrase.substring(0, index).toUpperCase());
-                phrase = phrase.toString().substring(index + 1,phrase.length());
-
-            }else{
-                mListResult.add(phrase.toString().toUpperCase());
-                phrase = "";
-            }
-
-        }
-
-        return mListResult;
-    }
-
-    private static  List<String> EliminateDuplicate(List<String> listString){
-
-        int i = 0;
-        while ( i < (listString.size() - 1)){
-            if (listString.get(i).toString().equals(listString.get(i+1).toString())){
-                listString.remove(i+1);
-                i--;
-            }
-            i++;
-        }
-
-        return listString;
-    }
-
-    private static  List<String> countPoint(List<String> correctList, List<String> myList, int i) {
-
-        if (correctList.size() == i) {
-            return correctList;
-        }
-        else if (myList.size() == 0) {
-            i ++;
-            myList = ListListen;
-            return countPoint(correctList, myList,i);
-        } else if (correctList.get(i).toString().equals(myList.get(0).toString())) {
-            correctList.remove(i);
-            myList.remove(0);
-            return countPoint(correctList, myList,i);
-        } else if (myList.size() > 0) {
-            return countPoint(correctList, myList.subList(1, myList.size()),i);
-        } else {
-            return countPoint(correctList, myList, i);
-
-        }
-
-    }
-
 
 
 }

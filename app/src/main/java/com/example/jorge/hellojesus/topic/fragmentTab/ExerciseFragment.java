@@ -19,13 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.content.ContentActivity;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
 import com.example.jorge.hellojesus.topic.TopicPresenter;
+import com.example.jorge.hellojesus.write.WriteActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +38,10 @@ import java.util.List;
 
 public class ExerciseFragment extends Fragment implements TopicContract.View {
 
-    public static String EXTRA_PRODUCT = "PRODUCT";
-    public static String EXTRA_BUNDLE_PRODUCT = "BUNDLE_PRODUCT";
+    public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
+    public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
+    public static String EXTRA_CONTENT = "CONTENT";
+    public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -236,18 +241,22 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
 
             @Override
             public void onClick(View v) {
+
                 int position = getAdapterPosition();
-                //   Topic product = getItem(position);
-                //   mItemListener.onTopicClick(product);
+                List<Content> contents = getItem(position).getContent();
+                int time = Integer.parseInt(getItem(position).getTime());
+                String mp3 = (getItem(position).getAudio());
 
-                //   Intent intent = new Intent(v.getContext(), ShoppingActivity.class);
+                mItemListener.onTopicClick(contents);
 
-                //   Bundle bundle = new Bundle();
-                //   bundle.putSerializable(EXTRA_PRODUCT, product );
+                Intent intent = new Intent(v.getContext(), WriteActivity.class);
 
-                //   intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
-                //   v.getContext().startActivity(intent);
-
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
+                bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                bundle.putString(EXTRA_CONTENT_MP3, mp3);
+                intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                v.getContext().startActivity(intent);
 
 
             }
