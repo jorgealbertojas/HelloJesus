@@ -9,8 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.write.WritePresenter;
 
 
 import java.util.ArrayList;
@@ -20,6 +22,9 @@ import java.util.List;
 import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_ARRAY_LIST_STRING;
 import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_BUNDLE;
 import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_LIST_CONTENT;
+import static com.example.jorge.hellojesus.write.WriteFragment.EXTRA_SOURCE_NAME;
+import static com.example.jorge.hellojesus.write.WriteFragment.EXTRA_TYPE;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 06/04/2018.
@@ -27,7 +32,10 @@ import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_LIST_CONT
  * Algorithm for count total word, mistake, missing, correct and word said
  */
 
-public class ProgressActivity extends AppCompatActivity {
+public class ProgressActivity extends AppCompatActivity implements ProgressContract.View {
+
+    private static ProgressContract.UserActionsListener mActionsListener;
+
 
     private static ProgressBar mProgressBar;
     private static CountDownTimer mCountDownTimer;
@@ -39,15 +47,22 @@ public class ProgressActivity extends AppCompatActivity {
     private TextView mCountSaid;
     private TextView mCountMistake;
 
-    private static List<String> ListCorrect;
-    private static List<String> ListListen;
+    private static List<String> mListCorrect;
+    private static List<String> mListListen;
 
-    private static List<Content> ListContent;
-    private static ArrayList<String> ListArrayString;
+    private static List<Content> mListContent;
+    private static ArrayList<String> mListArrayString;
+
+    private static String mSourceName;
+    private static String mType;
 
     private static int mTotal;
 
     private static String mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake;
+
+    private static String CONST_TIME = "1";
+    private static Boolean CONST_SAID = false;
+    private static Boolean CONST_WRITE = false;
 
     private  static int i=0;
 
@@ -59,11 +74,18 @@ public class ProgressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_progress);
 
         Bundle bundle = new Bundle();
-        bundle = getIntent().getBundleExtra(EXTRA_BUNDLE);
-        ListContent = (List<Content>) bundle.getSerializable(EXTRA_LIST_CONTENT);
-        ListArrayString = (ArrayList<String>) bundle.getStringArrayList(EXTRA_ARRAY_LIST_STRING);
+        bundle = getIntent().getExtras();
+        mListContent = (List<Content>) bundle.getSerializable(EXTRA_LIST_CONTENT);
+        mListArrayString = (ArrayList<String>) bundle.getStringArrayList(EXTRA_ARRAY_LIST_STRING);
 
-        intCount(ListContent, ListArrayString);
+        mType = bundle.getString(EXTRA_TYPE);
+        mSourceName = bundle.getString(EXTRA_SOURCE_NAME);
+
+        mActionsListener = new ProgressPresenter(
+                Injection.provideWordsRepository(getApplicationContext()), this);
+
+
+        intCount(mListContent, mListArrayString);
 
         mLinearLayoutResult = (LinearLayout) findViewById(R.id.ll_result);
         mCountSpeech = (TextView) findViewById(R.id.tv_count_speech);
@@ -104,15 +126,17 @@ public class ProgressActivity extends AppCompatActivity {
 
 
     private void intCount(List<Content> listContent, ArrayList<String> stringArrayList ){
-        ListCorrect = verifyTheWord(changeForAdpter(listContent));
+        mListCorrect = verifyTheWord(changeForAdapter(listContent));
 
-        ListListen = verifyTheWord(changeForAdpter(stringArrayList));
+        mListListen = verifyTheWord(changeForAdapter(stringArrayList));
 
-        mTotal = ListCorrect.size();
-        mTotalSaid = Integer.toString(ListListen.size());
+        mTotal = mListCorrect.size();
+        mTotalSaid = Integer.toString(mListListen.size());
 
         List<String> result = new ArrayList<>();
-        result = countPoint(ListCorrect,ListListen,0);
+        result = countPoint(mListCorrect,mListListen,0);
+
+        mActionsListener.saveWord(result,mType,mSourceName,CONST_TIME, Boolean.toString(CONST_SAID), Boolean.toString(CONST_WRITE));
 
         mTotalSaidCorrect = Integer.toString(mTotal - result.size());
         mTotalMistake = Integer.toString(Integer.parseInt(mTotalSaid) - Integer.parseInt(mTotalSaidCorrect));
@@ -187,7 +211,7 @@ public class ProgressActivity extends AppCompatActivity {
         }
         else if (myList.size() == 0) {
             i ++;
-            myList = ListListen;
+            myList = mListListen;
             return countPoint(correctList, myList,i);
         } else if (correctList.get(i).toString().equals(myList.get(0).toString())) {
             correctList.remove(i);
@@ -202,7 +226,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     }
 
-    public List<String> changeForAdpter(List<Content> contentList){
+    public List<String> changeForAdapter(List<Content> contentList){
         List<String> stringList = new ArrayList<>();
         for (int i = 0; i < contentList.size(); i++){
             stringList.add(contentList.get(i).getContent_english());
@@ -210,7 +234,7 @@ public class ProgressActivity extends AppCompatActivity {
         return stringList;
     }
 
-    public List<String> changeForAdpter(ArrayList<String> stringArrayList){
+    public List<String> changeForAdapter(ArrayList<String> stringArrayList){
         List<String> stringList = new ArrayList<>();
         for (int i = 0; i < stringArrayList.size(); i++){
             stringList.add(stringArrayList.get(i).toString());
@@ -218,4 +242,15 @@ public class ProgressActivity extends AppCompatActivity {
         return stringList;
     }
 
+    @Override
+    public void setPresenter(ProgressContract.UserActionsListener presenter) {
+        mActionsListener = checkNotNull(presenter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mActionsListener.start();
+
+    }
 }

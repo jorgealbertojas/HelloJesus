@@ -32,6 +32,7 @@
     <string name="verses">Verses</string>
     <string name="phases">Phases</string>
     <string name="exercises">Exercises</string>
+    <string name="words">Words</string>
     <string name="seconds">sec</string>
 
     <string name="total">Total</string>
@@ -41,6 +42,22 @@
     <string name="total_missing">Missing</string>
 
     <string name="format_until">" / "</string>
+
+    <!-- String Tab Fragment  -->
+    <string name="key_bible">Bible</string>
+    <string name="key_music">Music</string>
+    <string name="key_music_write">Music write</string>
+    <string name="key_music_said">Music said</string>
+    <string name="key_interpretation">Ask</string>
+    <string name="key_exercise">Exercise</string>
+    <string name="key_write">WRITE</string>
+
+    <string name="msg_error_return">Erro nesta operação.</string>
+    <string name="msg_next_return">Próxima operação.</string>
+
+    <string name="msg_success_return_update">Atualizado com sucesso!</string>
+    <string name="msg_success_return_delete">Deletado com sucesso!</string>
+    <string name="msg_success_return_insert">Adicionado com sucesso!</string>
 
 
 </resources>

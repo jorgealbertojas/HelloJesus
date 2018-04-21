@@ -1,7 +1,8 @@
 package com.example.jorge.hellojesus.topic;
 
-import android.support.annotation.NonNull;
-
+import com.example.jorge.hellojesus.BasePresenter;
+import com.example.jorge.hellojesus.BaseView;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface TopicContract {
 
-    interface View {
+    interface View extends BaseView<UserActionsListener> {
 
 
         void showTopicBible(List<Topic> topics);
@@ -24,12 +25,20 @@ public interface TopicContract {
 
         void showTopicQuestion(List<Topic> topics);
 
+        void showWords(List<Content> contentList);
 
+        void showLoadingShoppingError();
+
+        boolean isActive();
+
+        void setLoadingIndicator(boolean active);
 
         void showAllTopics();
     }
 
-    interface UserActionsListener {
+    interface UserActionsListener extends BasePresenter {
+
+        void loadingWords(String type);
 
         void loadingTopic();
 

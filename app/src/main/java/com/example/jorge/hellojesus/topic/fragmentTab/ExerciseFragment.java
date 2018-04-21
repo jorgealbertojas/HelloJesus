@@ -32,6 +32,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Created by jorge on 23/02/2018.
  */
@@ -42,10 +45,11 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
     public static String EXTRA_CONTENT = "CONTENT";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
+    public static String EXTRA_SOURCE_NAME = "CONTENT_SOURCE_NAME";
 
     private TopicContract.UserActionsListener mActionsListener;
 
-    private ExerciseFragment.TopicsAdapter mListAdapter;
+    private static ExerciseFragment.TopicsAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -56,13 +60,16 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
 
     private static List<Integer> mIdTopics;
 
+    private static String mSourceName;
+
     private static Context mContext;
 
     public ExerciseFragment() {
     }
 
-    public static ExerciseFragment newInstance(List<Integer> topicList) {
+    public static ExerciseFragment newInstance(List<Integer> topicList, String sourceName) {
         mIdTopics = topicList;
+        mSourceName = sourceName;
         return new ExerciseFragment();
     }
 
@@ -153,6 +160,26 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     }
 
     @Override
+    public void showWords(List<Content> contentList) {
+
+    }
+
+    @Override
+    public void showLoadingShoppingError() {
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
+    @Override
     public void showAllTopics() {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
@@ -163,6 +190,10 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
         startActivity(intent);
     }
 
+    @Override
+    public void setPresenter(TopicContract.UserActionsListener presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
 
 
     private static class TopicsAdapter extends RecyclerView.Adapter<ExerciseFragment.TopicsAdapter.ViewHolder> {
@@ -255,7 +286,9 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
                 bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
                 bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                 bundle.putString(EXTRA_CONTENT_MP3, mp3);
+                bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
                 intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+
                 v.getContext().startActivity(intent);
 
 

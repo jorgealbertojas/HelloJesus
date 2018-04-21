@@ -2,12 +2,19 @@ package com.example.jorge.hellojesus.topic;
 
 import android.support.annotation.NonNull;
 
+import com.example.jorge.hellojesus.data.local.Word;
+import com.example.jorge.hellojesus.data.local.WordsDataSource;
+import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceApi;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.ListTopic;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
+import com.example.jorge.hellojesus.util.EspressoIdlingResource;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 21/02/2018.
@@ -17,9 +24,22 @@ import java.util.List;
 public class TopicPresenter  implements TopicContract.UserActionsListener {
 
     private final TopicServiceApi mTopicServiceApi;
+
+    private final WordsRepository mWordsRepository;
+
     private final TopicContract.View mTopicContractView;
 
-    public TopicPresenter(TopicServiceApi topicServiceApi, TopicContract.View topicContract_View) {
+    public TopicPresenter(WordsRepository wordsRepository, @NonNull TopicServiceApi topicServiceApi, TopicContract.View topicContract_View) {
+        this.mWordsRepository = wordsRepository;
+
+        this.mTopicContractView = topicContract_View;
+        this.mTopicServiceApi = topicServiceApi;
+
+        mTopicContractView.setPresenter(this);
+    }
+
+    public TopicPresenter(@NonNull TopicServiceApi topicServiceApi, TopicContract.View topicContract_View) {
+        mWordsRepository = null;
         this.mTopicContractView = topicContract_View;
         this.mTopicServiceApi = topicServiceApi;
     }
@@ -63,12 +83,88 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
         });
     }
 
+    private void loadWord() {
+
+        // The network request might be handled in a different thread so make sure Espresso knows
+        // that the app is busy until the response is handled.
+        EspressoIdlingResource.increment();
+
+        mWordsRepository.getWords(new WordsDataSource.LoadWordCallback() {
+
+            @Override
+            public void onWordLoaded(List<Word> wordList) {
+                List<Content> arrayList = new ArrayList<Content>();
+
+                // This callback may be called twice, once for the cache and once for loading
+                // the data from the server API, so we check before decrementing, otherwise
+                // it throws "Counter has been corrupted!" exception.
+                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                    EspressoIdlingResource.decrement(); // Set app as idle.
+                }
+
+                // We filter the tasks based on the requestType
+                int i = 0;
+                for (Word word : wordList) {
+                    Content content = new Content();
+                    content.setContent_english(word.getWord());
+                    content.setContent_portuguese(word.getWord());
+                    content.setCorret_option(word.getType());
+                    content.setId_content(1);
+                    content.setTime(1);
+                    arrayList.add(i,content);
+                    i++;
+                }
+
+                // The view may not be able to handle UI updates anymore
+                if (!mTopicContractView.isActive()) {
+                    return;
+                }
+                //if (showLoadingUI) {
+                if (true) {
+                    mTopicContractView.setLoadingIndicator(false);
+                }
+
+                processWords(arrayList);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                // The view may not be able to handle UI updates anymore
+                if (!mTopicContractView.isActive()) {
+                    return;
+                }
+                mTopicContractView.showLoadingShoppingError();
+            }
+
+        });
+    }
+
+    @Override
+    public void loadingWords(String type) {
+        loadWord();
+    }
+
     @Override
     public void openDetail() {
 
     }
 
+    private void processWords(List<Content> wordList) {
+
+        if (wordList.isEmpty()) {
+            // Show a message indicating there are no tasks for that filter type.
+            //processEmptyTasks();
+        } else {
+            // Show the list of tasks
+            mTopicContractView.showWords(wordList);
+            // Set the filter label's text.
+           // showFilterLabel();
+        }
+    }
 
 
+    @Override
+    public void start() {
 
+    }
 }

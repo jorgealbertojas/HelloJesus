@@ -64,7 +64,7 @@ public class TopicActivity extends AppCompatActivity {
 
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.category_bible)).setIcon(R.mipmap.ic_bible));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.category_music)).setIcon(R.mipmap.ic_music));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.category_interpretation)).setIcon(R.mipmap.ic_interpretation));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.category_write)).setIcon(R.mipmap.ic_write));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.category_exercise)).setIcon(R.mipmap.ic_exercise));
 
         // Set the adapter onto the view pager

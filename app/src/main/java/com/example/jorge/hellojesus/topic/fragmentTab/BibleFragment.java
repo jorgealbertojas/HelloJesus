@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Created by jorge on 23/02/2018.
  */
@@ -40,8 +42,10 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
     public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
+    public static String EXTRA_CONTENT_SOURCE_NAME = "CONTENT_SOURCE_NAME";
     public static String EXTRA_CONTENT = "CONTENT";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
+
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -71,7 +75,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         super.onCreate(savedInstanceState);
         mListAdapter = new BibleFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mContext =  getContext();
-        mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
+        mActionsListener = new TopicPresenter( new TopicServiceImpl(), this);
     }
 
     @Override
@@ -154,6 +158,26 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     }
 
     @Override
+    public void showWords(List<Content> contentList) {
+
+    }
+
+    @Override
+    public void showLoadingShoppingError() {
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
+    @Override
     public void showAllTopics() {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
@@ -164,6 +188,10 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         startActivity(intent);
     }
 
+    @Override
+    public void setPresenter(TopicContract.UserActionsListener presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
 
 
     private static class TopicsAdapter extends RecyclerView.Adapter<BibleFragment.TopicsAdapter.ViewHolder> {

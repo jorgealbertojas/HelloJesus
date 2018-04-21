@@ -21,6 +21,7 @@ import java.util.List;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_BUNDLE_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
 public class WriteActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class WriteActivity extends AppCompatActivity {
     private Bundle mBundle;
     private int mTime;
     private String mMp3;
+    private String mSourceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,11 @@ public class WriteActivity extends AppCompatActivity {
         mContents = (List<Content>) mBundle.getSerializable(EXTRA_CONTENT);
         mTime = (int) mBundle.getInt(EXTRA_CONTENT_TIME);
         mMp3 = (String) mBundle.getString(EXTRA_CONTENT_MP3);
+        mSourceName = (String) mBundle.getString(EXTRA_CONTENT_SOURCE_NAME);
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(WriteFragment.newInstance(mContents,mTime,mMp3));
+                initFragment(WriteFragment.newInstance(mContents,mTime,mMp3,mSourceName));
             }
         }
 

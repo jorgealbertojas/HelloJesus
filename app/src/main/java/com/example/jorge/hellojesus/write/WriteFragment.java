@@ -84,7 +84,9 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
     public static final String EXTRA_LIST_CONTENT = "EXTRA_LIST_CONTENT";
     public static final String EXTRA_ARRAY_LIST_STRING = "EXTRA_ARRAY_LIST_STRING";
-    public static final String EXTRA_BUNDLE = "EXTRA_BUDLE";
+    public static final String EXTRA_SOURCE_NAME = "EXTRA_SOURCE_NAME";
+    public static final String EXTRA_TYPE = "EXTRA_TYPE";
+    public static final String EXTRA_BUNDLE = "EXTRA_BUNDLE";
 
     private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
 
@@ -123,6 +125,8 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     public static List<Content> mContents;
     public static int mTime;
     public static String mMp3;
+    public static String mSourceName;
+    public static String mType;
 
     private static final int PROGRESS_COUNT = 18;
 
@@ -173,16 +177,21 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     };
 
 
-    public static WriteFragment newInstance(List<Content> contents, int time, String mp3) {
+    public static WriteFragment newInstance(List<Content> contents, int time, String mp3, String sourceName) {
+
+        mSourceName = sourceName;
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
+
         return new WriteFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mType = getActivity().getResources().getString(R.string.key_music_write);
 
         mListAdapter = new WriteFragment.ContentAdapter(new ArrayList<Content>(0));
         mPresenter = new WritePresenter(this);
@@ -252,6 +261,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             public void onClick(View v) {
                 onPlayerStateChanged(true,3);
                 mTextCorrect.setText(mListAdapter.mContent.get(mPosition).getContent_english());
+                mTextCorrect.setVisibility(View.VISIBLE);
                 onNextPart();
                 putTextWrite(mText.getText().toString());
 
@@ -455,7 +465,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             mExoPlayerAudio.seekTo(getSumList(durations, mPosition - 1));
         }
 
-
         if (!playWhenReady){
             mPresenter.pauseAudio(mExoPlayerAudio);
         }else{
@@ -653,7 +662,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     }
 
 
-
     private void showStatus(final boolean hearingVoice) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -685,9 +693,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             mRecyclerView.scrollToPosition(mPosition);
             mRecyclerView.getAdapter().notifyDataSetChanged();
             mValueStart.setText(Integer.toString(mPosition + 1) + " / ");
-
-
-
 
         }else{
             mLoadingGif.setVisibility(View.GONE);
@@ -788,9 +793,11 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
-                    bundle.putStringArrayList (EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+                    bundle.putStringArrayList(EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+                    bundle.putString(EXTRA_SOURCE_NAME,mSourceName );
+                    bundle.putString(EXTRA_TYPE,mType );
 
-                    intent.putExtra(EXTRA_BUNDLE, bundle);
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
                     changeStatus(false);
