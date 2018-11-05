@@ -220,7 +220,7 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
             Topic topic = mTopics.get(position);
 
             viewHolder.topicName.setText(topic.getName());
-            viewHolder.topicTime.setText(topic.getTime() + " " + mContext.getResources().getString(R.string.seconds) );
+            viewHolder.topicTime.setText("");
             viewHolder.topicGlossary.setText(Integer.toString(topic.getContent().size()));
             viewHolder.topicPhases.setText(mContext.getResources().getString(R.string.exercises));
 

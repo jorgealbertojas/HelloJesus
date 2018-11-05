@@ -144,6 +144,8 @@ dependencies {
     compile 'javax.annotation:javax.annotation-api:1.2'
     protobuf 'com.google.protobuf:protobuf-java:3.3.1'
 
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
     // OAuth2 for Google API
     compile('com.google.auth:google-auth-library-oauth2-http:0.7.0') {
         exclude module: 'httpclient'
@@ -160,6 +162,7 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex:rxjava:1.1.6'
 
+    compile project(path: ':libJavaForTest')
 }
 
 task copySecretKey(type: Copy) {

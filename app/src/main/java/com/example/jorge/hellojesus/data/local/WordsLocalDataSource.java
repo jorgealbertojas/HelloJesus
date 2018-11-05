@@ -134,7 +134,7 @@ public class WordsLocalDataSource implements WordsDataSource {
 
 
     @Override
-    public void activateWord(@NonNull Word purchase, String Quantity) {
+    public void activateWord(@NonNull Word word, String Quantity) {
 
     }
 

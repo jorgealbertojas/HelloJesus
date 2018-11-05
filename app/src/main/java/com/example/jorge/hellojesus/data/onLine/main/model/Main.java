@@ -13,7 +13,50 @@ public class Main implements Serializable {
     private String time;
     private String description;
     private List<Integer> topics;
+    private String title_bible;
+    private String title_music;
+    private String title_write;
+    private String title_exercise;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTitle_bible() {
+        return title_bible;
+    }
+
+    public void setTitle_bible(String title_bible) {
+        this.title_bible = title_bible;
+    }
+
+    public String getTitle_music() {
+        return title_music;
+    }
+
+    public void setTitle_music(String title_music) {
+        this.title_music = title_music;
+    }
+
+    public String getTitle_write() {
+        return title_write;
+    }
+
+    public void setTitle_write(String title_write) {
+        this.title_write = title_write;
+    }
+
+    public String getTitle_exercise() {
+        return title_exercise;
+    }
+
+    public void setTitle_exercise(String title_exercise) {
+        this.title_exercise = title_exercise;
+    }
 
     public int getId() {
         return id;

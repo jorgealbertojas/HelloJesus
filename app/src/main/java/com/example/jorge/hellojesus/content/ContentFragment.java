@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import io.grpc.internal.SharedResourceHolder;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -649,7 +650,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     }
 
-    //@Override
+    @Override
     public void onNext() {
         mProgressBar.clearAnimation();
         mPosition ++;
@@ -657,25 +658,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mValueStart.setText(Integer.toString(mPosition + 1));
         showAnimation();
+        mFabMenuOpen = true;
+        toggleFabMenu();
 
-
-
-        //mRecyclerView.setFocusable(true);
-
-     //   mText = (android.support.constraint.ConstraintLayout) mRecyclerView.findViewHolderForPosition(mPosition).itemView.findViewById(R.id.cl_content);
-      //  mText.setBackground(getActivity().getResources().getDrawable(android.R.color.darker_gray));
-       // mText.setTypeface(null, Typeface.BOLD);
-
-
-
-      //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-       //     mText.setTextColor(getActivity().getResources().getColor(android.R.color.white, getActivity().getTheme()));
-     //   }else {
-       //     mText.setTextColor(getActivity().getResources().getColor(android.R.color.white));
-    //    }
-
-       // mText = mRecyclerView.findViewHolderForPosition(mPosition).itemView.findViewById(R.id.tv_content_english);
-       // mText.setTypeface(null, Typeface.BOLD);
+        mRecyclerView.setFocusable(true);
     }
 
     @Override
@@ -762,10 +748,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         public void onBindViewHolder(ContentFragment.ContentAdapter.ViewHolder viewHolder, int position) {
             Content content = mContent.get(position);
 
-           // setAnimation(viewHolder.itemView, position);
+            setAnimation(viewHolder.itemView, position);
 
             if(position == mPosition) {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
+                viewHolder.mContentEnglish.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
 
             } else {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.NORMAL);

@@ -127,6 +127,7 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
                 processWords(arrayList);
             }
 
+
             @Override
             public void onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
@@ -137,6 +138,11 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
             }
 
         });
+    }
+
+    @Override
+    public void loadingWords(String type, String sourceName, String write) {
+        loadWord();
     }
 
     @Override

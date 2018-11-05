@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.jorge.hellojesus.R;
+import com.example.libjavafortest.myClass;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,10 +24,19 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
+    public FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //myClass myClass = new myClass();
+
+        //int[] gg;
+        //gg = new int[] {1,3,6,4,1,2,3};
+
+        //myClass.main();
 
         // Set up the toolbar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -62,8 +62,6 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     private static List<Integer> mIdTopics;
 
-    public BibleFragment() {
-    }
 
     public static BibleFragment newInstance(List<Integer> topicList) {
         mIdTopics = topicList;

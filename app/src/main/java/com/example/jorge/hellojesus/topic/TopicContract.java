@@ -38,6 +38,8 @@ public interface TopicContract {
 
     interface UserActionsListener extends BasePresenter {
 
+        void loadingWords(String type, String sourceName, String write);
+
         void loadingWords(String type);
 
         void loadingTopic();

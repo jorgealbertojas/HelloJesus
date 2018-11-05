@@ -37,6 +37,7 @@ public class MainServiceImpl implements MainServiceApi {
 
             @Override
             public void onFailure(Call<ListMain<Main>> call, Throwable t) {
+                ListMain<Main> resultSearch = null;
 
             }
         });

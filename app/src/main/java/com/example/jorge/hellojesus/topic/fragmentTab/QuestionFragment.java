@@ -28,10 +28,14 @@ import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
 import com.example.jorge.hellojesus.topic.TopicPresenter;
+import com.example.jorge.hellojesus.word.WordActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -40,12 +44,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class QuestionFragment extends Fragment implements TopicContract.View {
 
-    public static String EXTRA_PRODUCT = "PRODUCT";
-    public static String EXTRA_BUNDLE_PRODUCT = "BUNDLE_PRODUCT";
 
     private TopicContract.UserActionsListener mActionsListener;
 
-    private TopicsAdapter mListAdapter;
+    private static TopicsAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -108,7 +110,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
             if (listWord.get(i).getCorret_option().toString().equals(getActivity().getResources().getString(R.string.key_bible))){
                 mListContentBible.add(listWord.get(i));
 
-            }else if (listWord.get(i).getCorret_option().toString().equals(getActivity().getResources().getString(R.string.key_music_write))){
+            }else if (listWord.get(i).getCorret_option().toString().equals(getActivity().getResources().getString(R.string.key_music_said))){
                 mListContentMusicSaid.add(listWord.get(i));
             }else{
                 mListContentMusicWrite.add(listWord.get(i));
@@ -161,7 +163,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
         @Override
         public void onActivateWordClick(Word activatedPurchase) {
-            mPresenter.loadingWords(activatedPurchase.getType());
+            mPresenter.loadingWords(activatedPurchase.getType(),getContext().getResources().getString(R.string.key_music_write),"false");
         }
 
         @Override
@@ -409,16 +411,22 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                //   Topic product = getItem(position);
-                //   mItemListener.onTopicClick(product);
 
-                //   Intent intent = new Intent(v.getContext(), ShoppingActivity.class);
 
-                //   Bundle bundle = new Bundle();
-                //   bundle.putSerializable(EXTRA_PRODUCT, product );
 
-                //   intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
-                //   v.getContext().startActivity(intent);
+                   List<String> stringList = new ArrayList<String>();
+
+                   for (int i = 0; i < mListAdapter.mTopics.get(position).getContent().size() ; i++){
+                       stringList.add(mListAdapter.mTopics.get(position).getContent().get(i).getContent_english());
+                   }
+
+
+                   Intent intent = new Intent(v.getContext(), WordActivity.class);
+
+                   Bundle bundle = new Bundle();
+                   bundle.putSerializable(EXTRA_WORD, (Serializable) stringList);
+                   intent.putExtra(EXTRA_BUNDLE_WORD, bundle);
+                   v.getContext().startActivity(intent);
 
 
 

@@ -64,9 +64,9 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
     public MusicFragment() {
     }
 
-    public static BibleFragment newInstance(List<Integer> topicList) {
+    public static MusicFragment newInstance(List<Integer> topicList) {
         mIdTopics = topicList;
-        return new BibleFragment();
+        return new MusicFragment();
     }
 
     @Override
@@ -126,13 +126,11 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
 
 
-    BibleFragment.ItemListener mItemListener = new BibleFragment.ItemListener() {
+    MusicFragment.ItemListener mItemListener = new MusicFragment.ItemListener() {
         @Override
-        public void onTopicClick(List<Content> clickedNote) {
-            mActionsListener.openDetail();
+        public void onTopicClick(Topic clickedNote) {
+
         }
-
-
     };
 
     @Override
@@ -196,9 +194,9 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
     private static class TopicsAdapter extends RecyclerView.Adapter<MusicFragment.TopicsAdapter.ViewHolder> {
 
         private List<Topic> mTopics;
-        private BibleFragment.ItemListener mItemListener;
+        private MusicFragment.ItemListener mItemListener;
 
-        public TopicsAdapter(List<Topic> topicList, BibleFragment.ItemListener itemListener) {
+        public TopicsAdapter(List<Topic> topicList, MusicFragment.ItemListener itemListener) {
             setList(topicList);
             mItemListener = itemListener;
         }
@@ -253,9 +251,9 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
             public TextView topicTime;
             public ImageView topicImage;
             public TextView topicPhases;
-            private BibleFragment.ItemListener mItemListener;
+            private MusicFragment.ItemListener mItemListener;
 
-            public ViewHolder(View itemView, BibleFragment.ItemListener listener) {
+            public ViewHolder(View itemView, MusicFragment.ItemListener listener) {
                 super(itemView);
                 mItemListener = listener;
                 topicName = (TextView) itemView.findViewById(R.id.tv_topic_name);
@@ -271,7 +269,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                List<Content> contents = getItem(position).getContent();
+                Topic contents = getItem(position);
                 int time = Integer.parseInt(getItem(position).getTime());
                 String mp3 = (getItem(position).getAudio());
 

@@ -21,6 +21,7 @@ import jp.shts.android.storiesprogressview.StoriesProgressView;
 
 /**
  * Created by jorge on 27/02/2018.
+ * Contract for support View amd Listener User of the Content
  */
 
 public interface ContentContract {
