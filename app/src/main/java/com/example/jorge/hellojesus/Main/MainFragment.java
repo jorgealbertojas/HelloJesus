@@ -1,6 +1,5 @@
 package com.example.jorge.hellojesus.main;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,27 +10,34 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v4.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
+import com.example.jorge.hellojesus.helpApp.AppHelp;
 import com.example.jorge.hellojesus.topic.TopicActivity;
+import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +81,8 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static int radius = 0;
 
 
+    private static LinearLayout Llmain ;
+
     public MainFragment() {
     }
 
@@ -86,7 +94,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mListAdapter = new MainAdapter(new ArrayList<Main>(0), mItemListener);
-        mPresenter = new MainPresenter(new MainServiceImpl(), this);
+        mPresenter = new MainPresenter(Injection.provideWordsRepository(this.getContext()), new MainServiceImpl(), this);
         mActivity = getActivity();
 
 
@@ -100,12 +108,14 @@ public class MainFragment extends Fragment implements MainContract.View {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+                             Bundle savedInstanceState) {
 
 
 
-        View root = inflater.inflate(R.layout.fragment_main, container, false);
+        final View root = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Llmain = (LinearLayout) root.findViewById(R.id.ll_main);
 
 
         SwipeRefreshLayout swipeRefreshLayout =
@@ -131,12 +141,9 @@ public class MainFragment extends Fragment implements MainContract.View {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMain != null){
-                    openViewTopic(mMain);
 
 
-                }
-
+                    mPresenter.loadHelp(root,getContext());
 
 
             }
@@ -144,13 +151,15 @@ public class MainFragment extends Fragment implements MainContract.View {
 
 
         mPresenter.loadingMain();
+        // Insert HELP for all Screen
+        loadSessionConfig();
 
         initRecyclerView(root);
 
 
-
         return root;
     }
+
 
 
 
@@ -224,6 +233,10 @@ public class MainFragment extends Fragment implements MainContract.View {
             viewHolder.mImage4.setTransitionName("imagem4");
             viewHolder.mName.setTransitionName("mName");
 
+            final int newColor = res.getColor(R.color.NoAccent2);
+
+
+
             viewHolder.mImage1.setImageResource(R.mipmap.ic_bible);
             viewHolder.mImage2.setImageResource(R.mipmap.ic_music);
             viewHolder.mImage3.setImageResource(R.mipmap.ic_write);
@@ -235,7 +248,7 @@ public class MainFragment extends Fragment implements MainContract.View {
             viewHolder.titleExercise.setText(product.getTitle_exercise());
 
 
-            final int newColor = res.getColor(R.color.NoAccent2);
+
             viewHolder.mImageList.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage1.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage2.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
@@ -243,10 +256,14 @@ public class MainFragment extends Fragment implements MainContract.View {
             viewHolder.mImage4.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
         }
 
+
+
         public void replaceData(List<Main> notes) {
             setList(notes);
             notifyDataSetChanged();
         }
+
+
 
         private void setList(List<Main> notes) {
             mMains = notes;
@@ -389,6 +406,40 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
+    }
+
+    protected String readJsonFile(InputStream inputStream) {
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        byte bufferByte[] = new byte[1024];
+        int length;
+        try {
+            while ((length = inputStream.read(bufferByte)) != -1) {
+                outputStream.write(bufferByte, 0, length);
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            Log.e(this.getClass().getSimpleName(), e.getMessage());
+        }
+        return outputStream.toString();
+    }
+
+    private void loadSessionConfig(){
+        try {
+
+            Gson gson = new Gson();
+            InputStream inputStream = this.getActivity().getAssets().open("config_help.json");
+            AppHelp appHelp = (gson.fromJson(readJsonFile(inputStream), AppHelp.class));
+
+            for (int i = 0;  i < appHelp.getConfigHelp().size()  ;i ++ ){
+                Help help = new Help(appHelp.getConfigHelp().get(i).getMkey(),appHelp.getConfigHelp().get(i).getMvalue());
+                mPresenter.saveHelp(help);
+            }
+        } catch (Exception e) {
+            //   errorLog(e.toString());
+        }
     }
 }
 

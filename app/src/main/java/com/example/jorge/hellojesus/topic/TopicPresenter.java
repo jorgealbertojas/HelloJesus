@@ -1,6 +1,8 @@
 package com.example.jorge.hellojesus.topic;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
@@ -171,6 +173,11 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
 
     @Override
     public void start() {
+
+    }
+
+    @Override
+    public void loadHelp(View root, Context context) {
 
     }
 }

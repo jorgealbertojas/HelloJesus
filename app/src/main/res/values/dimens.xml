@@ -41,5 +41,9 @@
     <dimen name="text_normal">5sp</dimen>
 
 
+    <dimen name="image_help_width">25dp</dimen>
+    <dimen name="image_help_heigth">25dp</dimen>
+
+
 
 </resources>

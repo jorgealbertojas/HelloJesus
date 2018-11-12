@@ -12,10 +12,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.help.Help;
+import com.example.jorge.hellojesus.helpApp.AppHelp;
+import com.example.jorge.hellojesus.helpApp.HelpPresenter;
 import com.example.libjavafortest.myClass;
+import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         initFragment(MainFragment.newInstance());
 
 /*        TopicsFragment tasksFragment =
@@ -80,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-    //    outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter.getFiltering());
+        //    outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter.getFiltering());
 
-       super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -106,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
                                 // Do nothing, we're already on that screen
                                 break;
                             case R.id.list_menu_item_setting:
-                               // Intent intent =
-                               //         new Intent(TasksActivity.this, StatisticsActivity.class);
-                               // startActivity(intent);
+                                // Intent intent =
+                                //         new Intent(TasksActivity.this, StatisticsActivity.class);
+                                // startActivity(intent);
                                 break;
                             default:
                                 break;
@@ -123,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     @VisibleForTesting
     public IdlingResource getCountingIdlingResource() {
-       // return EspressoIdlingResource.getIdlingResource();
+        // return EspressoIdlingResource.getIdlingResource();
         return null;
     }
 
@@ -135,4 +144,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 }

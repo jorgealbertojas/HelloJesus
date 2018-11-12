@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -17,11 +16,53 @@ import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by jorge on 21/02/2018.
  */
 
 public class Common {
+
+    public static Integer lastFldId = 0;
+
+
+    /**
+     * Get Component Screen for
+     */
+    public static Integer getResourceString(String name) {
+
+
+      //  if(lastFldId == null) {
+            int maxFld = 0;
+            String fldName = "";
+            Field[] flds = R.id.class.getDeclaredFields();
+
+            R.id inst = new R.id();
+
+            for (int i = 0; i < flds.length; i++) {
+                Field fld = flds[i];
+
+                try {
+                    int value = fld.getInt(inst);
+
+                    if (value > maxFld) {
+                        maxFld = value;
+                        fldName = fld.getName();
+                    }
+                    if (name.equals(fld.getName())){
+                          return value;
+                    }
+
+                } catch (IllegalAccessException e) {
+
+                }
+            }
+            lastFldId = new Integer(maxFld);
+      //  }
+
+        return 0;
+    }
 
 
     /**

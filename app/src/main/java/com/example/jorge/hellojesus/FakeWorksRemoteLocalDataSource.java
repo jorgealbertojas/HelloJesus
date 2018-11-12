@@ -1,9 +1,12 @@
 package com.example.jorge.hellojesus;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
+import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
 
@@ -31,12 +34,23 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getHelp(@NonNull LoadHelpCallback callback, @NonNull View root, @NonNull Context context) {
+
+    }
+
+
+    @Override
     public void getWord(@NonNull String word, @NonNull GetWordCallback callback) {
 
     }
 
     @Override
     public void saveWord(@NonNull Word word) {
+
+    }
+
+    @Override
+    public void saveHelp(@NonNull Help help) {
 
     }
 
@@ -57,6 +71,11 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
 
     @Override
     public void deleteAllWords() {
+
+    }
+
+    @Override
+    public void deleteAllHelps() {
 
     }
 

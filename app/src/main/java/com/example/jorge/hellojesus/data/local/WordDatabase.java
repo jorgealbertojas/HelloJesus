@@ -5,12 +5,14 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.example.jorge.hellojesus.data.local.help.Help;
+
 /**
  * Created by jorge on 11/04/2018.
  * Get Instance SQLLite
  */
 
-@Database(entities = {Word.class}, version = 1)
+@Database(entities = {Word.class,Help.class}, version = 1)
 public abstract class WordDatabase  extends RoomDatabase {
 
     private static WordDatabase INSTANCE;

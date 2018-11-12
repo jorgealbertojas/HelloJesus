@@ -12,4 +12,7 @@
     <color name="NoAccent0">#f1efef</color>
     <color name="NoAccent">#a8a8a8</color>
     <color name="NoAccent2">#737272</color>
+
+    <color name="NoHelp">#a8a8a8</color>
+    <color name="red">#fc0101</color>
 </resources>

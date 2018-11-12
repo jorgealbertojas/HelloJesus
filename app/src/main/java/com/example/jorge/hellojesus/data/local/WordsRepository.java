@@ -1,7 +1,11 @@
 package com.example.jorge.hellojesus.data.local;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+
+import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,6 +32,7 @@ public class WordsRepository implements WordsDataSource {
      * This variable has package local visibility so it can be accessed from tests.
      */
     Map<String, Word> mCachedWords;
+    Map<String, Help> mCachedHelp;
 
     boolean mCacheIsDirty = false;
 
@@ -59,7 +64,7 @@ public class WordsRepository implements WordsDataSource {
 
             @Override
             public void onWordLoaded(List<Word> wordList) {
-                refreshCache(wordList);
+                refreshCacheWord(wordList);
                 callback.onWordLoaded(new ArrayList<>(mCachedWords.values()));
             }
 
@@ -69,6 +74,26 @@ public class WordsRepository implements WordsDataSource {
             }
         });
 
+    }
+
+    @Override
+    public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
+        checkNotNull(callback);
+
+        // Query the local storage if available. If not, query the network.
+        mWordsLocalDataSource.getHelp(new LoadHelpCallback() {
+
+              @Override
+            public void onHelpLoaded(List<Help> contentList, View root, Context context) {
+                refreshCacheHelp(contentList);
+                callback.onHelpLoaded(new ArrayList<>(mCachedHelp.values()),root,context);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getHelpFromRemoteDataSource(callback,root,context);
+            }
+        },root,context);
     }
 
     @Override
@@ -125,6 +150,19 @@ public class WordsRepository implements WordsDataSource {
     }
 
     @Override
+    public void saveHelp(@NonNull Help help) {
+        checkNotNull(help);
+        mWordsRemoteDataSource.saveHelp(help);
+        mWordsLocalDataSource.saveHelp(help);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedHelp == null) {
+            mCachedHelp = new LinkedHashMap<>();
+        }
+        mCachedHelp.put(help.getId(), help);
+    }
+
+    @Override
     public void activateWord(@NonNull String productId, String quantity) {
 
         if (!quantity.toString().equals("0")) {
@@ -161,7 +199,7 @@ public class WordsRepository implements WordsDataSource {
 
     @Override
     public void refreshWord(List<Word> wordList) {
-        refreshCache(wordList);
+        refreshCacheWord(wordList);
         mCacheIsDirty = true;
     }
 
@@ -178,6 +216,16 @@ public class WordsRepository implements WordsDataSource {
         mCachedWords.clear();
     }
 
+    @Override
+    public void deleteAllHelps() {
+        mWordsRemoteDataSource.deleteAllHelps();
+        mWordsLocalDataSource.deleteAllHelps();
+
+        if (mCachedHelp == null) {
+            mCachedHelp = new LinkedHashMap<>();
+        }
+        mCachedHelp.clear();
+    }
 
 
     @Override
@@ -233,8 +281,8 @@ public class WordsRepository implements WordsDataSource {
         mWordsRemoteDataSource.getWords(new LoadWordCallback() {
             @Override
             public void onWordLoaded(List<Word> wordList) {
-                refreshCache(wordList);
-                refreshLocalDataSource(wordList);
+                refreshCacheWord(wordList);
+                refreshLocalDataSourceWord(wordList);
                 callback.onWordLoaded(new ArrayList<>(mCachedWords.values()));
             }
 
@@ -245,7 +293,24 @@ public class WordsRepository implements WordsDataSource {
         });
     }
 
-    private void refreshCache(List<Word> wordList) {
+    private void getHelpFromRemoteDataSource(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
+        mWordsRemoteDataSource.getHelp(new LoadHelpCallback() {
+
+            @Override
+            public void onHelpLoaded(List<Help> contentList, View root, Context context) {
+                refreshCacheHelp(contentList);
+                refreshLocalDataSourceHelp(contentList);
+                callback.onHelpLoaded(new ArrayList<>(mCachedHelp.values()),root,context);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        },root,context);
+    }
+
+    private void refreshCacheWord(List<Word> wordList) {
         if (mCachedWords == null) {
             mCachedWords = new LinkedHashMap<>();
         }
@@ -253,6 +318,21 @@ public class WordsRepository implements WordsDataSource {
         mCachedWords.clear();
         for (Word word : wordList) {
             mCachedWords.put(word.getId(), word);
+        }
+        mCacheIsDirty = false;
+    }
+
+    private void refreshCacheHelp(List<Help> helpList) {
+        if (mCachedWords == null) {
+            mCachedWords = new LinkedHashMap<>();
+        }
+        // For Test
+        mCachedWords.clear();
+        if (mCachedHelp == null) {
+            mCachedHelp = new LinkedHashMap<>();
+        }
+        for (Help help : helpList) {
+            mCachedHelp.put(help.getId(), help);
         }
         mCacheIsDirty = false;
     }
@@ -267,11 +347,19 @@ public class WordsRepository implements WordsDataSource {
         }
     }
 
-    private void refreshLocalDataSource(List<Word> wordList) {
+    private void refreshLocalDataSourceWord(List<Word> wordList) {
         // For Test
         mWordsLocalDataSource.deleteAllWords();
         for (Word word : wordList) {
             mWordsLocalDataSource.saveWord(word);
+        }
+    }
+
+    private void refreshLocalDataSourceHelp(List<Help> helpList) {
+        // For Test
+        mWordsLocalDataSource.deleteAllHelps();
+        for (Help help : helpList) {
+            mWordsLocalDataSource.saveHelp(help);
         }
     }
 

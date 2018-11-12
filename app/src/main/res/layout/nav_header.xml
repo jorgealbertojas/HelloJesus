@@ -20,6 +20,7 @@
     android:background="?attr/colorPrimaryDark"
     android:gravity="bottom"
     android:orientation="vertical"
+    android:id="@+id/menu"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 

@@ -4,9 +4,11 @@ package com.example.jorge.hellojesus.data.local;
  * Created by jorge on 11/04/2018.
  */
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
-import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ import java.util.List;
  */
 
 public interface WordsDataSource {
+
+    // Table WORD
     interface LoadWordCallback {
 
         void onWordLoaded(List<Word> contentList);
@@ -35,11 +39,26 @@ public interface WordsDataSource {
         void onDataNotAvailable();
     }
 
+
+    // Table HELP
+    interface LoadHelpCallback {
+
+        void onHelpLoaded(List<Help> contentList, View root, Context context);
+
+        void onDataNotAvailable();
+
+    }
+
+
     void getWords(@NonNull LoadWordCallback callback);
+
+    void getHelp(@NonNull LoadHelpCallback callback, View root, final Context context);
 
     void getWord(@NonNull String word , @NonNull GetWordCallback callback);
 
     void saveWord(@NonNull Word word);
+
+    void saveHelp(@NonNull Help help);
 
     void activateWord(@NonNull String productId, String Quantity);
 
@@ -48,6 +67,8 @@ public interface WordsDataSource {
     void refreshWord(List<Word> wordList);
 
     void deleteAllWords();
+
+    void deleteAllHelps();
 
     void deleteWord(@NonNull String word);
 

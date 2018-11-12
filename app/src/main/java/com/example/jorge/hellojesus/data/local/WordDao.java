@@ -5,6 +5,9 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
+
+import com.example.jorge.hellojesus.data.local.help.Help;
+
 import java.util.List;
 
 /**
@@ -81,5 +84,17 @@ public interface  WordDao {
      */
     @Query("UPDATE Word SET statussaid = :statusSaid WHERE word = :word")
     int updateFinalizeWords(String statusSaid, String word);
+
+    @Query("SELECT * FROM Help ")
+    List<Help> getHelp();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertHelp(Help help);
+
+    /**
+     * Select a Purchase by id.
+     */
+    @Query("SELECT * FROM Help WHERE key = :key ")
+    Help getHelpByHelpId(String key);
 
 }

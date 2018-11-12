@@ -1,0 +1,156 @@
+{
+  "config": [
+      {
+        "key":"iv_image_list",
+        "value":"Esse botapoe e para escolher novos resultados"
+      },
+      {
+        "key":"tv_main_description",
+        "value":"Recarga"
+      },
+      {
+        "key":"description_recarga",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"tv_main_time",
+        "value":"12"
+      },
+      {
+        "key":"imageView",
+        "value":"Franquia"
+      },
+      {
+        "key":"imageView2",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"imageView3",
+        "value":"10"
+      },
+      {
+        "key":"imageView4",
+        "value":"Franquia de Voz"
+      },
+      {
+        "key":"tv_main_name",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"text_explanation",
+        "value":"1"
+      },
+      {
+        "key":"title_promocional_ligações:tim",
+        "value":"Ligações – TIM"
+      },
+      {
+        "key":"description_promocional_ligações:tim",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_ligações:outrasoperadoras(br)",
+        "value":"2"
+      },
+      {
+        "key":"title_promocional_ligações:outrasoperadoras(br)",
+        "value":"Ligações - Outras operadoras (BR)"
+      },
+      {
+        "key":"description_promocional_ligações:outrasoperadoras(br)",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_ligações:tim+outrasoperadoras(br)",
+        "value":"3"
+      },
+      {
+        "key":"title_promocional_ligações:tim+outrasoperadoras(br)",
+        "value":"Ligações - TIM+Outras operadoras (BR)"
+      },
+      {
+        "key":"description_promocional_ligações:tim+outrasoperadoras(br)",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_torpedos:tim+outras operadoras (br)",
+        "value":"4"
+      },
+      {
+        "key":"title_promocional_torpedos:tim+outras operadoras (br)",
+        "value":"Torpedos – TIM-Outras operadoras (BR)"
+      },
+      {
+        "key":"description_promocional_torpedos:tim+outras operadoras (br)",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_internet e torpedos:tim+outras operadoras (br)",
+        "value":"5"
+      },
+      {
+        "key":"title_promocional_internet e torpedos:tim+outras operadoras (br)",
+        "value":"Internet e Torpedos – Tim-Outras operadoras (BR)"
+      },
+      {
+        "key":"description_promocional_internet e torpedos:tim+outras operadoras (br)",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_uso livre:tim-tim/internet/torpedos",
+        "value":"6"
+      },
+      {
+        "key":"title_promocional_uso livre:tim-tim/internet/torpedos",
+        "value":"Uso Livre – TIM-TIM/Internet/Torpedos"
+      },
+      {
+        "key":"description_promocional_uso livre:tim-tim/internet/torpedos",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_uso livre:lig.(br)/torpedos(br)/internet",
+        "value":"7"
+      },
+      {
+        "key":"title_promocional_uso livre:lig.(br)/torpedos(br)/internet",
+        "value":"Uso Livre – Lig.(BR)/Torpedos (BR)/Internet"
+      },
+      {
+        "key":"description_promocional_uso livre:lig.(br)/torpedos(br)/internet",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_promocional_internet",
+        "value":"8"
+      },
+      {
+        "key":"title_promocional_internet",
+        "value":"Internet"
+      },
+      {
+        "key":"description_promocional_internet",
+        "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+      },
+      {
+        "key":"code_ressarcimento_ressarcimento",
+        "value":"9"
+      },
+      {
+        "key":"title_ressarcimento_ressarcimento",
+        "value":"Ressarcimento"
+      },
+      {
+        "key":"baskets-credit",
+        "value":"13"
+      },
+      {
+        "key":"baskets-credit-reais",
+        "value":"12"
+      },
+     {
+      "key":"baskets-credit-reais-teste",
+      "value":"12"
+     }
+    ]
+}

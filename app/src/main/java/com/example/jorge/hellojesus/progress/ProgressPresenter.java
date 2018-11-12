@@ -1,6 +1,8 @@
 package com.example.jorge.hellojesus.progress;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
@@ -40,6 +42,11 @@ public class ProgressPresenter implements ProgressContract.UserActionsListener {
 
     @Override
     public void start() {
+
+    }
+
+    @Override
+    public void loadHelp(View root, Context context) {
 
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/constraintLayoutHelp"
+    tools:context=".helpApp.HelpAppActivity">
+
+        <ImageView
+            android:id="@+id/helpView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@mipmap/ic_exercise"
+        />
+
+    <TextView
+        android:id="@+id/text_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="dvsfbfbfb"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+
+        android:textSize="@dimen/text1_list_size"
+        app:layout_constraintBottom_toBottomOf="@+id/helpView" />
+
+
+
+
+</android.support.constraint.ConstraintLayout>

@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,10 +30,13 @@
         <activity android:name=".topic.TopicActivity" />
         <activity android:name=".content.ContentActivity" />
         <activity android:name=".speech.SpeechActivity" />
+
         <service android:name=".speech.support.SpeechService" />
+
         <activity android:name=".progress.ProgressActivity" />
         <activity android:name=".word.WordActivity" />
-        <activity android:name=".write.WriteActivity"></activity>
+        <activity android:name=".write.WriteActivity" />
+        <activity android:name=".helpApp.HelpAppActivity" android:theme="@style/Theme.Transparent"></activity>
     </application>
 
 </manifest>

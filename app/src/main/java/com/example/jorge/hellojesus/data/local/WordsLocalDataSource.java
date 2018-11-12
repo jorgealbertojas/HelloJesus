@@ -6,9 +6,11 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.util.AppExecutors;
 
 import java.util.LinkedHashMap;
@@ -31,6 +33,7 @@ public class WordsLocalDataSource implements WordsDataSource {
     private static volatile WordsLocalDataSource INSTANCE;
 
     private WordDao mWordsDao;
+
 
     private AppExecutors mAppExecutors;
 
@@ -83,6 +86,30 @@ public class WordsLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<Help> helpList = mWordsDao.getHelp();
+
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (helpList != null) {
+                            callback.onHelpLoaded(helpList,root,context);
+                        } else {
+                            callback.onDataNotAvailable();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+
+    @Override
     public void getWord(@NonNull final String word, @NonNull final GetWordCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
@@ -127,6 +154,30 @@ public class WordsLocalDataSource implements WordsDataSource {
 
     }
 
+
+
+
+
+    @Override
+    public void saveHelp(@NonNull final Help help) {
+        checkNotNull(help);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Help helpNew = mWordsDao.getHelpByHelpId(help.getMkey());
+                if (helpNew == null) {
+                    observeInsertHelp(help).subscribe(subscriberInsert);
+                }else{
+
+                    observeUpdate(help.getHelp()).subscribe(subscriberUpdate);
+
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+
+    }
+
     @Override
     public void activateWord(@NonNull String productId, String Quantity) {
 
@@ -154,6 +205,11 @@ public class WordsLocalDataSource implements WordsDataSource {
             }
         };
         mAppExecutors.diskIO().execute(deleteRunnable);
+    }
+
+    @Override
+    public void deleteAllHelps() {
+
     }
 
     @Override
@@ -227,6 +283,11 @@ public class WordsLocalDataSource implements WordsDataSource {
         return Observable.just(callObserveInsertWord(purchase));
     }
 
+    public Observable<Long> observeInsertHelp(@NonNull Help help){
+        return Observable.just(callObserveInsertHelp(help));
+    }
+
+
     public Observable<Integer> observeDeleteWord(@NonNull String shoppingId){
         return Observable.just(callObserveDeleteWord(shoppingId));
     }
@@ -255,6 +316,14 @@ public class WordsLocalDataSource implements WordsDataSource {
         subscriberInsert.onCompleted();
         return statusCommit;
     }
+
+    private long callObserveInsertHelp(@NonNull Help help){
+        long statusCommit = mWordsDao.insertHelp(help);
+        subscriberInsert.onNext(statusCommit);
+        subscriberInsert.onCompleted();
+        return statusCommit;
+    }
+
 
     private int callObserveDeleteWord(@NonNull String shoppingId){
       //  int statusCommit = mWordsDao.deleteWordById(shoppingId);
