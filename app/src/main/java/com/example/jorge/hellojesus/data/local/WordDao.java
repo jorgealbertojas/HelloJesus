@@ -6,6 +6,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
@@ -88,13 +89,23 @@ public interface  WordDao {
     @Query("SELECT * FROM Help ")
     List<Help> getHelp();
 
+    @Query("SELECT * FROM Control ")
+    List<Control> getControl();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertHelp(Help help);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertControl(Control control);
 
     /**
      * Select a Purchase by id.
      */
     @Query("SELECT * FROM Help WHERE key = :key ")
     Help getHelpByHelpId(String key);
+
+    @Query("SELECT * FROM Control WHERE key = :key ")
+    Control getControlByHelpId(String key);
 
 }

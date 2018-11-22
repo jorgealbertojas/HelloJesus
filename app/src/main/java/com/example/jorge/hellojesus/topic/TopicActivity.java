@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
@@ -77,21 +78,37 @@ public class TopicActivity extends AppCompatActivity {
         // Set the adapter onto the view pager
         mViewPager.setAdapter(adapter);
 
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.background), (int) getResources().getDimension(R.dimen.background));
+
+
+
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.mipmap.ic_bible);
         imageView.setTransitionName("imagem1");
+        imageView.setLayoutParams(layoutParams);
+        imageView.setPadding((int) getResources().getDimension(R.dimen.background_padding),(int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding));
+        imageView.setBackground(getDrawable(R.drawable.duplicates_notif));
 
         ImageView imageView2 = new ImageView(this);
         imageView2.setImageResource(R.mipmap.ic_music);
         imageView2.setTransitionName("imagem2");
+        imageView2.setLayoutParams(layoutParams);
+        imageView2.setPadding((int) getResources().getDimension(R.dimen.background_padding),(int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding));
+        imageView2.setBackground(getDrawable(R.drawable.duplicates_notif));
 
         ImageView imageView3 = new ImageView(this);
         imageView3.setImageResource(R.mipmap.ic_write);
         imageView3.setTransitionName("imagem3");
+        imageView3.setLayoutParams(layoutParams);
+        imageView3.setPadding((int) getResources().getDimension(R.dimen.background_padding),(int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding));
+        imageView3.setBackground(getDrawable(R.drawable.duplicates_notif));
 
         ImageView imageView4 = new ImageView(this);
         imageView4.setImageResource(R.mipmap.ic_exercise);
         imageView4.setTransitionName("imagem4");
+        imageView4.setLayoutParams(layoutParams);
+        imageView4.setPadding((int) getResources().getDimension(R.dimen.background_padding),(int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding), (int) getResources().getDimension(R.dimen.background_padding));
+        imageView4.setBackground(getDrawable(R.drawable.duplicates_notif));
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
         tabLayout.setTabTextColors(getResources().getColor(R.color.NoAccent2),getResources().getColor(R.color.colorAccent));

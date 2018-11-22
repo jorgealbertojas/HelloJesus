@@ -32,17 +32,26 @@ public final class Help {
     @SerializedName("value")
     private final String mvalue;
 
+    @NonNull
+    @ColumnInfo(name = "last")
+    @SerializedName("last")
+    private final String mlast;
+
 
     @Ignore
-    public Help(@NonNull String mkey, @NonNull String mvalue) {
-        this(UUID.randomUUID().toString(),mkey,mvalue);
+    public Help(@NonNull String mkey, @NonNull String mvalue, @NonNull String mlast  ) {
+        this(UUID.randomUUID().toString(),mkey,mvalue, mlast);
     }
 
-    public Help(@NonNull String mId, @NonNull String mkey, @NonNull String mvalue) {
+    public Help(@NonNull String mId, @NonNull String mkey, @NonNull String mvalue, @NonNull String mlast ) {
         this.mId = mId;
         this.mkey = mkey;
         this.mvalue = mvalue;
+        this.mlast = mlast;
+
     }
+
+
 
     @NonNull
     public String getId() {
@@ -64,4 +73,14 @@ public final class Help {
     public String getHelp() {
         return mkey;
     }
+
+    @NonNull
+    public String getMlast() {
+        return mlast;
+    }
+
+
+
+
+
 }

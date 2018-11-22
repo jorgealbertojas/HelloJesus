@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/constraintLayoutHelp"
     tools:context=".helpApp.HelpAppActivity">
 
-        <ImageView
-            android:id="@+id/helpView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
 
-            android:background="@mipmap/ic_exercise"
-        />
-
-    <TextView
-        android:id="@+id/text_explanation"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardViewHelp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="dvsfbfbfb"
-        android:padding="10dp"
-        android:textAlignment="center"
-        android:layout_margin="20dp"
-        android:textColor="@color/white"
+        card_view:cardBackgroundColor="@android:color/transparent"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
 
-        android:textSize="@dimen/text1_list_size"
-        app:layout_constraintBottom_toBottomOf="@+id/helpView" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <TextView
+                android:id="@+id/text_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:text=" Título: Informação de Titulo \n\n T Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text1_list_size" />
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_move_down_up"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/ic_move_down_up" />
+
+            <ImageView
+                android:id="@+id/ic_close"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/ic_close" />
+        </RelativeLayout>
 
 
+    </android.support.v7.widget.CardView>
 
+    <View
+        android:id="@+id/tttt"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_alignParentBottom="true" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

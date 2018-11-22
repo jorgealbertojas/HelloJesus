@@ -1,5 +1,6 @@
 package com.example.jorge.hellojesus.main;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,8 @@ import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 import com.example.jorge.hellojesus.helpApp.AppHelp;
 import com.example.jorge.hellojesus.topic.TopicActivity;
+import com.example.jorge.hellojesus.util.ActivityUtils;
+import com.example.jorge.hellojesus.util.Common;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -80,6 +83,10 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static int lastPositionY = 0;
     private static int radius = 0;
 
+    private static boolean helpBoolean = false;
+
+    private static FloatingActionButton fab;
+
 
     private static LinearLayout Llmain ;
 
@@ -104,6 +111,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void onResume() {
         super.onResume();
        // mPresenter.loadingMain();
+        if (helpBoolean){
+            ObjectAnimator animation = ObjectAnimator.ofFloat(fab, "translationX", 0);
+            animation.setDuration(2000);
+            animation.start();
+        }
+        helpBoolean = false;
     }
 
 
@@ -132,18 +145,21 @@ public class MainFragment extends Fragment implements MainContract.View {
             }
         });
 
-
+        final int newColorRed = getResources().getColor(R.color.red);
         // Set up floating action button
-        FloatingActionButton fab =
+        fab =
                 (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
+        fab.setRippleColor(Common.getColorWithAlpha(newColorRed, 0.6f));
 
         // fab.setImageResource(R.drawable.ic_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                    mPresenter.loadHelp(root,getContext());
+                helpBoolean = true;
+                ObjectAnimator animation = ObjectAnimator.ofFloat(fab, "translationX", fab.getHeight() * 2);
+                animation.setDuration(2000);
+                animation.start();
+                mPresenter.loadHelp(root,getContext());
 
 
             }
@@ -434,7 +450,7 @@ public class MainFragment extends Fragment implements MainContract.View {
             AppHelp appHelp = (gson.fromJson(readJsonFile(inputStream), AppHelp.class));
 
             for (int i = 0;  i < appHelp.getConfigHelp().size()  ;i ++ ){
-                Help help = new Help(appHelp.getConfigHelp().get(i).getMkey(),appHelp.getConfigHelp().get(i).getMvalue());
+                Help help = new Help(appHelp.getConfigHelp().get(i).getMkey(),appHelp.getConfigHelp().get(i).getMvalue(), appHelp.getConfigHelp().get(i).getMlast());
                 mPresenter.saveHelp(help);
             }
         } catch (Exception e) {

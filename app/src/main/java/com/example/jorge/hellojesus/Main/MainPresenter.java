@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.local.help.Help;
@@ -81,6 +82,7 @@ public class MainPresenter implements MainContract.UserActionsListener {
                 List<String> stringList = new ArrayList<String>();
                 List<Integer> stringListX = new ArrayList<Integer>();
                 List<Integer> stringListY = new ArrayList<Integer>();
+                List<String> stringListTOP= new ArrayList<String>();
 
                 // This callback may be called twice, once for the cache and once for loading
                 // the data from the server API, so we check before decrementing, otherwise
@@ -96,9 +98,10 @@ public class MainPresenter implements MainContract.UserActionsListener {
                     valueID = Common.getResourceString(help.getMkey());
                     if (valueID != 0) {
                         View vievHelp2 = (View) root.findViewById(valueID);
-                        if (vievHelp2  != null) {
+                        if ((vievHelp2  != null) && (!stringList.contains(help.getMkey()))) {
                             vievHelp2.getLocationOnScreen(locationInScreen);
                             stringList.add(help.getMkey());
+                            stringListTOP.add(help.getMlast());
                             stringListX.add(locationInScreen[0]);
                             stringListY.add(locationInScreen[1] - (vievHelp2.getHeight() / 2));
                         }
@@ -110,6 +113,7 @@ public class MainPresenter implements MainContract.UserActionsListener {
                 intent.putExtra("HELP_ID", (Serializable) stringList);
                 intent.putExtra("HELP_X", (Serializable) stringListX);
                 intent.putExtra("HELP_Y", (Serializable) stringListY);
+                intent.putExtra("HELP_TOP", (Serializable) stringListTOP);
 
                 context.startActivity(intent);
 

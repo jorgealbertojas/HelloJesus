@@ -162,6 +162,10 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex:rxjava:1.1.6'
 
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     compile project(path: ':libJavaForTest')
 }
 
