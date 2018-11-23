@@ -23,33 +23,32 @@ import com.example.jorge.hellojesus.content.ContentActivity;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
+import com.example.jorge.hellojesus.speech.SpeechActivity;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.topic.TopicContract;
 import com.example.jorge.hellojesus.topic.TopicPresenter;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 23/02/2018.
  */
 
-public class BibleFragment extends Fragment implements TopicContract.View {
+public class MusicSingFragment extends Fragment implements TopicContract.View {
 
     public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
-    public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
-    public static String EXTRA_CONTENT_SOURCE_NAME = "CONTENT_SOURCE_NAME";
     public static String EXTRA_CONTENT = "CONTENT";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
 
-
     private TopicContract.UserActionsListener mActionsListener;
 
-    private BibleFragment.TopicsAdapter mListAdapter;
+    private MusicSingFragment.TopicsAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -58,22 +57,23 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     private TopicContract.UserActionsListener mPresenter;
 
-    private static Context mContext;
-
     private static List<Integer> mIdTopics;
 
+    private static Context mContext;
 
-    public static BibleFragment newInstance(List<Integer> topicList) {
+    public MusicSingFragment() {
+    }
+
+    public static MusicSingFragment newInstance(List<Integer> topicList) {
         mIdTopics = topicList;
-        return new BibleFragment();
+        return new MusicSingFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListAdapter = new BibleFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
-        mContext =  getContext();
-        mActionsListener = new TopicPresenter( new TopicServiceImpl(), this);
+        mListAdapter = new MusicSingFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
+        mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
                              Bundle savedInstanceState) {
 
 
+        mContext = getContext();
 
         View root = inflater.inflate(R.layout.fragment_topics, container, false);
 
@@ -125,18 +126,16 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
 
 
-    BibleFragment.ItemListener mItemListener = new BibleFragment.ItemListener() {
+    MusicSingFragment.ItemListener mItemListener = new MusicSingFragment.ItemListener() {
         @Override
-        public void onTopicClick(List<Content> clickedNote) {
-            mActionsListener.openDetail();
+        public void onTopicClick(Topic clickedNote) {
+
         }
-
-
     };
 
     @Override
     public void showTopicBible(List<Topic> topics) {
-        mListAdapter.replaceData(topics);
+
 
     }
 
@@ -147,7 +146,8 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void showTopicMusicSing(List<Topic> topics) {
-
+        mListAdapter.
+                replaceData(topics);
     }
 
     @Override
@@ -197,35 +197,35 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     }
 
 
-    private static class TopicsAdapter extends RecyclerView.Adapter<BibleFragment.TopicsAdapter.ViewHolder> {
+    private static class TopicsAdapter extends RecyclerView.Adapter<MusicSingFragment.TopicsAdapter.ViewHolder> {
 
         private List<Topic> mTopics;
-        private BibleFragment.ItemListener mItemListener;
+        private MusicSingFragment.ItemListener mItemListener;
 
-        public TopicsAdapter(List<Topic> topicList, BibleFragment.ItemListener itemListener) {
+        public TopicsAdapter(List<Topic> topicList, MusicSingFragment.ItemListener itemListener) {
             setList(topicList);
             mItemListener = itemListener;
         }
 
         @Override
-        public BibleFragment.TopicsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MusicSingFragment.TopicsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View noteView = inflater.inflate(R.layout.item_topic, parent, false);
 
-            return new BibleFragment.TopicsAdapter.ViewHolder(noteView, mItemListener);
+            return new MusicSingFragment.TopicsAdapter.ViewHolder(noteView, mItemListener);
         }
 
         @Override
-        public void onBindViewHolder(BibleFragment.TopicsAdapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(MusicSingFragment.TopicsAdapter.ViewHolder viewHolder, int position) {
             Topic topic = mTopics.get(position);
 
             viewHolder.topicName.setText(topic.getName());
             viewHolder.topicTime.setText(topic.getTime() + " " + mContext.getResources().getString(R.string.seconds) );
             viewHolder.topicGlossary.setText(Integer.toString(topic.getContent().size()));
-            viewHolder.topicPhases.setText(mContext.getResources().getString(R.string.verses));
+            viewHolder.topicPhases.setText(mContext.getResources().getString(R.string.phases));
 
-           // topic.getContent().size();
+            // topic.getContent().size();
 
             Resources res = mContext.getResources();
             final int newColor = res.getColor(R.color.colorAccent);
@@ -257,10 +257,9 @@ public class BibleFragment extends Fragment implements TopicContract.View {
             public TextView topicTime;
             public ImageView topicImage;
             public TextView topicPhases;
+            private MusicSingFragment.ItemListener mItemListener;
 
-            private BibleFragment.ItemListener mItemListener;
-
-            public ViewHolder(View itemView, BibleFragment.ItemListener listener) {
+            public ViewHolder(View itemView, MusicSingFragment.ItemListener listener) {
                 super(itemView);
                 mItemListener = listener;
                 topicName = (TextView) itemView.findViewById(R.id.tv_topic_name);
@@ -269,36 +268,43 @@ public class BibleFragment extends Fragment implements TopicContract.View {
                 topicImage = (ImageView) itemView.findViewById(R.id.iv_topic);
                 topicPhases = (TextView) itemView.findViewById(R.id.tv_phases);
 
+
                 itemView.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                List<Content> contents = getItem(position).getContent();
+                Topic contents = getItem(position);
                 int time = Integer.parseInt(getItem(position).getTime());
                 String mp3 = (getItem(position).getAudio());
 
-                mItemListener.onTopicClick(contents);
-
-                Intent intent = new Intent(v.getContext(), ContentActivity.class);
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
-                bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
-                bundle.putString(EXTRA_CONTENT_MP3, mp3);
-                intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
-                v.getContext().startActivity(intent);
-
-
-
+                if (mp3.toString().equals(KEY_SING)){
+                    mItemListener.onTopicClick(contents);
+                    Intent intent = new Intent(v.getContext(), SpeechActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
+                    bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                    bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+                    intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                    v.getContext().startActivity(intent);
+                }else{
+                    mItemListener.onTopicClick(contents);
+                    Intent intent = new Intent(v.getContext(), ContentActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
+                    bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
+                    bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+                    intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
+                    v.getContext().startActivity(intent);
+                }
             }
         }
     }
 
     public interface ItemListener {
 
-        void onTopicClick(List<Content> clickedNote);
+        void onTopicClick(Topic clickedNote);
     }
 
     private void initRecyclerView(View root){
@@ -311,4 +317,3 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
     }
 }
-

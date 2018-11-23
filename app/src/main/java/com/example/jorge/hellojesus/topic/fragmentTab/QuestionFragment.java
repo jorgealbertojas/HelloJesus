@@ -56,7 +56,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
     private TopicContract.UserActionsListener mPresenter;
 
-    private static List<Integer> mIdTopics;
+    //private static List<Integer> mIdTopics;
 
     private static List<Content> mListContentBible;
     private static List<Content> mListContentMusicWrite;
@@ -67,8 +67,8 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
     public QuestionFragment() {
     }
 
-    public static QuestionFragment newInstance(List<Integer> topicList) {
-        mIdTopics = topicList;
+    public static QuestionFragment newInstance() {
+        //mIdTopics = topicList;
         return new QuestionFragment();
     }
 
@@ -293,6 +293,11 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
     @Override
     public void showTopicMusic(List<Topic> topics) {
+
+    }
+
+    @Override
+    public void showTopicMusicSing(List<Topic> topics) {
 
     }
 

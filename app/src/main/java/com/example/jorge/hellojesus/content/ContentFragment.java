@@ -49,6 +49,7 @@ import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.util.Common;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -124,6 +125,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private static  Boolean mFabMenuOpen = false;
 
     private static LinearLayout mLinearLayout;
+    private static LinearLayout mLinearLayout2;
 
     private static Context mContext;
 
@@ -211,6 +213,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         View root = inflater.inflate(R.layout.fragment_content, container, false);
 
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
+
+        mLinearLayout2 = (LinearLayout) root.findViewById(R.id.linearLayout);
+        final int newColorRed = getResources().getColor(R.color.red);
+        mLinearLayout2.setBackgroundColor(Common.getColorWithAlpha(newColorRed, 0.6f));
 
         mFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.fab_function);
         mFabImage = (FloatingActionButton) root.findViewById(R.id.fab_image);

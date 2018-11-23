@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
-    android:background="#ff1e00"
+
     android:orientation="horizontal"
     android:visibility="visible">
     <LinearLayout
@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorRed"
             android:orientation="horizontal"
             android:paddingTop="4dp">
             <FrameLayout

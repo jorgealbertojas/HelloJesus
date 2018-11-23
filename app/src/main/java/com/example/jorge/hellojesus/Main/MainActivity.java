@@ -1,5 +1,6 @@
 package com.example.jorge.hellojesus.main;
 
+import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.IdlingResource;
@@ -20,6 +21,8 @@ import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.helpApp.AppHelp;
 import com.example.jorge.hellojesus.helpApp.HelpPresenter;
+import com.example.jorge.hellojesus.menuActivity.MenuWordActivity;
+import com.example.jorge.hellojesus.topic.fragmentTab.QuestionFragment;
 import com.example.libjavafortest.myClass;
 import com.google.gson.Gson;
 
@@ -113,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.list_menu_item_home:
                                 // Do nothing, we're already on that screen
+                                break;
+                            case R.id.list_menu_word:
+                            //    initFragment(QuestionFragment.newInstance());
+
+                                Intent intent =
+                                         new Intent(MainActivity.this, MenuWordActivity.class);
+                                 startActivity(intent);
                                 break;
                             case R.id.list_menu_item_setting:
                                 // Intent intent =

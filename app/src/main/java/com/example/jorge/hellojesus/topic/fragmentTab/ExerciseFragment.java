@@ -150,6 +150,11 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     }
 
     @Override
+    public void showTopicMusicSing(List<Topic> topics) {
+
+    }
+
+    @Override
     public void showTopicExercise(List<Topic> topics) {
         mListAdapter.replaceData(topics);
     }

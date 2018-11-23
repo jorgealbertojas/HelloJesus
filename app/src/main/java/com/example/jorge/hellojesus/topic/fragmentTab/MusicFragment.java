@@ -141,7 +141,13 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     @Override
     public void showTopicMusic(List<Topic> topics) {
-        mListAdapter.replaceData(topics);
+        mListAdapter.
+                replaceData(topics);
+    }
+
+    @Override
+    public void showTopicMusicSing(List<Topic> topics) {
+
     }
 
     @Override
@@ -277,7 +283,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     mItemListener.onTopicClick(contents);
                     Intent intent = new Intent(v.getContext(), SpeechActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
                     bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                     bundle.putString(EXTRA_CONTENT_MP3,  mp3);
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
@@ -286,7 +292,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     mItemListener.onTopicClick(contents);
                     Intent intent = new Intent(v.getContext(), ContentActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
+                    bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
                     bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                     bundle.putString(EXTRA_CONTENT_MP3,  mp3);
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);

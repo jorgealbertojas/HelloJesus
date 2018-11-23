@@ -29,13 +29,8 @@
         android:layout_height="125dp"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:src="@drawable/ic_local_library_white_24dp" />
+        android:src="@mipmap/ic_main_icon" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:text="@string/item_home"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
 
 </FrameLayout>

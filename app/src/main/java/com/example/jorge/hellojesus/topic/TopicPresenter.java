@@ -16,6 +16,7 @@ import com.example.jorge.hellojesus.util.EspressoIdlingResource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -55,6 +56,7 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
 
                 List<Topic>  topicListBible = new ArrayList<>();
                 List<Topic>  topicListMusic = new ArrayList<>();
+                List<Topic>  topicListMusicSing = new ArrayList<>();
                 List<Topic>  topicListQuestion = new ArrayList<>();
                 List<Topic>  topicListExercise = new ArrayList<>();
 
@@ -65,7 +67,11 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
                             topicListBible.add(topicList.get(i));
 
                         }else if (topicList.get(i).getType().equals("music")){
-                            topicListMusic.add(topicList.get(i));
+                            if (topicList.get(i).getAudio().toString().equals(KEY_SING)) {
+                                topicListMusicSing.add(topicList.get(i));
+                            }else{
+                                topicListMusic.add(topicList.get(i));
+                            }
 
                         }else if (topicList.get(i).getType().equals("question")){
                             topicListQuestion.add(topicList.get(i));
@@ -79,6 +85,7 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
 
                 mTopicContractView.showTopicBible(topicListBible);
                 mTopicContractView.showTopicMusic(topicListMusic);
+                mTopicContractView.showTopicMusicSing(topicListMusicSing);
                 mTopicContractView.showTopicQuestion(topicListQuestion);
                 mTopicContractView.showTopicExercise(topicListExercise);
             }

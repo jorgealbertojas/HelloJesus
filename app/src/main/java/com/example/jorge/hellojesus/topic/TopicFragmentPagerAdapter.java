@@ -9,7 +9,7 @@ import com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment;
 import com.example.jorge.hellojesus.topic.fragmentTab.ExerciseFragment;
 
 import com.example.jorge.hellojesus.topic.fragmentTab.MusicFragment;
-import com.example.jorge.hellojesus.topic.fragmentTab.QuestionFragment;
+import com.example.jorge.hellojesus.topic.fragmentTab.MusicSingFragment;
 
 /**
  * Created by jorge on 23/02/2018.
@@ -34,7 +34,7 @@ public class TopicFragmentPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 2){
             return new ExerciseFragment();
         } else if (position == 3){
-            return new QuestionFragment();
+            return new MusicSingFragment();
         } else {
             return null;
         }

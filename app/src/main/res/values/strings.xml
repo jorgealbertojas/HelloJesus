@@ -4,6 +4,7 @@
     <!-- String Menu  -->
     <string name="main_menu">English curse</string>
     <string name="item_home">Home</string>
+    <string name="item_word">Word</string>
     <string name="item_setting">Setting</string>
 
     <!-- String Tab Fragment  -->

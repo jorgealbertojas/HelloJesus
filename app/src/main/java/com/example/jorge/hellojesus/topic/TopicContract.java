@@ -21,6 +21,8 @@ public interface TopicContract {
 
         void showTopicMusic(List<Topic> topics);
 
+        void showTopicMusicSing(List<Topic> topics);
+
         void showTopicExercise(List<Topic> topics);
 
         void showTopicQuestion(List<Topic> topics);
