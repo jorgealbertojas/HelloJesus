@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
@@ -45,12 +46,22 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getControlStatus1(@NonNull String key, @NonNull GetControlCallback callback) {
+
+    }
+
+    @Override
     public void saveWord(@NonNull Word word) {
 
     }
 
     @Override
     public void saveHelp(@NonNull Help help) {
+
+    }
+
+    @Override
+    public void saveControl(@NonNull Control control) {
 
     }
 
@@ -66,6 +77,26 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
 
     @Override
     public void refreshWord(List<Word> wordList) {
+
+    }
+
+    @Override
+    public void updateControlStatus1(@NonNull Control control, String status1) {
+
+    }
+
+    @Override
+    public void updateControlStatus2(@NonNull Control control, String status2) {
+
+    }
+
+    @Override
+    public void updateControlStatus3(@NonNull Control control, String status3) {
+
+    }
+
+    @Override
+    public void updateControlStatus4(@NonNull Control control, String status4) {
 
     }
 

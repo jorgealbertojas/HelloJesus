@@ -18,10 +18,13 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.WordsRepository;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceApi;
 import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.example.jorge.hellojesus.main.MainContract;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -36,11 +39,23 @@ import jp.shts.android.storiesprogressview.StoriesProgressView;
  */
 
 public class ContentPresenter implements ContentContract.UserActionsListener {
-
+    private final WordsRepository mWordsRepository;
 
     private final ContentContract.View mContentContractView;
 
-    public ContentPresenter(ContentContract.View contentContract_View) {
+    public ContentPresenter(ContentContract.View contentContract_View, WordsRepository wordsRepository, String salveStatus, String nName, String status) {
+        this.mWordsRepository = wordsRepository;
+
+
+        Control control = new Control(nName,"0","0","0","0");
+        mWordsRepository.saveControl(control);
+        if (status.equals("1")){
+            mWordsRepository.updateControlStatus1(control,salveStatus);
+        }else{
+            mWordsRepository.updateControlStatus2(control,salveStatus);
+        }
+
+
 
         this.mContentContractView = contentContract_View;
     }

@@ -45,7 +45,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.content.ContentPresenter;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.progress.ProgressActivity;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -72,7 +74,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.jorge.hellojesus.content.ContentFragment.BASE_STORAGE;
-
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_LAST;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
 
 
 /**
@@ -157,6 +160,9 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
     private static boolean statusPlay = false;
 
+    public static String mName;
+    public static String mSaveStatus;
+
     public WriteFragment() {
     }
 
@@ -177,13 +183,14 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     };
 
 
-    public static WriteFragment newInstance(List<Content> contents, int time, String mp3, String sourceName) {
+    public static WriteFragment newInstance(List<Content> contents, int time, String mp3, String sourceName, String saveStatus, String name) {
 
         mSourceName = sourceName;
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
-
+        mSaveStatus = saveStatus;
+        mName = name;
         return new WriteFragment();
     }
 
@@ -194,7 +201,9 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
         mType = getActivity().getResources().getString(R.string.key_music_write);
 
         mListAdapter = new WriteFragment.ContentAdapter(new ArrayList<Content>(0));
-        mPresenter = new WritePresenter(this);
+        mPresenter = new WritePresenter(this,  Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName);
+
+
 
     }
 

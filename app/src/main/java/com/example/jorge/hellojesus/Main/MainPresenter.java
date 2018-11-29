@@ -2,13 +2,16 @@ package com.example.jorge.hellojesus.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceApi;
 import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
@@ -64,6 +67,60 @@ public class MainPresenter implements MainContract.UserActionsListener {
     @Override
     public void openTopic(@NonNull Main main) {
 
+    }
+
+    @Override
+    public void getControlStatus1(@NonNull String key, final ImageView imageView, final Context context, final String status) {
+        mWordsRepository.getControlStatus1(key, new WordsDataSource.GetControlCallback() {
+            @Override
+            public void onControlLoaded(Control control) {
+                final int newColor2 = context.getResources().getColor(R.color.red);
+                if (control != null) {
+                    if (status.equals("1")) {
+                        if (control.getMstatus1().equals("1")) {
+                            imageView.setColorFilter(newColor2, PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }else if (status.equals("2")) {
+                        if (control.getMstatus2().equals("1")) {
+                            imageView.setColorFilter(newColor2, PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }else if (status.equals("3")) {
+                        if (control.getMstatus3().equals("1")) {
+                            imageView.setColorFilter(newColor2, PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }else if (status.equals("4")) {
+                        if (control.getMstatus4().equals("1")) {
+                            imageView.setColorFilter(newColor2, PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+    }
+
+    @Override
+    public void getControlStatusAll(@NonNull String key, final ImageView imageView, final Context context) {
+        mWordsRepository.getControlStatus1(key, new WordsDataSource.GetControlCallback() {
+            @Override
+            public void onControlLoaded(Control control) {
+                final int newColor2 = context.getResources().getColor(R.color.red);
+                if (control != null) {
+                    if ((control.getMstatus1().equals("1")) && (control.getMstatus2().equals("1")) && (control.getMstatus3().equals("1")) && (control.getMstatus4().equals("1")) ) {
+                        imageView.setColorFilter(newColor2, PorterDuff.Mode.SRC_ATOP);
+                    }
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 
     @Override

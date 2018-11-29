@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -45,6 +46,8 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
     public static String EXTRA_CONTENT = "CONTENT";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
+    public static String EXTRA_CONTENT_LAST = "CONTENT_LAST";
+    public static String EXTRA_CONTENT_NAME = "CONTENT_NAME";
     public static String EXTRA_SOURCE_NAME = "CONTENT_SOURCE_NAME";
 
     private TopicContract.UserActionsListener mActionsListener;
@@ -64,6 +67,8 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
 
     private static Context mContext;
 
+    private static String mNameTitle = "";
+
     public ExerciseFragment() {
     }
 
@@ -78,6 +83,7 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
         super.onCreate(savedInstanceState);
         mListAdapter = new ExerciseFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
+        mNameTitle = getActivity().getIntent().getStringExtra(EXTRA_STRING_TITLE);
     }
 
     @Override
@@ -292,6 +298,15 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
                 bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                 bundle.putString(EXTRA_CONTENT_MP3, mp3);
                 bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
+
+                if (mListAdapter.mTopics.size() == (position + 1) ){
+                    bundle.putString(EXTRA_CONTENT_LAST, "1");
+                }else{
+                    bundle.putString(EXTRA_CONTENT_LAST, "0");
+                }
+
+                bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+
                 intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
 
                 v.getContext().startActivity(intent);

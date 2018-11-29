@@ -20,7 +20,9 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_BUNDLE_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_LAST;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
@@ -34,6 +36,9 @@ public class WriteActivity extends AppCompatActivity {
     private String mMp3;
     private String mSourceName;
 
+    private String mName;
+    private String mSatusSave;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +49,15 @@ public class WriteActivity extends AppCompatActivity {
         mMp3 = (String) mBundle.getString(EXTRA_CONTENT_MP3);
         mSourceName = (String) mBundle.getString(EXTRA_CONTENT_SOURCE_NAME);
 
+
+        mName = (String) mBundle.getString(EXTRA_CONTENT_NAME);
+        mSatusSave = (String) mBundle.getString(EXTRA_CONTENT_LAST);
+
+
+        
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(WriteFragment.newInstance(mContents,mTime,mMp3,mSourceName));
+                initFragment(WriteFragment.newInstance(mContents,mTime,mMp3,mSourceName,mSatusSave,mName));
             }
         }
 

@@ -1,6 +1,8 @@
 package com.example.jorge.hellojesus.main;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
 import com.example.jorge.hellojesus.BasePresenter;
 import com.example.jorge.hellojesus.BaseView;
@@ -30,6 +32,10 @@ public interface MainContract extends HelpContract {
         void saveHelp(Help help);
 
         void openTopic(@NonNull Main main);
+
+        void getControlStatus1(@NonNull String key, ImageView imageView, Context context, String status);
+
+        void getControlStatusAll(@NonNull String key, ImageView imageView, Context context);
 
 
 

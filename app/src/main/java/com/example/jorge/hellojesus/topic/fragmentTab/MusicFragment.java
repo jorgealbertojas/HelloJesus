@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
 import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -44,7 +45,10 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     public static String EXTRA_CONTENT_TIME = "CONTENT_TIME";
     public static String EXTRA_CONTENT = "CONTENT";
+    public static String EXTRA_CONTENT_LAST = "CONTENT_LAST";
+    public static String EXTRA_CONTENT_NAME = "CONTENT_NAME";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
+    public static String EXTRA_CONTENT_STATUS = "CONTENT_STATUS";
 
     private TopicContract.UserActionsListener mActionsListener;
 
@@ -61,6 +65,8 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     private static Context mContext;
 
+    private static String mNameTitle = "";
+
     public MusicFragment() {
     }
 
@@ -74,6 +80,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
         super.onCreate(savedInstanceState);
         mListAdapter = new MusicFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
+        mNameTitle = getActivity().getIntent().getStringExtra(EXTRA_STRING_TITLE);
     }
 
     @Override
@@ -286,6 +293,17 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
                     bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                     bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+
+                    if (mTopics.size() == (position + 1) ){
+                        bundle.putString(EXTRA_CONTENT_LAST, "1");
+                    }else{
+                        bundle.putString(EXTRA_CONTENT_LAST, "0");
+                    }
+
+                    bundle.putString(EXTRA_CONTENT_STATUS,"2");
+
+                    bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
                 }else{
@@ -295,6 +313,17 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents.getContent());
                     bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                     bundle.putString(EXTRA_CONTENT_MP3,  mp3);
+
+                    if (mTopics.size() == (position + 1) ){
+                        bundle.putString(EXTRA_CONTENT_LAST, "1");
+                    }else{
+                        bundle.putString(EXTRA_CONTENT_LAST, "0");
+                    }
+
+                    bundle.putString(EXTRA_CONTENT_STATUS,"2");
+
+                    bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
                 }

@@ -30,6 +30,9 @@ public interface  WordDao {
     @Query("SELECT * FROM Word WHERE word = :word  ")
     Word getWordByName(String word);
 
+    @Query("SELECT * FROM Control WHERE key = :key  ")
+    Control getControlStatus(String key);
+
     /**
      * Delete a Purchase by id.
      */
@@ -80,6 +83,7 @@ public interface  WordDao {
     Word getWordByCarId(String word);
 
 
+
     /**
      * Update for finalize of the shopping
      */
@@ -107,5 +111,17 @@ public interface  WordDao {
 
     @Query("SELECT * FROM Control WHERE key = :key ")
     Control getControlByHelpId(String key);
+
+    @Query("UPDATE Control SET status1 = :status1 WHERE key = :key")
+    int updateStatus1(String key, String status1);
+
+    @Query("UPDATE Control SET status2 = :status2 WHERE key = :key")
+    int updateStatus2(String key, String status2);
+
+    @Query("UPDATE Control SET status3 = :status3 WHERE key = :key")
+    int updateStatus3(String key, String status3);
+
+    @Query("UPDATE Control SET status4 = :status4 WHERE key = :key")
+    int updateStatus4(String key, String status4);
 
 }

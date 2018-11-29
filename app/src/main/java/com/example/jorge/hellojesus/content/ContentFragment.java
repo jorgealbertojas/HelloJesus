@@ -47,6 +47,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.util.Common;
@@ -110,6 +111,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     public static List<Content> mContents;
     public static int mTime;
     public static String mMp3;
+
+    public static String mName;
+    public static String mSaveStatus;
+    public static String mStatus;
 
     private static final int PROGRESS_COUNT = 18;
 
@@ -177,10 +182,13 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         }
     };
 
-    public static ContentFragment newInstance(List<Content> contents, int time, String mp3) {
+    public static ContentFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name, String status) {
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
+        mSaveStatus = saveStatus;
+        mName = name;
+        mStatus = status;
         return new ContentFragment();
     }
 
@@ -189,7 +197,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         super.onCreate(savedInstanceState);
 
         mListAdapter = new ContentFragment.ContentAdapter(new ArrayList<Content>(0), mItemListener);
-        mPresenter = new ContentPresenter( this);
+        mPresenter = new ContentPresenter( this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName,mStatus);
 
     }
 

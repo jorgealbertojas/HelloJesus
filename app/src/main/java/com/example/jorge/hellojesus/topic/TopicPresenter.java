@@ -7,6 +7,7 @@ import android.view.View;
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceApi;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.ListTopic;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 21/02/2018.
@@ -32,6 +32,8 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
 
     private final TopicContract.View mTopicContractView;
 
+    private static String mNameTitle = "";
+
     public TopicPresenter(WordsRepository wordsRepository, @NonNull TopicServiceApi topicServiceApi, TopicContract.View topicContract_View) {
         this.mWordsRepository = wordsRepository;
 
@@ -45,6 +47,7 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
         mWordsRepository = null;
         this.mTopicContractView = topicContract_View;
         this.mTopicServiceApi = topicServiceApi;
+
     }
 
 
@@ -91,6 +94,19 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
             }
         });
     }
+
+    @Override
+    public void saveControl(Control control) {
+
+              mWordsRepository.saveControl(control);
+
+    }
+
+    @Override
+    public String getNameTitle() {
+        return this.mNameTitle;
+    }
+
 
     private void loadWord() {
 
@@ -149,6 +165,8 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
         });
     }
 
+
+
     @Override
     public void loadingWords(String type, String sourceName, String write) {
         loadWord();
@@ -163,6 +181,10 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
     public void openDetail() {
 
     }
+
+
+
+
 
     private void processWords(List<Content> wordList) {
 

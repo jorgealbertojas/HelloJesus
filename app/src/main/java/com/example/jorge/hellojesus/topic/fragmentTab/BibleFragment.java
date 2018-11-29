@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -44,12 +45,17 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     public static String EXTRA_CONTENT_MP3 = "CONTENT_MP3";
     public static String EXTRA_CONTENT_SOURCE_NAME = "CONTENT_SOURCE_NAME";
     public static String EXTRA_CONTENT = "CONTENT";
+    public static String EXTRA_CONTENT_LAST = "CONTENT_LAST";
+    public static String EXTRA_CONTENT_NAME = "CONTENT_NAME";
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
+    public static String EXTRA_CONTENT_STATUS = "CONTENT_STATUS";
 
 
-    private TopicContract.UserActionsListener mActionsListener;
+    private static TopicContract.UserActionsListener mActionsListener;
 
-    private BibleFragment.TopicsAdapter mListAdapter;
+    public static BibleFragment.TopicsAdapter
+
+            mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -62,6 +68,8 @@ public class BibleFragment extends Fragment implements TopicContract.View {
 
     private static List<Integer> mIdTopics;
 
+    private static String mNameTitle = "";
+
 
     public static BibleFragment newInstance(List<Integer> topicList) {
         mIdTopics = topicList;
@@ -73,6 +81,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         super.onCreate(savedInstanceState);
         mListAdapter = new BibleFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mContext =  getContext();
+        mNameTitle = getActivity().getIntent().getStringExtra(EXTRA_STRING_TITLE);
         mActionsListener = new TopicPresenter( new TopicServiceImpl(), this);
     }
 
@@ -197,7 +206,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
     }
 
 
-    private static class TopicsAdapter extends RecyclerView.Adapter<BibleFragment.TopicsAdapter.ViewHolder> {
+    private static class TopicsAdapter extends RecyclerView.Adapter<BibleFragment.TopicsAdapter.ViewHolder>  {
 
         private List<Topic> mTopics;
         private BibleFragment.ItemListener mItemListener;
@@ -287,6 +296,19 @@ public class BibleFragment extends Fragment implements TopicContract.View {
                 bundle.putSerializable(EXTRA_CONTENT, (Serializable) contents);
                 bundle.putInt(EXTRA_CONTENT_TIME, (int) time);
                 bundle.putString(EXTRA_CONTENT_MP3, mp3);
+
+
+                if (mListAdapter.mTopics.size() == (position + 1) ){
+                    bundle.putString(EXTRA_CONTENT_LAST, "1");
+                }else{
+                    bundle.putString(EXTRA_CONTENT_LAST, "0");
+                }
+
+                bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+
+                bundle.putString(EXTRA_CONTENT_STATUS,"1");
+
+
                 intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                 v.getContext().startActivity(intent);
 

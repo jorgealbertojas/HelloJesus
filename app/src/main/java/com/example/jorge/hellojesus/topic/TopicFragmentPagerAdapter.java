@@ -18,10 +18,12 @@ import com.example.jorge.hellojesus.topic.fragmentTab.MusicSingFragment;
 public class TopicFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
+    private String mNameTitle = "";
 
-    public TopicFragmentPagerAdapter(Context context, FragmentManager fm) {
+    public TopicFragmentPagerAdapter(Context context, FragmentManager fm, String nameTitle) {
         super(fm);
         mContext = context;
+        mNameTitle = nameTitle;
     }
 
     // This determines the fragment for each tab

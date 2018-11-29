@@ -46,6 +46,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.progress.ProgressActivity;
@@ -128,6 +129,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private static boolean statusPlay = false;
 
+    public static String mName;
+    public static String mSaveStatus;
+
     public SpeechFragment() {
     }
 
@@ -156,10 +160,12 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     };
 
 
-    public static SpeechFragment newInstance(List<Content> contents, int time, String mp3) {
+    public static SpeechFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name) {
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
+        mSaveStatus = saveStatus;
+        mName = name;
         return new SpeechFragment();
     }
 
@@ -168,7 +174,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         super.onCreate(savedInstanceState);
 
         mListAdapter = new SpeechFragment.ContentAdapter(new ArrayList<Content>(0));
-        mPresenter = new SpeechPresenter(this);
+        mPresenter = new SpeechPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName);
 
     }
 

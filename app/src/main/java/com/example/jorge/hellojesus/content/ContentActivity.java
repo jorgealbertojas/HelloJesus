@@ -14,7 +14,10 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_BUNDLE_CONTENT;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_LAST;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_STATUS;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
 public class ContentActivity extends AppCompatActivity  {
@@ -23,6 +26,10 @@ public class ContentActivity extends AppCompatActivity  {
     private Bundle mBundle;
     private int mTime;
     private String mMp3;
+
+    private String mName;
+    private String mStatusSave;
+    private String mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +41,15 @@ public class ContentActivity extends AppCompatActivity  {
         mTime = (int) mBundle.getInt(EXTRA_CONTENT_TIME);
         mMp3 = (String) mBundle.getString(EXTRA_CONTENT_MP3);
 
+        mName = (String) mBundle.getString(EXTRA_CONTENT_NAME);
+        mStatusSave = (String) mBundle.getString(EXTRA_CONTENT_LAST);
+
+        mStatus = (String) mBundle.getString(EXTRA_CONTENT_STATUS);
+
+
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(ContentFragment.newInstance(mContents,mTime,mMp3));
+                initFragment(ContentFragment.newInstance(mContents,mTime,mMp3,mStatusSave,mName,mStatus));
             }
         }
 

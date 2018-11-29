@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class TopicActivity extends AppCompatActivity {
     private void initTabLayout(){
 
         // Create an adapter that knows which fragment should be shown on each page
-        TopicFragmentPagerAdapter adapter = new TopicFragmentPagerAdapter(this, getSupportFragmentManager());
+        TopicFragmentPagerAdapter adapter = new TopicFragmentPagerAdapter(this, getSupportFragmentManager(),mTitle.getText().toString());
 
         // Give the TabLayout the ViewPager
         tabLayout = (TabLayout) findViewById(R.id.tabs);

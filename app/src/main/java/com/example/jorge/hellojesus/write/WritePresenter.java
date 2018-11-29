@@ -2,6 +2,8 @@ package com.example.jorge.hellojesus.write;
 
 
 
+import com.example.jorge.hellojesus.data.local.WordsRepository;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -18,9 +20,15 @@ public class WritePresenter implements WriteContract.UserActionsListener {
 
 
     private final WriteContract.View mWriteContractView;
+    private final WordsRepository mWordsRepository;
 
 
-    public WritePresenter(WriteContract.View writeContract_View) {
+    public WritePresenter(WriteContract.View writeContract_View, WordsRepository wordsRepository, String salveStatus, String nName) {
+        this.mWordsRepository = wordsRepository;
+
+        Control control = new Control(nName,"0","0","0","0");
+        mWordsRepository.saveControl(control);
+        mWordsRepository.updateControlStatus3(control,salveStatus);
 
         this.mWriteContractView = writeContract_View;
     }

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
@@ -39,6 +40,13 @@ public interface WordsDataSource {
         void onDataNotAvailable();
     }
 
+    interface GetControlCallback {
+
+        void onControlLoaded(Control control);
+
+        void onDataNotAvailable();
+    }
+
 
     // Table HELP
     interface LoadHelpCallback {
@@ -52,19 +60,33 @@ public interface WordsDataSource {
 
     void getWords(@NonNull LoadWordCallback callback);
 
+
+
     void getHelp(@NonNull LoadHelpCallback callback, View root, final Context context);
 
     void getWord(@NonNull String word , @NonNull GetWordCallback callback);
 
+    void getControlStatus1(@NonNull String key , @NonNull GetControlCallback callback);
+
     void saveWord(@NonNull Word word);
 
     void saveHelp(@NonNull Help help);
+
+    void saveControl(@NonNull Control control);
 
     void activateWord(@NonNull String productId, String Quantity);
 
     void activateWord(@NonNull Word word, String Quantity);
 
     void refreshWord(List<Word> wordList);
+
+    void updateControlStatus1(@NonNull Control control, String status1);
+
+    void updateControlStatus2(@NonNull Control control, String status2);
+
+    void updateControlStatus3(@NonNull Control control, String status3);
+
+    void updateControlStatus4(@NonNull Control control, String status4);
 
     void deleteAllWords();
 

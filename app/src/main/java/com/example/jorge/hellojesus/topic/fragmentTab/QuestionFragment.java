@@ -64,6 +64,8 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
     private static Context mContext;
 
+    private static String mNameTitle = "";
+
     public QuestionFragment() {
     }
 

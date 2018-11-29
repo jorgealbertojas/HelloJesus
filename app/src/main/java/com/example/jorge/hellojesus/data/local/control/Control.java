@@ -27,19 +27,37 @@ import java.util.UUID;
         private final String mkey;
 
         @NonNull
-        @ColumnInfo(name = "status")
-        @SerializedName("status")
-        private final String mstatus;
+        @ColumnInfo(name = "status1")
+        @SerializedName("status1")
+        private final String mstatus1;
+
+        @NonNull
+        @ColumnInfo(name = "status2")
+        @SerializedName("status2")
+        private final String mstatus2;
+
+        @NonNull
+        @ColumnInfo(name = "status3")
+        @SerializedName("status3")
+        private final String mstatus3;
+
+        @NonNull
+        @ColumnInfo(name = "status4")
+        @SerializedName("status4")
+        private final String mstatus4;
 
         @Ignore
-        public Control(@NonNull String mkey, @NonNull String mstatus  ) {
-            this(UUID.randomUUID().toString(),mkey,mstatus);
+        public Control(@NonNull String mkey, @NonNull String mstatus1, @NonNull String mstatus2, @NonNull String mstatus3, @NonNull String mstatus4  ) {
+            this(UUID.randomUUID().toString(),mkey,mstatus1,mstatus2, mstatus3,mstatus4);
         }
 
-        public Control(@NonNull String mId, @NonNull String mkey, @NonNull String mstatus ) {
+        public Control(@NonNull String mId, @NonNull String mkey, @NonNull String mstatus1, @NonNull String mstatus2, @NonNull String mstatus3, @NonNull String mstatus4 ) {
             this.mId = mId;
             this.mkey = mkey;
-            this.mstatus = mstatus;
+            this.mstatus1 = mstatus1;
+            this.mstatus2 = mstatus2;
+            this.mstatus3 = mstatus3;
+            this.mstatus4 = mstatus4;
         }
 
         @NonNull
@@ -53,7 +71,22 @@ import java.util.UUID;
         }
 
         @NonNull
-        public String getMstatus() {
-            return mstatus;
+        public String getMstatus1() {
+            return mstatus1;
+        }
+
+        @NonNull
+        public String getMstatus2() {
+            return mstatus2;
+        }
+
+        @NonNull
+        public String getMstatus3() {
+            return mstatus3;
+        }
+
+        @NonNull
+        public String getMstatus4() {
+            return mstatus4;
         }
     }

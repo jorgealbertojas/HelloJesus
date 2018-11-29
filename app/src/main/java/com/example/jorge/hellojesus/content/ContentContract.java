@@ -4,14 +4,11 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
@@ -41,10 +38,6 @@ public interface ContentContract {
 
             void setListTime(long[] listTime);
 
-
-
-
-
             void showAllContent();
         }
 
@@ -64,9 +57,6 @@ public interface ContentContract {
             void openBrowserExplanation(Context context, TextView word);
 
             void openBrowserTranslate(Context context, TextView word);
-
-
-
 
             // Play audio
             void initAudio();
@@ -89,15 +79,7 @@ public interface ContentContract {
 
             void showNotification();
 
-
             void releasePlayer();
-
-
-
-
-
-
-
 
             void openDetail();
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class WordsRepository implements WordsDataSource {
      */
     Map<String, Word> mCachedWords;
     Map<String, Help> mCachedHelp;
+    Map<String, Control> mCachedControl;
 
     boolean mCacheIsDirty = false;
 
@@ -137,6 +139,45 @@ public class WordsRepository implements WordsDataSource {
     }
 
     @Override
+    public void getControlStatus1(@NonNull String key, @NonNull final GetControlCallback callback) {
+        checkNotNull(key);
+        checkNotNull(callback);
+
+        mWordsLocalDataSource.getControlStatus1(key, new GetControlCallback() {
+
+            @Override
+            public void onControlLoaded(Control control) {
+                // Do in memory cache update to keep the app UI up to date
+                if (mCachedControl == null) {
+                    mCachedControl = new LinkedHashMap<>();
+                }
+                callback.onControlLoaded(control);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+
+
+        });
+    }
+
+
+    @Override
+    public void saveControl(@NonNull Control control) {
+        checkNotNull(control);
+        mWordsRemoteDataSource.saveControl(control);
+        mWordsLocalDataSource.saveControl(control);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedControl == null) {
+            mCachedControl = new LinkedHashMap<>();
+        }
+        mCachedControl.put(control.getId(), control);
+    }
+
+    @Override
     public void saveWord(@NonNull Word word) {
         checkNotNull(word);
         mWordsRemoteDataSource.saveWord(word);
@@ -203,6 +244,67 @@ public class WordsRepository implements WordsDataSource {
         mCacheIsDirty = true;
     }
 
+    @Override
+    public void updateControlStatus1(Control control, String status1) {
+        checkNotNull(control);
+        mWordsRemoteDataSource.updateControlStatus1(control,status1);
+        mWordsLocalDataSource.updateControlStatus1(control,status1);
+
+        Control activeControl = new Control(control.getMkey(), status1,control.getMstatus2(),control.getMstatus3(),control.getMstatus4());
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedControl == null) {
+            mCachedControl = new LinkedHashMap<>();
+        }
+        mCachedControl.put(control.getId(), activeControl);
+    }
+
+    @Override
+    public void updateControlStatus2(@NonNull Control control, String status2) {
+        checkNotNull(control);
+        mWordsRemoteDataSource.updateControlStatus2(control,status2);
+        mWordsLocalDataSource.updateControlStatus2(control,status2);
+
+        Control activeControl = new Control(control.getMkey(), control.getMstatus1(),control.getMstatus2(),control.getMstatus3(),control.getMstatus4());
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedControl == null) {
+            mCachedControl = new LinkedHashMap<>();
+        }
+        mCachedControl.put(control.getId(), activeControl);
+    }
+
+    @Override
+    public void updateControlStatus3(@NonNull Control control, String status3) {
+        checkNotNull(control);
+        mWordsRemoteDataSource.updateControlStatus3(control,status3);
+        mWordsLocalDataSource.updateControlStatus3(control,status3);
+
+        Control activeControl = new Control(control.getMkey(), control.getMstatus1(),control.getMstatus2(),control.getMstatus3(),control.getMstatus4());
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedControl == null) {
+            mCachedControl = new LinkedHashMap<>();
+        }
+        mCachedControl.put(control.getId(), activeControl);
+    }
+
+    @Override
+    public void updateControlStatus4(@NonNull Control control, String status4) {
+        checkNotNull(control);
+
+        mWordsRemoteDataSource.updateControlStatus4(control,status4);
+        mWordsLocalDataSource.updateControlStatus4(control,status4);
+
+        Control activeControl = new Control(control.getMkey(), control.getMstatus1(),control.getMstatus2(),control.getMstatus3(),control.getMstatus4());
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedControl == null) {
+            mCachedControl = new LinkedHashMap<>();
+        }
+        mCachedControl.put(control.getId(), activeControl);
+
+    }
 
 
     @Override

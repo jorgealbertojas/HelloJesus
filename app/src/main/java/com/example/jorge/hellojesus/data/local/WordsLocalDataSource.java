@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.util.AppExecutors;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import rx.Observable;
@@ -120,8 +120,6 @@ public class WordsLocalDataSource implements WordsDataSource {
                     @Override
                     public void run() {
                         if (purchase != null) {
-
-
                             callback.onWordLoaded(purchase);
                         } else {
                             callback.onDataNotAvailable();
@@ -133,6 +131,31 @@ public class WordsLocalDataSource implements WordsDataSource {
 
         mAppExecutors.diskIO().execute(runnable);
     }
+
+    @Override
+    public void getControlStatus1(@NonNull final String key, @NonNull final GetControlCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final Control control = mWordsDao.getControlByHelpId(key);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        callback.onControlLoaded(control);
+
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+
+
+
+
 
     @Override
     public void saveWord(@NonNull final Word word) {
@@ -179,6 +202,25 @@ public class WordsLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void saveControl(@NonNull final Control control) {
+        checkNotNull(control);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Control controlNew = mWordsDao.getControlByHelpId(control.getMkey());
+                if (controlNew == null) {
+                    observeInsertControl(control).subscribe(subscriberInsert);
+                }else{
+
+                    observeUpdateControl(control.getMkey()).subscribe(subscriberUpdate);
+
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+    }
+
+    @Override
     public void activateWord(@NonNull String productId, String Quantity) {
 
     }
@@ -192,6 +234,70 @@ public class WordsLocalDataSource implements WordsDataSource {
     @Override
     public void refreshWord(List<Word> wordList) {
 
+    }
+
+    @Override
+    public void updateControlStatus1(@NonNull final Control control, final String status1) {
+
+        checkNotNull(control);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mWordsDao.updateStatus1(control.getMkey(), status1);
+                observeUpdateControl1(control,status1).subscribe(subscriberUpdate);
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+
+
+
+
+
+    }
+
+    @Override
+    public void updateControlStatus2(@NonNull final Control control, final String status2) {
+        checkNotNull(control);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int i = mWordsDao.updateStatus2(control.getMkey(), status2);
+                if (i > 0) {
+                    observeUpdateControl1(control,status2).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+    }
+
+    @Override
+    public void updateControlStatus3(@NonNull final Control control, final String status3) {
+        checkNotNull(control);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int i = mWordsDao.updateStatus3(control.getMkey(), status3);
+                if (i > 0) {
+                    observeUpdateControl1(control,status3).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+    }
+
+    @Override
+    public void updateControlStatus4(@NonNull final Control control, final String status4) {
+        checkNotNull(control);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int i = mWordsDao.updateStatus4(control.getMkey(), status4);
+                if (i > 0) {
+                    observeUpdateControl1(control,status4).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
     }
 
 
@@ -279,8 +385,16 @@ public class WordsLocalDataSource implements WordsDataSource {
         return Observable.just(callObserveUpdate(word));
     }
 
+    public Observable<Integer> observeUpdateControl(@NonNull String word ){
+        return Observable.just(callObserveUpdate(word));
+    }
+
     public Observable<Long> observeInsertWord(@NonNull Word purchase){
         return Observable.just(callObserveInsertWord(purchase));
+    }
+
+    public Observable<Long> observeInsertControl(@NonNull Control control){
+        return Observable.just(callObserveInsertControl(control));
     }
 
     public Observable<Long> observeInsertHelp(@NonNull Help help){
@@ -291,6 +405,13 @@ public class WordsLocalDataSource implements WordsDataSource {
     public Observable<Integer> observeDeleteWord(@NonNull String shoppingId){
         return Observable.just(callObserveDeleteWord(shoppingId));
     }
+
+    public Observable<Integer> observeUpdateControl1(@NonNull Control control, String status1 ){
+        return Observable.just(callObserveUpdateControl1(control,status1));
+    }
+
+
+
 
     private int callObserveFinalizeWords(@NonNull String date){
      //  int i = mWordsDao.updateFinalizeWords(date);
@@ -310,8 +431,24 @@ public class WordsLocalDataSource implements WordsDataSource {
         return 0;
     }
 
+
+    private int callObserveUpdateControl1(@NonNull Control control, String status1){
+        int i = mWordsDao.updateStatus1(control.getMkey(), status1);
+        subscriberUpdate.onNext(i);
+        subscriberUpdate.onCompleted();
+        return i;
+    }
+
+
     private long callObserveInsertWord(@NonNull Word purchase){
         long statusCommit = mWordsDao.insertWord(purchase);
+        subscriberInsert.onNext(statusCommit);
+        subscriberInsert.onCompleted();
+        return statusCommit;
+    }
+
+    private long callObserveInsertControl(@NonNull Control control){
+        long statusCommit = mWordsDao.insertControl(control);
         subscriberInsert.onNext(statusCommit);
         subscriberInsert.onCompleted();
         return statusCommit;

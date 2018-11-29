@@ -63,7 +63,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     public static String EXTRA_STRING_TITLE = "EXTRA_STRING_TITLE";
     public static String EXTRA_BUNDLE_MAIN = "EXTRA_BUNDLE_MAIN";
 
-    private MainContract.UserActionsListener mPresenter;
+    private static MainContract.UserActionsListener mPresenter;
 
     private MainAdapter mListAdapter;
     public RecyclerView mRecyclerView;
@@ -263,13 +263,19 @@ public class MainFragment extends Fragment implements MainContract.View {
             viewHolder.titleWrite.setText(product.getTitle_write());
             viewHolder.titleExercise.setText(product.getTitle_exercise());
 
-
-
             viewHolder.mImageList.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage1.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage2.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage3.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
             viewHolder.mImage4.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+
+
+            mPresenter.getControlStatus1(product.getName(), viewHolder.mImage1,context,"1");
+            mPresenter.getControlStatus1(product.getName(), viewHolder.mImage2,context,"2");
+            mPresenter.getControlStatus1(product.getName(), viewHolder.mImage3,context,"3");
+            mPresenter.getControlStatus1(product.getName(), viewHolder.mImage4,context,"4");
+
+            mPresenter.getControlStatusAll(product.getName(), viewHolder.mImageList,context);
         }
 
 

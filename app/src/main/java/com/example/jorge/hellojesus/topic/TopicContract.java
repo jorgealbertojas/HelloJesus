@@ -2,6 +2,7 @@ package com.example.jorge.hellojesus.topic;
 
 import com.example.jorge.hellojesus.BasePresenter;
 import com.example.jorge.hellojesus.BaseView;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
 
@@ -47,6 +48,12 @@ public interface TopicContract {
         void loadingTopic();
 
         void openDetail();
+
+        void saveControl(Control control);
+
+        String getNameTitle();
+
+
 
     }
 }

@@ -1,5 +1,7 @@
 package com.example.jorge.hellojesus.speech;
 
+import com.example.jorge.hellojesus.data.local.WordsRepository;
+import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import java.util.List;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
@@ -10,11 +12,16 @@ import jp.shts.android.storiesprogressview.StoriesProgressView;
  */
 
 public class SpeechPresenter implements SpeechContract.UserActionsListener {
-
+    private final WordsRepository mWordsRepository;
 
     private final SpeechContract.View mSpeechContractView;
 
-    public SpeechPresenter(SpeechContract.View speechContract_View) {
+    public SpeechPresenter(SpeechContract.View speechContract_View,WordsRepository wordsRepository, String salveStatus, String nName) {
+        this.mWordsRepository = wordsRepository;
+
+        Control control = new Control(nName,"0","0","0","0");
+        mWordsRepository.saveControl(control);
+        mWordsRepository.updateControlStatus4(control,salveStatus);
 
         this.mSpeechContractView = speechContract_View;
     }
