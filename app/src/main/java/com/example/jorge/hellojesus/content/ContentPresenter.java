@@ -228,7 +228,7 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
 
     @Override
     public void playAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator animation, StoriesProgressView storiesProgressView) {
-        if (animation != null) {
+        if (animation != null && ExoPlayerAudio != null) {
             animation.start();
             ExoPlayerAudio.setPlayWhenReady(true);
             storiesProgressView.resume();
@@ -237,7 +237,7 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
 
     @Override
     public void pauseAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator animation, StoriesProgressView storiesProgressView) {
-        if (animation != null) {
+        if (animation != null && ExoPlayerAudio != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 animation.pause();
             }

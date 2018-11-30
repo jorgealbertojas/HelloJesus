@@ -114,7 +114,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     private TextView mStatus;
     private ImageView mLoadingGif;
     private static EditText mText;
-    private TextView mTextCorrect;
     private WriteFragment.ResultAdapter mAdapter;
     private RecyclerView mRecyclerViewSpeech;
 
@@ -197,6 +196,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPosition = 0;
 
         mType = getActivity().getResources().getString(R.string.key_music_write);
 
@@ -269,8 +269,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             @Override
             public void onClick(View v) {
                 onPlayerStateChanged(true,3);
-                mTextCorrect.setText(mListAdapter.mContent.get(mPosition).getContent_english());
-                mTextCorrect.setVisibility(View.VISIBLE);
                 onNextPart();
                 putTextWrite(mText.getText().toString());
 
@@ -286,8 +284,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
         mStatus = (TextView)  root.findViewById(R.id.status);
         mLoadingGif = (ImageView) root.findViewById(R.id.iv_loading_gif);
         mText = (EditText) root.findViewById(R.id.tv_enter_text);
-
-        mTextCorrect = (TextView) root.findViewById(R.id.tv_correct);
 
         mRecyclerViewSpeech = (RecyclerView) root.findViewById(R.id.recycler_view);
         mRecyclerViewSpeech.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -520,6 +516,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             Content content = mContent.get(position);
 
             viewHolder.mContentEnglish.setText(content.getContent_english());
+            viewHolder.mContentMyEnglish.setText(content.getContent_portuguese());
 
             if (position == mPosition) {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
@@ -527,6 +524,14 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             } else {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.NORMAL);
                 viewHolder.mContentEnglish.setTextSize(mContext.getResources().getDimension(R.dimen.text_normal));
+            }
+
+            if (mPosition > position){
+                viewHolder.mContentEnglish.setVisibility(View.VISIBLE);
+                viewHolder.mContentMyEnglish.setVisibility(View.VISIBLE);
+            }else{
+                viewHolder.mContentEnglish.setVisibility(View.INVISIBLE);
+                viewHolder.mContentMyEnglish.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -553,11 +558,13 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView mContentEnglish;
+            public TextView mContentMyEnglish;
 
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
+                mContentMyEnglish = (TextView) itemView.findViewById(R.id.tv_content_my_english);
                 itemView.setOnClickListener(this);
             }
 
@@ -591,6 +598,11 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
                         mText.setText(null);
                         mAdapter.addResult(text);
                         mRecyclerViewSpeech.smoothScrollToPosition(0);
+                        if (mRecyclerViewSpeech.getAdapter().getItemCount() > 0) {
+                            mListAdapter.mContent.get(mRecyclerViewSpeech.getAdapter().getItemCount()-1).setContent_portuguese(text);
+                            mRecyclerView.smoothScrollToPosition(mRecyclerViewSpeech.getAdapter().getItemCount()-1);
+                        }
+
                     } else {
                         mText.setText(text);
                     }
@@ -810,6 +822,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
                     startActivity(intent);
 
                     changeStatus(false);
+                    getActivity().finish();
 
                 }
             }

@@ -1,36 +1,29 @@
 package com.example.jorge.hellojesus.speech;
 
-import android.content.BroadcastReceiver;
+import android.Manifest;
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.media.session.MediaButtonReceiver;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
-import android.Manifest;
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -73,6 +66,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     public static final String EXTRA_LIST_CONTENT = "EXTRA_LIST_CONTENT";
     public static final String EXTRA_ARRAY_LIST_STRING = "EXTRA_ARRAY_LIST_STRING";
     public static final String EXTRA_BUNDLE = "EXTRA_BUDLE";
+    public static final String EXTRA_SOURCE_NAME = "EXTRA_SOURCE_NAME";
+    public static final String EXTRA_TYPE = "EXTRA_TYPE";
 
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
@@ -87,7 +82,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private ImageView mLoadingGif;
     private TextView mText;
     private ResultAdapter mAdapter;
-    private RecyclerView mRecyclerViewSpeech;
+    private static RecyclerView mRecyclerViewSpeech;
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
@@ -127,10 +122,14 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     private TextView mValueStart;
     private TextView mValueEnd;
 
+    private static String mSourceName;
+
     private static boolean statusPlay = false;
 
     public static String mName;
     public static String mSaveStatus;
+
+    private String mType;
 
     public SpeechFragment() {
     }
@@ -160,8 +159,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     };
 
 
-    public static SpeechFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name) {
+    public static SpeechFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name, String sourceName) {
         mMp3 = mp3;
+        mSourceName = sourceName;
         mTime = time;
         mContents = contents;
         mSaveStatus = saveStatus;
@@ -172,7 +172,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mType = getActivity().getResources().getString(R.string.key_music_said);
+        mPosition = 0;
         mListAdapter = new SpeechFragment.ContentAdapter(new ArrayList<Content>(0));
         mPresenter = new SpeechPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName);
 
@@ -231,10 +232,10 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                 mSpeechService.recognizeInputStream(getResources().openRawResource(R.raw.audio));
                 if (statusPlay){
                     stopVoiceRecorder();
-                    changeStatus(false);
+
                 }else{
                     startVoiceRecorder();
-                    changeStatus(true);
+
                 }
             }
         });
@@ -395,27 +396,35 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mPosition++;
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
-                    mRecyclerView.scrollToPosition(mPosition);
-                    mValueStart.setText(Integer.toString(mPosition + 1) + getResources().getString(R.string.format_until));
-                    mRecyclerView.setSelected(true);
 
-                    if (mPosition == mListAdapter.mContent.size()){
 
-                        Intent intent = new Intent(getActivity(), ProgressActivity.class);
+                        mPosition = mRecyclerViewSpeech.getAdapter().getItemCount();
+                        mPosition++;
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                        mRecyclerView.scrollToPosition(mPosition);
+                        //mValueStart.setText(Integer.toString(mPosition + 1) + getResources().getString(R.string.format_until));
+                        mRecyclerView.setSelected(true);
 
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
-                        bundle.putStringArrayList (EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+                       // if (mPosition == mListAdapter.mContent.size()) {
 
-                        intent.putExtra(EXTRA_BUNDLE, bundle);
-                        startActivity(intent);
+                            Intent intent = new Intent(getActivity(), ProgressActivity.class);
 
-                        stopVoiceRecorder();
-                        changeStatus(false);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
+                            bundle.putStringArrayList(EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+                            bundle.putString(EXTRA_SOURCE_NAME, mSourceName);
+                            bundle.putString(EXTRA_TYPE, mType);
 
-                    }
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+
+                            stopVoiceRecorder();
+                            changeStatus(false);
+                            getActivity().finish();
+
+                      //  }
+
+
                 }
             });
 
@@ -460,13 +469,18 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             Content content = mContent.get(position);
 
             viewHolder.mContentEnglish.setText(content.getContent_english());
+            viewHolder.mContentMyEnglish.setText(content.getContent_portuguese());
 
-            if (position == mPosition) {
+            if (position == mRecyclerViewSpeech.getAdapter().getItemCount()) {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
                 viewHolder.mContentEnglish.setTextSize(mContext.getResources().getDimension(R.dimen.text_big));
             } else {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.NORMAL);
                 viewHolder.mContentEnglish.setTextSize(mContext.getResources().getDimension(R.dimen.text_normal));
+            }
+
+            if (position >= mRecyclerViewSpeech.getAdapter().getItemCount()) {
+                viewHolder.mContentMyEnglish.setText("");
             }
 
         }
@@ -493,11 +507,13 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView mContentEnglish;
+            public TextView mContentMyEnglish;
 
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mContentEnglish = (TextView) itemView.findViewById(R.id.tv_content_english);
+                mContentMyEnglish = (TextView) itemView.findViewById(R.id.tv_content_my_english_said);
                 itemView.setOnClickListener(this);
             }
 
@@ -543,7 +559,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             showStatus(false);
             if (mSpeechService != null) {
                 mSpeechService.finishRecognizing();
-                onNext();
+
             }
         }
 
@@ -564,10 +580,21 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                             public void run() {
                                 if (isFinal) {
                                     mText.setText(null);
+
                                     mAdapter.addResult(text);
                                     mRecyclerViewSpeech.smoothScrollToPosition(0);
+                                    if (mRecyclerViewSpeech.getAdapter().getItemCount() > 0) {
+                                        if (mListAdapter.mContent.size() > mRecyclerViewSpeech.getAdapter().getItemCount()-1) {
+                                            mListAdapter.mContent.get(mRecyclerViewSpeech.getAdapter().getItemCount() - 1).setContent_portuguese(text);
+                                            mRecyclerView.smoothScrollToPosition(mRecyclerViewSpeech.getAdapter().getItemCount());
+                                        }
+                                    }
+                                    mListAdapter.notifyDataSetChanged();
+                                    mValueStart.setText(Integer.toString(mRecyclerViewSpeech.getAdapter().getItemCount() + 1) + getResources().getString(R.string.format_until));
+                                    onNext();
                                 } else {
                                     mText.setText(text);
+
                                 }
                             }
                         });
@@ -678,6 +705,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         }
         mVoiceRecorder = new VoiceRecorder(mVoiceCallback);
         mVoiceRecorder.start();
+        changeStatus(true);
     }
 
     private void stopVoiceRecorder() {
@@ -686,7 +714,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             mVoiceRecorder = null;
         }
         changeStatus(false);
-
     }
 
     private void showPermissionMessageDialog() {
@@ -704,7 +731,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                     changeStatus(true);
 
                 }else{
-
+                    changeStatus(false);
                 }
 
             }

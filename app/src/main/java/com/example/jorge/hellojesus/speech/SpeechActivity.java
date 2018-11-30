@@ -22,6 +22,7 @@ import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_LAST;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
 
 public class SpeechActivity extends AppCompatActivity implements MessageDialogFragment.Listener {
@@ -35,22 +36,26 @@ public class SpeechActivity extends AppCompatActivity implements MessageDialogFr
     private String mName;
     private String mSatusSave;
 
+    private String mSourceName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech);
 
+
+
         mBundle = getIntent().getBundleExtra(EXTRA_BUNDLE_CONTENT);
         mContents = (List<Content>) mBundle.getSerializable(EXTRA_CONTENT);
         mTime = (int) mBundle.getInt(EXTRA_CONTENT_TIME);
         mMp3 = (String) mBundle.getString(EXTRA_CONTENT_MP3);
-
+        mSourceName = (String) mBundle.getString(EXTRA_CONTENT_SOURCE_NAME);
         mName = (String) mBundle.getString(EXTRA_CONTENT_NAME);
         mSatusSave = (String) mBundle.getString(EXTRA_CONTENT_LAST);
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(SpeechFragment.newInstance(mContents,mTime,mMp3,mSatusSave,mName));
+                initFragment(SpeechFragment.newInstance(mContents,mTime,mMp3,mSatusSave,mName,mSourceName));
             }
         }
 

@@ -228,17 +228,22 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
 
     public List<String> changeForAdapter(List<Content> contentList){
         List<String> stringList = new ArrayList<>();
-        for (int i = 0; i < contentList.size(); i++){
-            stringList.add(contentList.get(i).getContent_english());
+        if (contentList != null) {
+            for (int i = 0; i < contentList.size(); i++) {
+                stringList.add(contentList.get(i).getContent_english());
+            }
         }
         return stringList;
     }
 
     public List<String> changeForAdapter(ArrayList<String> stringArrayList){
         List<String> stringList = new ArrayList<>();
-        for (int i = 0; i < stringArrayList.size(); i++){
-            stringList.add(stringArrayList.get(i).toString());
+        if (stringArrayList != null) {
+            for (int i = 0; i < stringArrayList.size(); i++){
+                stringList.add(stringArrayList.get(i).toString());
+            }
         }
+
         return stringList;
     }
 

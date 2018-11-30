@@ -195,12 +195,17 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mPosition = 0;
         mListAdapter = new ContentFragment.ContentAdapter(new ArrayList<Content>(0), mItemListener);
         mPresenter = new ContentPresenter( this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName,mStatus);
 
     }
 
+    @Override
+    public void onDestroy() {
+        resetSession();
+        super.onDestroy();
+    }
 
     @Override
     public void onResume() {
@@ -535,7 +540,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
 
         }
-        showNotification(mStateBuilder.build());
+       // showNotification(mStateBuilder.build());
     }
 
     @Override

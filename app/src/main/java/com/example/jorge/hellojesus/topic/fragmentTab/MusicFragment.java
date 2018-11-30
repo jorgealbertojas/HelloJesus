@@ -34,6 +34,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_MP3;
+import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -52,7 +53,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
     private TopicContract.UserActionsListener mActionsListener;
 
-    private MusicFragment.TopicsAdapter mListAdapter;
+    private static MusicFragment.TopicsAdapter mListAdapter;
     private RecyclerView mRecyclerView;
 
     private static Bundle mBundleRecyclerViewState;
@@ -303,6 +304,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putString(EXTRA_CONTENT_STATUS,"2");
 
                     bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+                    bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
@@ -323,6 +325,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putString(EXTRA_CONTENT_STATUS,"2");
 
                     bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+                    bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);

@@ -80,8 +80,7 @@
                         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/rv_content_list"
                             android:layout_width="match_parent"
-                            android:layout_height="300dp"
-                            android:visibility="gone"
+                            android:layout_height="match_parent"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true">
                         </android.support.v7.widget.RecyclerView>
@@ -89,6 +88,7 @@
                         <android.support.v7.widget.RecyclerView
 
                             android:id="@+id/recycler_view"
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_below="@+id/rv_content_list"
@@ -127,18 +127,7 @@
 
 
 
-            <TextView
-                android:id="@+id/tv_result_speech"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:lineSpacingExtra="16dp"
-                android:layout_marginStart="2dp"
-                android:padding="2dp"
-                android:textColor="@color/black"
-                android:textSize="23sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+
 
         </LinearLayout>
 
