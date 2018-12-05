@@ -19,6 +19,7 @@ import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_STATUS;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_TIME;
+import static com.example.jorge.hellojesus.topic.fragmentTab.MusicFragment.EXTRA_CONTENT_NAME_NOT_SHOW_TRANSLATE;
 
 public class ContentActivity extends AppCompatActivity  {
 
@@ -30,6 +31,8 @@ public class ContentActivity extends AppCompatActivity  {
     private String mName;
     private String mStatusSave;
     private String mStatus;
+
+    private String mShowTranslete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,12 @@ public class ContentActivity extends AppCompatActivity  {
 
         mStatus = (String) mBundle.getString(EXTRA_CONTENT_STATUS);
 
+        mShowTranslete = (String) mBundle.getString(EXTRA_CONTENT_NAME_NOT_SHOW_TRANSLATE);
+
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(ContentFragment.newInstance(mContents,mTime,mMp3,mStatusSave,mName,mStatus));
+                initFragment(ContentFragment.newInstance(mContents,mTime,mMp3,mStatusSave,mName,mStatus, mShowTranslete));
             }
         }
 
@@ -62,4 +67,10 @@ public class ContentActivity extends AppCompatActivity  {
         transaction.commit();
    }
 
+    @Override
+    protected void onDestroy() {
+        this.finish();
+
+        super.onDestroy();
+    }
 }

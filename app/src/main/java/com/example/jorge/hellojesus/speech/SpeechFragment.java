@@ -25,6 +25,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -131,6 +133,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private String mType;
 
+    private RelativeLayout rl_relativeLayout;
+
     public SpeechFragment() {
     }
 
@@ -177,6 +181,8 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mListAdapter = new SpeechFragment.ContentAdapter(new ArrayList<Content>(0));
         mPresenter = new SpeechPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName);
 
+
+
     }
 
 
@@ -200,6 +206,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
         mFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.fab_function);
         mFabNext = (FloatingActionButton) root.findViewById(R.id.fab_next);
+
+        mFabNext.setVisibility(View.INVISIBLE);
+
+        rl_relativeLayout = (RelativeLayout) root.findViewById(R.id.rl_relativeLayout);
+        rl_relativeLayout.setVisibility(View.VISIBLE);
 
         // Initialize the player view.
         mValueStart = (TextView) root.findViewById(R.id.tv_start);
@@ -243,8 +254,23 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         mFabNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if ()
-               onNext();
+
+                onNext();
+                Intent intent = new Intent(getActivity(), ProgressActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
+                bundle.putStringArrayList(EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
+                bundle.putString(EXTRA_SOURCE_NAME, mSourceName);
+                bundle.putString(EXTRA_TYPE, mType);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+                stopVoiceRecorder();
+                changeStatus(false);
+
+                rl_relativeLayout.setVisibility(View.GONE);
             }
         });
 
@@ -362,7 +388,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
      */
     private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -405,24 +431,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                         //mValueStart.setText(Integer.toString(mPosition + 1) + getResources().getString(R.string.format_until));
                         mRecyclerView.setSelected(true);
 
-                       // if (mPosition == mListAdapter.mContent.size()) {
+                        if (mPosition >= mListAdapter.mContent.size()) {
+                            mFabNext.setVisibility(View.VISIBLE);
 
-                            Intent intent = new Intent(getActivity(), ProgressActivity.class);
 
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(EXTRA_LIST_CONTENT, (Serializable) mListAdapter.mContent);
-                            bundle.putStringArrayList(EXTRA_ARRAY_LIST_STRING, mAdapter.getResults());
-                            bundle.putString(EXTRA_SOURCE_NAME, mSourceName);
-                            bundle.putString(EXTRA_TYPE, mType);
-
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-
-                            stopVoiceRecorder();
-                            changeStatus(false);
-                            getActivity().finish();
-
-                      //  }
+                        }
 
 
                 }
@@ -545,6 +558,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                 mSpeechService.startRecognizing(mVoiceRecorder.getSampleRate());
                 showStatus(true);
             }
+            Log.e("bebeto","onVoiceStart");
         }
 
         @Override
@@ -561,6 +575,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                 mSpeechService.finishRecognizing();
 
             }
+            Log.e("bebeto","onVoiceEnd");
         }
 
     };
@@ -705,7 +720,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
         }
         mVoiceRecorder = new VoiceRecorder(mVoiceCallback);
         mVoiceRecorder.start();
-        changeStatus(true);
+        //changeStatus(true);
     }
 
     private void stopVoiceRecorder() {
@@ -713,7 +728,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             mVoiceRecorder.stop();
             mVoiceRecorder = null;
         }
-        changeStatus(false);
+        //changeStatus(false);
     }
 
     private void showPermissionMessageDialog() {
@@ -729,9 +744,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
                 mStatus.setTextColor(hearingVoice ? mColorHearing : mColorNotHearing);
                 if (hearingVoice) {
                     changeStatus(true);
+                    Log.e("bebeto","run changeStatus(true)");
 
                 }else{
                     changeStatus(false);
+                    Log.e("bebeto","run changeStatus(false)");
                 }
 
             }
@@ -739,6 +756,14 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
     }
 
     private void changeStatus(boolean status ){
+        if (mRecyclerViewSpeech != null) {
+            mPosition = mRecyclerViewSpeech.getAdapter().getItemCount();
+            if (mListAdapter.mContent != null) {
+                if (mPosition >= mListAdapter.mContent.size()) {
+                    mFabNext.setVisibility(View.VISIBLE);
+                }
+            }
+        }
         if (status) {
             mLoadingGif.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(R.drawable.sound_image).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().into(mLoadingGif);

@@ -73,9 +73,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.jorge.hellojesus.content.ContentFragment.BASE_STORAGE;
-import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_LAST;
-import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_NAME;
+import static com.example.jorge.hellojesus.util.download.Utility.BASE_STORAGE;
 
 
 /**
@@ -147,6 +145,8 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
     private long[] durations;
 
+    private static boolean helpBoolean = false;
+
     long pressTime = 0;
     long limit = 5000;
 
@@ -165,6 +165,20 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     public WriteFragment() {
     }
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // mPresenter.loadingMain();
+        if (helpBoolean){
+           // ObjectAnimator animation = ObjectAnimator.ofFloat(mFloatingActionButton, "translationX", 0);
+          //  animation.setDuration(2000);
+          //  animation.start();
+        }
+        helpBoolean = false;
+        mPresenter.loadingContent(mContents, second);
+    }
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
@@ -208,11 +222,6 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.loadingContent(mContents, second);
-    }
 
 
     @Override
@@ -260,6 +269,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 onPlayerStateChangedDuration(true);
 
             }
@@ -296,7 +306,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
         requestPermission();
         initializeMediaSession();
-        initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + mMp3 + ".mp3"));
+        initializePlayer(Uri.parse(BASE_STORAGE + "/" + mMp3 + ".mp3"));
 
 
         mPresenter.loadingContent(mContents, mTime);
@@ -372,7 +382,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
      */
     private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -808,7 +818,13 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
             @Override
             public void run() {
 
-                if (mPosition == mListAdapter.mContent.size()){
+                if (mPosition >= mListAdapter.mContent.size()){
+                    mValueStart.setText(Integer.toString(mListAdapter.mContent.size()) + " / ");
+
+                    helpBoolean = true;
+                    ObjectAnimator animation = ObjectAnimator.ofFloat(mFloatingActionButton, "translationX", mFloatingActionButton.getHeight() * 2);
+                    animation.setDuration(2000);
+                    animation.start();
 
                     Intent intent = new Intent(getActivity(), ProgressActivity.class);
 
@@ -822,7 +838,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
                     startActivity(intent);
 
                     changeStatus(false);
-                    getActivity().finish();
+
 
                 }
             }

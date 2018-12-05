@@ -3,8 +3,10 @@ package com.example.jorge.hellojesus.progress;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.write.WritePresenter;
 
 
@@ -37,7 +40,7 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
     private static ProgressContract.UserActionsListener mActionsListener;
 
 
-    private static ProgressBar mProgressBar;
+
     private static CountDownTimer mCountDownTimer;
 
     private LinearLayout mLinearLayoutResult;
@@ -58,11 +61,15 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
 
     private static int mTotal;
 
+    public ImageView ic_close;
+
     private static String mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake;
 
     private static String CONST_TIME = "1";
     private static Boolean CONST_SAID = false;
     private static Boolean CONST_WRITE = false;
+
+    private static CardView cardViewProgress;
 
     private  static int i=0;
 
@@ -72,6 +79,10 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
+
+       i=0;
+
+        j=5;
 
         Bundle bundle = new Bundle();
         bundle = getIntent().getExtras();
@@ -87,6 +98,17 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
 
         intCount(mListContent, mListArrayString);
 
+        ic_close = (ImageView) findViewById(R.id.ic_close);
+        ic_close.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        cardViewProgress = (CardView) findViewById(R.id.cardViewProgress);
+
+
+
         mLinearLayoutResult = (LinearLayout) findViewById(R.id.ll_result);
         mCountSpeech = (TextView) findViewById(R.id.tv_count_speech);
         mCountMissing = (TextView) findViewById(R.id.tv_count_missing);
@@ -95,8 +117,12 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
         mCountMistake = (TextView) findViewById(R.id.tv_count_mistake);
         mCountSpeech = (TextView) findViewById(R.id.tv_count_speech);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        mProgressBar.setProgress(i);
+        final int newColorBlue = getResources().getColor(R.color.colorPrimary);
+
+        cardViewProgress.setBackgroundColor(Common.getColorWithAlpha(newColorBlue, 0.6f));
+
+       // mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+       // mProgressBar.setProgress(i);
         mCountDownTimer = new CountDownTimer(5000, 1000) {
 
             @Override
@@ -104,7 +130,7 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
                 Log.v("Log_tag", "Tick of Progress" + i + millisUntilFinished);
                 i++;
                 j--;
-                mProgressBar.setProgress((int) i * 100 / (5000 / 1000));
+               // mProgressBar.setProgress((int) i * 100 / (5000 / 1000));
                 mCountSpeech.setText(Integer.toString(j));
             }
 
@@ -112,11 +138,12 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
             public void onFinish() {
                 //Do what you want
                 i++;
-                mProgressBar.setProgress(100);
-                mProgressBar.setVisibility(View.GONE);
-                mCountSpeech.setBackground(getDrawable(R.drawable.circle_text_view_border));
+               // mProgressBar.setProgress(100);
+              //  mProgressBar.setVisibility(View.INVISIBLE);
+                //mCountSpeech.setBackground(getDrawable(R.drawable.circle_text_view_border));
                 mLinearLayoutResult.setVisibility(View.VISIBLE);
                 mCountSpeech.setText(Integer.toString(mTotal));
+
 
             }
         };

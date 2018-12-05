@@ -94,6 +94,16 @@
                             android:layout_below="@+id/rv_content_list"
                             android:clipToPadding="false"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_next"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="70dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/exo_controls_next"
+                            app:fabSize="normal" />
                     </RelativeLayout>
 
 
@@ -108,16 +118,7 @@
 
                     </FrameLayout>
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab_next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_end"
-                        android:layout_margin="10dp"
-                        android:layout_gravity="bottom|right"
-                        android:layout_toStartOf="@+id/fab_function"
-                        android:src="@drawable/exo_controls_next"
-                        app:fabSize="normal" />
+
                 </FrameLayout>
 
 

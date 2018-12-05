@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         // Close the navigation drawer when an item is selected.
                         menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
+                        // BEBETO
+                       // mDrawerLayout.closeDrawers();
                         return true;
                     }
                 });

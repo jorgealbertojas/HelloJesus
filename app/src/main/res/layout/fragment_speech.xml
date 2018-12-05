@@ -20,6 +20,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content">
 
 
@@ -32,7 +33,7 @@
                     android:paddingTop="4dp">
 
                     <RelativeLayout
-                        android:id="@+id/teste"
+                        android:id="@+id/rl_relativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"

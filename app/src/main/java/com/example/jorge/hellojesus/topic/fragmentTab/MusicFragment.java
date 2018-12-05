@@ -51,6 +51,8 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
     public static String EXTRA_BUNDLE_CONTENT = "BUNDLE_CONTENT";
     public static String EXTRA_CONTENT_STATUS = "CONTENT_STATUS";
 
+    public static String EXTRA_CONTENT_NAME_NOT_SHOW_TRANSLATE = "CONTENT_NAME_NOT_SHOW_TRANSLATE";
+
     private TopicContract.UserActionsListener mActionsListener;
 
     private static MusicFragment.TopicsAdapter mListAdapter;
@@ -304,6 +306,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putString(EXTRA_CONTENT_STATUS,"2");
 
                     bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+                    bundle.putString(EXTRA_CONTENT_NAME_NOT_SHOW_TRANSLATE, contents.getName());
                     bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
@@ -325,6 +328,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
                     bundle.putString(EXTRA_CONTENT_STATUS,"2");
 
                     bundle.putString(EXTRA_CONTENT_NAME, mNameTitle);
+                    bundle.putString(EXTRA_CONTENT_NAME_NOT_SHOW_TRANSLATE, contents.getName());
                     bundle.putString(EXTRA_CONTENT_SOURCE_NAME, mListAdapter.getItem(0).getName());
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);

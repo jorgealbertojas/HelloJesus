@@ -205,6 +205,14 @@ public class Common {
 
     }
 
+    public static String returnFile(String fileReturn){
+        if (fileReturn.indexOf("?") > 0) {
+            return fileReturn.substring(0, fileReturn.indexOf("?"));
+        }else{
+            return fileReturn;
+        }
+    }
+
     public static void GetConfigurationSize(Context context, Activity activity){
         DisplayMetrics displaymetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -226,4 +234,6 @@ public class Common {
         Utilities.deviceWidth = displaymetrics.widthPixels;
         Utilities.deviceHeight = displaymetrics.heightPixels;
     }
+
+
 }

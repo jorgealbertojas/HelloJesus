@@ -10,18 +10,21 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -30,7 +33,6 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,11 +48,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
+import com.example.jorge.hellojesus.speech.support.SpeechService;
 import com.example.jorge.hellojesus.util.Common;
+import com.example.jorge.hellojesus.util.download.Download;
+import com.example.jorge.hellojesus.util.download.DownloadService;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -69,27 +76,34 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.io.Serializable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import io.grpc.internal.SharedResourceHolder;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static android.content.Context.BIND_AUTO_CREATE;
+import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
+import static com.example.jorge.hellojesus.util.download.Utility.BASE_STORAGE;
+import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_DOWNLOAD;
+import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION;
+import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION_NUMBER;
+import static com.example.jorge.hellojesus.util.download.Utility.FILE_DOWNLOAD_COMPLETE;
+import static com.example.jorge.hellojesus.util.download.Utility.TAG_INFORMATION;
 
 /**
  * Created by jorge on 27/02/2018.
  */
 
-public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, StoriesProgressView.StoriesListener {
+public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
 
     public static final String MESSAGE_PROGRESS = "message_progress";
-    public static final String BASE_STORAGE =  Environment.DIRECTORY_DOWNLOADS;
-    private static final int PERMISSION_REQUEST_CODE = 1;
+
+    public static LocalBroadcastManager bManager;
+
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private SimpleExoPlayer mExoPlayerAudio;
     private Handler durationHandler = new Handler();
@@ -98,7 +112,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
 
     private static SimpleExoPlayerView mPlayerView;
-    private MediaSessionCompat mMediaSession;
+    private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
     private NotificationManager mNotificationManager;
 
@@ -159,7 +173,19 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private int selected_item;
 
+    private String mFileName;
+
     private static android.support.constraint.ConstraintLayout mText;
+
+    private static TextView mProgressText;
+    private static ProgressBar mProgressBarHorizontal;
+
+
+    private static View root;
+
+    private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
+
+    private static String mShowTranslate;
 
 
     public ContentFragment() {
@@ -182,29 +208,68 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         }
     };
 
-    public static ContentFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name, String status) {
+    public static ContentFragment newInstance(List<Content> contents, int time, String mp3, String saveStatus, String name, String status, String showTranslate) {
         mMp3 = mp3;
         mTime = time;
         mContents = contents;
         mSaveStatus = saveStatus;
         mName = name;
         mStatus = status;
+        mShowTranslate = showTranslate;
         return new ContentFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            registerReceiver();
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            e.printStackTrace();
+        }
+
         mPosition = 0;
         mListAdapter = new ContentFragment.ContentAdapter(new ArrayList<Content>(0), mItemListener);
         mPresenter = new ContentPresenter( this, Injection.provideWordsRepository(getActivity().getApplicationContext()),mSaveStatus, mName,mStatus);
-
+      //  requestPermission();
     }
 
+
+    /**
+     * Release the player when the activity is destroyed.
+     */
     @Override
     public void onDestroy() {
+        if (mPresenter != null){
+            mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            mPresenter = null;
+        }
+
+        if (mStateBuilder != null){
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    0, 1f);
+            mMediaSession.setPlaybackState(mStateBuilder.build());
+            mMediaSession.setCallback(new MySessionCallback());
+            mMediaSession.setActive(false);
+
+            mStateBuilder = null;
+        }
+
         resetSession();
         super.onDestroy();
+        releasePlayer();
+        if (mMediaSession != null) {
+
+            mMediaSession.setActive(false);
+        }
+
+        if (bManager != null) {
+            bManager.unregisterReceiver(broadcastReceiver);
+        }
+
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(broadcastReceiver);
+
     }
 
     @Override
@@ -223,7 +288,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mRotateFab = AnimationUtils.loadAnimation(getActivity().getApplication(), R.anim.fab_rotate);
 
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        View root = inflater.inflate(R.layout.fragment_content, container, false);
+        root = inflater.inflate(R.layout.fragment_content, container, false);
 
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
 
@@ -236,6 +301,12 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mFabExplanation = (FloatingActionButton) root.findViewById(R.id.fab_explanation);
         mFabTranslate = (FloatingActionButton) root.findViewById(R.id.fab_translate);
 
+        mProgressText = (TextView) root.findViewById(R.id.tv_progress_text);
+        mProgressBarHorizontal = (ProgressBar) root.findViewById(R.id.pb_progress);
+
+        mProgressBarHorizontal.setVisibility(View.GONE);
+        mProgressText.setVisibility(View.GONE);
+
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
         seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
@@ -243,6 +314,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mWord = (Button) root.findViewById(R.id.tv_word);
         mValueStart = (TextView) root.findViewById(R.id.tv_start);
         mValueEnd = (TextView) root.findViewById(R.id.tv_end);
+
+
 
         mWord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,15 +390,24 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         initRecyclerView(root);
 
-        requestPermission();
-        initializeMediaSession();
-        initializePlayer(Uri.parse(Environment.getExternalStoragePublicDirectory(BASE_STORAGE).toString() + "/" + mMp3 + ".mp3"));
 
 
-        mPresenter.loadingContent(mContents, mTime);
 
-        showAnimation();
-        showProgress(root);
+        mFileName = mMp3;
+        if (!verifyExistFiles(mFileName)){
+            mProgressBarHorizontal.setVisibility(View.VISIBLE);
+            mProgressText.setVisibility(View.VISIBLE);
+            allStarDownload(mFileName);
+        }else{
+           // requestPermission();
+            initializeMediaSession();
+            initializePlayer(Uri.parse(BASE_STORAGE + "/" + mMp3 + ".mp3"));
+
+            mPresenter.loadingContent(mContents, mTime);
+
+            showAnimation();
+            showProgress(root);
+        }
 
 
         return root;
@@ -407,13 +489,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
 
 
+
     /**
      * Reset Session the Audio and the Video
      */
     private void resetSession() {
 
         if (mExoPlayerAudio != null) {
-            mExoPlayerAudio.stop();
+            mExoPlayerAudio.setPlayWhenReady(false);
         }
 
         mExoPlayerAudio = null;
@@ -440,16 +523,16 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
                 icon, play_pause,
-                MediaButtonReceiver.buildMediaButtonPendingIntent(this.getActivity(),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(mContext,
                         PlaybackStateCompat.ACTION_PLAY_PAUSE));
 
         NotificationCompat.Action restartAction = new android.support.v4.app.NotificationCompat
                 .Action(R.drawable.exo_controls_previous, getString(R.string.restart),
                 MediaButtonReceiver.buildMediaButtonPendingIntent
-                        (this.getActivity(), PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
+                        (mContext, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
 
         PendingIntent contentPendingIntent = PendingIntent.getActivity
-                (this.getActivity(), 0, new Intent(this.getActivity(), ContentActivity.class), 0);
+                (mContext, 0, new Intent(mContext, ContentActivity.class), 0);
 
 
         builder.setContentTitle(getString(R.string.app_name))
@@ -474,7 +557,25 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
      */
     private void requestPermission(){
 
-        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
+        if (this.getActivity() != null) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+
+
+    }
+
+
+
+    @Override
+    public void onMessageDialogDismissed() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
+                REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+    private void showPermissionMessageDialog() {
+        MessageDialogFragment
+                .newInstance(getString(R.string.permission_message))
+                .show(getActivity().getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);
     }
 
     @Override
@@ -535,9 +636,13 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
 
         if (!playWhenReady){
-            mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            if (mPresenter != null) {
+                mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            }
         }else{
-            mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            if (mPresenter != null) {
+                mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            }
 
         }
        // showNotification(mStateBuilder.build());
@@ -560,8 +665,12 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void initializeMediaSession() {
 
+        if (mContext == null){
+            mContext = this.getActivity();
+        }
+
         // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(this.getActivity(), "BEBETO");
+        mMediaSession = new MediaSessionCompat(mContext, "BEBETO");
 
         // Enable callbacks from MediaButtons and TransportControls.
         mMediaSession.setFlags(
@@ -605,7 +714,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayerAudio = ExoPlayerFactory.newSimpleInstance(this.getActivity(), trackSelector, loadControl);
+            mExoPlayerAudio = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
 
 
             mPlayerView.setPlayer(mExoPlayerAudio);
@@ -613,10 +722,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             // Set the ExoPlayer.EventListener to this activity.
             mExoPlayerAudio.addListener(this);
 
+
             // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(this.getActivity(), "ClassicalMusicQuiz");
+            String userAgent = Util.getUserAgent(mContext, "ClassicalMusicQuiz");
             MediaSource mediaSourceAudio = new ExtractorMediaSource(mediaUriAudio, new DefaultDataSourceFactory(
-                    this.getActivity(), userAgent), new DefaultExtractorsFactory(), null,null);
+                    mContext, userAgent), new DefaultExtractorsFactory(), null,null);
 
 
             mExoPlayerAudio.prepare(mediaSourceAudio);
@@ -662,10 +772,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
      * Release ExoPlayer.
      */
     private void releasePlayer() {
-        mNotificationManager.cancelAll();
-        mExoPlayerAudio.stop();
-        mExoPlayerAudio.release();
-        mExoPlayerAudio = null;
+        //mNotificationManager.cancelAll();
+        if (mExoPlayerAudio != null) {
+            mExoPlayerAudio.stop();
+            mExoPlayerAudio.release();
+            mExoPlayerAudio.setPlayWhenReady(false);
+            mExoPlayerAudio.removeListener(this);
+            mExoPlayerAudio = null;
+        }
 
     }
 
@@ -769,7 +883,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
             setAnimation(viewHolder.itemView, position);
 
-            if(position == mPosition) {
+            if (position == mPosition) {
                 viewHolder.mContentEnglish.setTypeface(null, Typeface.BOLD);
                 viewHolder.mContentEnglish.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
 
@@ -778,6 +892,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             }
 
             viewHolder.mContentEnglish.setText(content.getContent_english());
+
+            if (mShowTranslate != null){
+                if (mShowTranslate.equals("Translate")) {
+                    viewHolder.mContentPortuguese.setVisibility(View.VISIBLE);
+                }else{
+                    viewHolder.mContentPortuguese.setVisibility(View.GONE);
+                }
+            }
             viewHolder.mContentPortuguese.setText(content.getContent_portuguese());
 
             viewHolder.mContentEnglish.setOnTouchListener(new View.OnTouchListener() {
@@ -960,6 +1082,180 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             i++;
         }
         return phrase.substring(0,i);
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
+        // Start listening to voices
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            if (!verifyExistFiles(mFileName)) {
+                mProgressBarHorizontal.setVisibility(View.VISIBLE);
+                mProgressText.setVisibility(View.VISIBLE);
+                allStarDownload(mFileName);
+            }
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.RECORD_AUDIO)) {
+            showPermissionMessageDialog();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+    }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (permissions.length == 1 && grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (!verifyExistFiles(mFileName)) {
+                    mProgressBarHorizontal.setVisibility(View.VISIBLE);
+                    mProgressText.setVisibility(View.VISIBLE);
+                    allStarDownload(mFileName);
+                }
+            } else {
+                showPermissionMessageDialog();
+            }
+        }else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    /**
+     * Verify if this files BG and SG they're gone
+     */
+    private boolean verifyExistFiles(String fileName) {
+        if (fileName != null){
+            fileName = (Common.returnFile(fileName));
+            String fileNameWithPathBg = BASE_STORAGE + fileName;
+            File fileBg = new File(fileNameWithPathBg);
+
+            if (!fileBg.exists()) {
+                return false;
+            } else {
+                return true;
+            }
+        }else{
+            return false;
+        }
+
+
+    }
+
+
+
+
+    /**
+     * Call intent the Download with put extra
+     */
+    private void startDownload(String fileName, String position){
+
+        Intent intent = new Intent(getActivity(), DownloadService.class);
+        intent.putExtra(EXTRA_POSITION,fileName);
+        intent.putExtra(EXTRA_POSITION_NUMBER, position);
+        if (mContext == null){
+            mContext = this.getActivity();
+        }
+        mContext.startService(intent);
+
+
+    }
+
+    /**
+     * Manager the receiver for support return when finished.
+     */
+    private void registerReceiver() throws IntentFilter.MalformedMimeTypeException {
+
+        Bundle extras = getActivity().getIntent().getExtras();
+       // mPosition =  Integer.parseInt(extras.getString(EXTRA_POSITION));
+
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MESSAGE_PROGRESS);
+        bManager.registerReceiver(broadcastReceiver, intentFilter);
+
+
+
+
+
+
+    }
+
+    /**
+     * BroadcastReceiver for wait when download finished.
+     */
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+            if(intent.getAction().equals(MESSAGE_PROGRESS)){
+
+
+
+                Download download = intent.getParcelableExtra(EXTRA_DOWNLOAD);
+                mProgressBarHorizontal.setProgress(download.getProgress());
+                if(download.getProgress() == 100){
+
+
+
+                    // Initialize the player.
+                    if (verifyExistFiles(mFileName) ){
+                        mProgressText.setText(FILE_DOWNLOAD_COMPLETE);
+                        mProgressBarHorizontal.setVisibility(View.GONE);
+                        mProgressText.setVisibility(View.GONE);
+
+                        mContext = context;
+                        //requestPermission();
+                        initializeMediaSession();
+                        initializePlayer(Uri.parse(BASE_STORAGE + "/" + mMp3 + ".mp3"));
+
+                        if (mPresenter != null) {
+                            mPresenter.loadingContent(mContents, mTime);
+                        }
+
+                        showAnimation();
+                        showProgress(root);
+                    }
+
+                } else {
+
+                    mProgressText.setText(String.format("Downloaded (%d/%d) MB",download.getCurrentFileSize(),download.getTotalFileSize()));
+
+                }
+            }
+        }
+    };
+
+    /**
+     * Start download all file SG and BG.
+     */
+    private void allStarDownload(String position) {
+
+
+        if (Common.checkPermission(getActivity())) {
+            if (!position.equals("")){
+                if (mFileName != null) {
+                    mProgressText.setText("");
+                    mProgressBarHorizontal.setVisibility(View.VISIBLE);
+                    startDownload(mFileName, position);
+                }
+            }
+        } else {
+            //requestPermission();
+
+        }
 
     }
 

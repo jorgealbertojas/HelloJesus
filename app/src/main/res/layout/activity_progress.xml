@@ -4,34 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    tools:context="com.example.jorge.hellojesus.speech.progress.ProgressActivity">
-
+    tools:context="com.example.jorge.hellojesus.progress.ProgressActivity">
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardViewProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
     <RelativeLayout
         android:id="@+id/rl_result"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
 
-        <ProgressBar
-            android:id="@+id/progressbar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:visibility="visible"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:max="100"
-            android:progress="0"
-            android:progressDrawable="@drawable/circular_progress_view" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
 
         <TextView
             android:id="@+id/tv_count_speech"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:text="1"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="55sp" />
@@ -40,161 +38,161 @@
             android:id="@+id/tv_speech"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_count_speech"
-            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+
             android:text="@string/total"
             android:textAlignment="center"
-            android:layout_centerHorizontal="true"
             android:textColor="@color/white"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
 
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <RelativeLayout
-            android:id="@+id/rl_correct"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_result"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
->
+            android:layout_below="@+id/tv_count_speech"
+            android:visibility="visible">
 
-
-            <TextView
-                android:id="@+id/tv_count_correct"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/rounded_text_view_border"
-                android:gravity="center"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/tv_correct"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_count_correct"
-                android:layout_marginTop="30dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/total_correct"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_mistake"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:id="@+id/tv_count_mistake"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/rounded_text_view_border"
-                android:gravity="center"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/tv_mistake"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_count_mistake"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:text="@string/total_mistake"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/rl_said"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:id="@+id/tv_count_said"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/rounded_text_view_border"
-                android:gravity="center"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-
-            <TextView
-                android:id="@+id/tv_said"
+            <RelativeLayout
+                android:id="@+id/rl_correct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_count_said"
-                android:layout_marginTop="30dp"
-                android:text="@string/total_said"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:layout_centerHorizontal="true"
-                android:textSize="15sp"/>
-
-        </RelativeLayout>
+                android:layout_weight="1">
 
 
-        <RelativeLayout
-            android:id="@+id/rl_missing"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_count_correct"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/tv_correct"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_count_correct"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/total_correct"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
 
-            <TextView
-                android:id="@+id/tv_count_missing"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/rounded_text_view_border"
-                android:gravity="center"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/tv_missing"
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_mistake"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_count_missing"
-                android:layout_marginTop="30dp"
-                android:text="@string/total_missing"
-                android:textAlignment="center"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
-                android:textSize="15sp"/>
+                android:layout_weight="1">
 
-        </RelativeLayout>
-    </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_count_mistake"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/tv_mistake"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_count_mistake"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:text="@string/total_mistake"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_said"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/tv_count_said"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_said"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_count_said"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/total_said"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_missing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/tv_count_missing"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/tv_missing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_count_missing"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/total_missing"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/ic_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_close" />
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
 </android.support.constraint.ConstraintLayout>

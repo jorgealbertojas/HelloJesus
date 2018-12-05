@@ -1,16 +1,17 @@
 package com.example.jorge.hellojesus.topic;
 
+import android.Manifest;
 import android.graphics.PorterDuff;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 
 import java.util.List;
 
@@ -18,8 +19,10 @@ import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_BUNDLE_MAIN;
 import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_MAIN;
 import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 
+
 public class TopicActivity extends AppCompatActivity {
 
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private ViewPager mViewPager;
     private static Bundle mBundle;
@@ -29,6 +32,8 @@ public class TopicActivity extends AppCompatActivity {
     public static TabLayout tabLayout;
 
     public static TextView mTitle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class TopicActivity extends AppCompatActivity {
 
 
 
+
     //   QuestionFragment bibleFragment =
     //           (QuestionFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
@@ -58,6 +64,8 @@ public class TopicActivity extends AppCompatActivity {
 
 
         initTabLayout();
+
+        requestPermission();
 
     }
 
@@ -149,6 +157,17 @@ public class TopicActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Request Permission download for the user .
+     */
+    private void requestPermission(){
+
+        ActivityCompat.requestPermissions( this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_RECORD_AUDIO_PERMISSION);
+
+
+    }
+
 
 
 

@@ -33,7 +33,16 @@
 
         <service android:name=".speech.support.SpeechService" />
 
-        <activity android:name=".progress.ProgressActivity" />
+        <service android:name=".util.download.DownloadService" />
+
+        <receiver android:name=".content.ContentFragment$MediaReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".progress.ProgressActivity"
+            android:theme="@style/Theme.Transparent"/>
         <activity android:name=".word.WordActivity" />
         <activity android:name=".write.WriteActivity" />
         <activity
