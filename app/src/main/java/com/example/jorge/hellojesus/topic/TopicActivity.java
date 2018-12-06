@@ -65,10 +65,17 @@ public class TopicActivity extends AppCompatActivity {
 
         initTabLayout();
 
-        requestPermission();
+
 
     }
 
+    @Override
+    protected void onStart() {
+        requestPermission();
+        super.onStart();
+
+
+    }
 
     private void initTabLayout(){
 
@@ -138,6 +145,7 @@ public class TopicActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 tabLayout.getTabAt(tab.getPosition());
                 mViewPager.setCurrentItem(tab.getPosition());
                 //tab.getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
