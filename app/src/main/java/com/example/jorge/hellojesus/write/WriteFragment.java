@@ -296,11 +296,17 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
         mText = (EditText) root.findViewById(R.id.tv_enter_text);
 
         mRecyclerViewSpeech = (RecyclerView) root.findViewById(R.id.recycler_view);
-        mRecyclerViewSpeech.setLayoutManager(new LinearLayoutManager(getContext()));
+       //mRecyclerViewSpeech.setLayoutManager(new LinearLayoutManager(getContext()));
         final ArrayList<String> results = savedInstanceState == null ? null :
                 savedInstanceState.getStringArrayList(STATE_RESULTS);
         mAdapter = new WriteFragment.ResultAdapter(results);
         mRecyclerViewSpeech.setAdapter(mAdapter);
+
+
+        int numColumns = 1;
+
+        mRecyclerViewSpeech.setHasFixedSize(true);
+        mRecyclerViewSpeech.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
 
         initRecyclerView();
 
@@ -607,10 +613,12 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
                     if (mIsFinal) {
                         mText.setText(null);
                         mAdapter.addResult(text);
-                        mRecyclerViewSpeech.smoothScrollToPosition(0);
+                        //mRecyclerViewSpeech.smoothScrollToPosition(0);
                         if (mRecyclerViewSpeech.getAdapter().getItemCount() > 0) {
                             mListAdapter.mContent.get(mRecyclerViewSpeech.getAdapter().getItemCount()-1).setContent_portuguese(text);
-                            mRecyclerView.smoothScrollToPosition(mRecyclerViewSpeech.getAdapter().getItemCount()-1);
+                            mRecyclerView.scrollToPosition(mPosition-1);
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                            mRecyclerView.setFocusable(true);
                         }
 
                     } else {

@@ -30,6 +30,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="1"
+            android:background="@drawable/rounded_text_view"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="55sp" />
@@ -38,8 +39,8 @@
             android:id="@+id/tv_speech"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_count_speech"
             android:layout_centerHorizontal="true"
-
             android:text="@string/total"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -67,6 +68,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="1"
+                    android:background="@drawable/rounded_text_view"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
@@ -103,6 +105,7 @@
                     android:text="1"
                     android:textAlignment="center"
                     android:textColor="@color/white"
+                    android:background="@drawable/rounded_text_view"
                     android:textSize="25sp" />
 
                 <TextView
@@ -136,6 +139,7 @@
                     android:text="1"
                     android:textAlignment="center"
                     android:textColor="@color/white"
+                    android:background="@drawable/rounded_text_view"
                     android:textSize="25sp" />
 
 
@@ -169,6 +173,7 @@
                     android:gravity="center"
                     android:text="1"
                     android:textAlignment="center"
+                    android:background="@drawable/rounded_text_view"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
 

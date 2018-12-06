@@ -73,8 +73,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
+                        android:orientation="horizontal"
                         android:layout_height="wrap_content">
 
                         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,18 +96,18 @@
                             android:clipToPadding="false"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/fab_next"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="70dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/exo_controls_next"
-                            app:fabSize="normal" />
-                    </RelativeLayout>
 
+                    </LinearLayout>
 
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fab_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="70dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="right"
+                        android:src="@drawable/exo_controls_next"
+                        app:fabSize="normal" />
 
 
 

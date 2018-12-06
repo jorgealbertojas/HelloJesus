@@ -123,15 +123,19 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
 
        // mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
        // mProgressBar.setProgress(i);
-        mCountDownTimer = new CountDownTimer(5000, 1000) {
+        mCountDownTimer = new CountDownTimer(3000, 20) {
 
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.v("Log_tag", "Tick of Progress" + i + millisUntilFinished);
-                i++;
+
                 j--;
                // mProgressBar.setProgress((int) i * 100 / (5000 / 1000));
-                mCountSpeech.setText(Integer.toString(j));
+                if (i <=  (mTotal)) {
+                    mCountSpeech.setText(Integer.toString(i));
+                }
+                putValueInLabel(mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake, i);
+                i++;
             }
 
             @Override
@@ -144,11 +148,16 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
                 mLinearLayoutResult.setVisibility(View.VISIBLE);
                 mCountSpeech.setText(Integer.toString(mTotal));
 
+                mCountMissing.setText(mTotalMissing);
+                mCountCorrect.setText(mTotalSaidCorrect);
+                mCountSaid.setText(mTotalSaid);
+                mCountMistake.setText(mTotalMistake);
+
 
             }
         };
         mCountDownTimer.start();
-        putValueInLabel(mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake);
+
     }
 
 
@@ -171,12 +180,20 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
     }
 
 
-    private void putValueInLabel(String countMissing, String countCorrect, String countSaid, String countMistake ){
+    private void putValueInLabel(String countMissing, String countCorrect, String countSaid, String countMistake, Integer interval){
 
-        mCountMissing.setText(countMissing);
-        mCountCorrect.setText(countCorrect);
-        mCountSaid.setText(countSaid);
-        mCountMistake.setText(countMistake);
+        if (interval <=  Integer.parseInt(countMissing)) {
+            mCountMissing.setText(Integer.toString(interval));
+        }
+        if (interval <=  Integer.parseInt(countCorrect)) {
+            mCountCorrect.setText(Integer.toString(interval));
+        }
+        if (interval <=  Integer.parseInt(countSaid)) {
+            mCountSaid.setText(Integer.toString(interval));
+        }
+        if (interval <=  Integer.parseInt(countMistake)) {
+            mCountMistake.setText(Integer.toString(interval));
+        }
     }
 
     private static List<String> verifyTheWord(List<String> eeee) {
