@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.jorge.hellojesus.data.local.control.Control;
+import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class WordsRepository implements WordsDataSource {
     Map<String, Word> mCachedWords;
     Map<String, Help> mCachedHelp;
     Map<String, Control> mCachedControl;
+    Map<String, HelloWord> mCachedHelloWords;
 
     boolean mCacheIsDirty = false;
 
@@ -138,6 +140,7 @@ public class WordsRepository implements WordsDataSource {
         });
     }
 
+
     @Override
     public void getControlStatus1(@NonNull String key, @NonNull final GetControlCallback callback) {
         checkNotNull(key);
@@ -178,6 +181,19 @@ public class WordsRepository implements WordsDataSource {
     }
 
     @Override
+    public void saveHelloWord(@NonNull HelloWord helloWord) {
+        checkNotNull(helloWord);
+        mWordsRemoteDataSource.saveHelloWord(helloWord);
+        mWordsLocalDataSource.saveHelloWord(helloWord);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedHelloWords == null) {
+            mCachedHelloWords = new LinkedHashMap<>();
+        }
+        mCachedHelloWords.put(helloWord.getId(), helloWord);
+    }
+
+    @Override
     public void saveWord(@NonNull Word word) {
         checkNotNull(word);
         mWordsRemoteDataSource.saveWord(word);
@@ -189,6 +205,7 @@ public class WordsRepository implements WordsDataSource {
         }
         mCachedWords.put(word.getId(), word);
     }
+
 
     @Override
     public void saveHelp(@NonNull Help help) {
@@ -319,6 +336,17 @@ public class WordsRepository implements WordsDataSource {
     }
 
     @Override
+    public void deleteAllHelloWords() {
+        mWordsRemoteDataSource.deleteAllWords();
+        mWordsLocalDataSource.deleteAllWords();
+
+        if (mCachedHelloWords == null) {
+            mCachedHelloWords = new LinkedHashMap<>();
+        }
+        mCachedHelloWords.clear();
+    }
+
+    @Override
     public void deleteAllHelps() {
         mWordsRemoteDataSource.deleteAllHelps();
         mWordsLocalDataSource.deleteAllHelps();
@@ -378,6 +406,22 @@ public class WordsRepository implements WordsDataSource {
 
     }
 
+    private void getHelloWordsFromRemoteDataSource(@NonNull final LoadHelloWordCallback callback, final String tip1, final Context context) {
+        mWordsRemoteDataSource.getHelloWord(new LoadHelloWordCallback() {
+
+            @Override
+            public void onHelloWordLoaded(List<HelloWord> helloWordList, String tip1, Context context) {
+                refreshCacheHelloWord(helloWordList);
+                refreshLocalDataSourceHelloWord(helloWordList);
+                callback.onHelloWordLoaded(new ArrayList<>(mCachedHelloWords.values()),tip1,context);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        },tip1,context);
+    }
 
     private void getWordsFromRemoteDataSource(@NonNull final LoadWordCallback callback) {
         mWordsRemoteDataSource.getWords(new LoadWordCallback() {
@@ -439,6 +483,18 @@ public class WordsRepository implements WordsDataSource {
         mCacheIsDirty = false;
     }
 
+    private void refreshCacheHelloWord(List<HelloWord> helloWordList) {
+        if (mCachedHelloWords == null) {
+            mCachedHelloWords = new LinkedHashMap<>();
+        }
+        // For Test
+        mCachedHelloWords.clear();
+        for (HelloWord helloWord : helloWordList) {
+            mCachedHelloWords.put(helloWord.getId(), helloWord);
+        }
+        mCacheIsDirty = false;
+    }
+
     @Nullable
     private Word getWordWithId(@NonNull String id) {
         checkNotNull(id);
@@ -457,6 +513,14 @@ public class WordsRepository implements WordsDataSource {
         }
     }
 
+    private void refreshLocalDataSourceHelloWord(List<HelloWord> helloWordList) {
+        // For Test
+        mWordsLocalDataSource.deleteAllHelloWords();
+        for (HelloWord HelloWord : helloWordList) {
+            mWordsLocalDataSource.saveHelloWord(HelloWord);
+        }
+    }
+
     private void refreshLocalDataSourceHelp(List<Help> helpList) {
         // For Test
         mWordsLocalDataSource.deleteAllHelps();
@@ -466,4 +530,22 @@ public class WordsRepository implements WordsDataSource {
     }
 
 
+    public void getHelloWord(final LoadHelloWordCallback loadHelloWordCallback, final String tip1, final Context context) {
+        checkNotNull(loadHelloWordCallback);
+
+        // Query the local storage if available. If not, query the network.
+        mWordsLocalDataSource.getHelloWord(new LoadHelloWordCallback() {
+
+            @Override
+            public void onHelloWordLoaded(List<HelloWord> contentList, String tip1, Context context) {
+                refreshCacheHelloWord(contentList);
+                loadHelloWordCallback.onHelloWordLoaded(new ArrayList<>(mCachedHelloWords.values()), tip1, context);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getHelloWordsFromRemoteDataSource(loadHelloWordCallback,tip1,context);
+            }
+        },tip1,context);
+    }
 }

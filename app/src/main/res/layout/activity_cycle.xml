@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/transparent"
+        android:layout_centerVertical="true"/>
+
+    <View
+        android:id="@+id/vertical_line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:id="@+id/bubble0"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight="23"
+        android:layout_toLeftOf="@+id/bubble19"
+        android:layout_alignTop="@+id/bubble19"
+        android:layout_marginRight="30dp">
+        <View
+            android:id="@+id/bubble0_shape"
+            android:tag="0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="24"
+            android:alpha="1"
+           />
+        <View
+            android:id="@+id/bubble0_img"
+            android:tag="0"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/ic_color"
+            android:layout_weight="25"
+/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/bubble0_label"
+        android:tag="0"
+        android:text="@string/menu_circle_color"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble0"
+        android:layout_alignLeft="@+id/bubble0"
+        android:layout_marginLeft="-10dp"
+        android:textSize="11sp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:alpha="1" />
+
+    <View
+        android:id="@+id/bubble19"
+        android:tag="inspiration"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_family"
+        android:layout_alignRight="@+id/vertical_line"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:text="@string/menu_circle_family"
+        android:tag="0"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble19"
+        android:layout_alignLeft="@+id/bubble19"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble19_label" />
+
+
+    <View
+        android:id="@+id/bubble2"
+        android:tag="streetstyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_food"
+        android:layout_alignTop="@+id/bubble19"
+        android:layout_toRightOf="@+id/bubble19"
+        android:layout_marginLeft="15dp" />
+    <TextView
+        android:text="@string/menu_circle_food"
+        android:tag="streetstyle"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble2"
+        android:layout_alignLeft="@+id/bubble2"
+        android:lineSpacingExtra="-2dp"
+        android:maxLines="2"
+        android:id="@+id/bubble2_label"
+        android:layout_marginLeft="-10dp"
+        android:textSize="11sp"
+        android:layout_marginTop="3dp"
+        android:gravity="center" />
+
+    <View
+        android:id="@+id/bubble3"
+        android:tag="food-and-drink"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_fruit"
+        android:layout_toRightOf="@+id/bubble2"
+        android:layout_alignTop="@+id/bubble2"
+        android:layout_marginLeft="30dp" />
+    <TextView
+        android:text="Food And Drink"
+        android:tag="food-and-drink"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bubble3"
+        android:layout_below="@+id/bubble3"
+        android:lineSpacingExtra="-3dp"
+        android:maxLines="2"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
+        android:id="@+id/bubble3_label" />
+
+    <View
+        android:id="@+id/bubble4"
+        android:tag="catwalk"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_body"
+        android:layout_below="@+id/bubble0"
+        android:clickable="true"
+        android:layout_alignLeft="@+id/bubble0"
+        android:layout_marginTop="35dp" />
+    <TextView
+        android:text="Catwalk"
+        android:tag="catwalk"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble4"
+        android:layout_alignLeft="@+id/bubble4"
+        android:layout_marginLeft="-10dp"
+        android:textSize="11sp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble4_label" />
+
+    <View
+        android:id="@+id/bubble5"
+        android:tag="tutorials"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_profession"
+        android:layout_alignTop="@+id/bubble4"
+        android:layout_alignRight="@+id/bubble19" />
+
+    <TextView
+        android:text="Tutorials"
+        android:tag="tutorials"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble5"
+        android:layout_alignLeft="@+id/bubble5"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble5_label" />
+
+    <View
+        android:id="@+id/bubble6"
+        android:tag="trends"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_car"
+        android:layout_alignTop="@+id/bubble5"
+        android:layout_alignLeft="@+id/bubble2" />
+    <TextView
+        android:text="Trends"
+        android:tag="trends"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble6"
+        android:layout_alignLeft="@+id/bubble6"
+        android:textSize="11sp"
+        android:id="@+id/bubble6_label"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center" />
+
+    <View
+        android:id="@+id/bubble7"
+        android:tag="video"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_mobile"
+        android:layout_alignTop="@+id/bubble6"
+        android:layout_alignLeft="@+id/bubble3" />
+    <TextView
+        android:text="Videos"
+        android:tag="video"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble7"
+        android:layout_alignLeft="@+id/bubble7"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble7_label" />
+
+    <View
+        android:id="@+id/bubble8"
+        android:tag="beauty"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_below="@+id/bubble4"
+        android:layout_alignRight="@+id/bubble4"
+        android:layout_marginTop="35dp" />
+
+    <TextView
+        android:text="Beauty"
+        android:tag="beauty"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble8"
+        android:layout_alignLeft="@+id/bubble8"
+        android:textSize="11sp"
+        android:id="@+id/bubble8_label"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center" />
+    <View
+        android:id="@+id/bubble9"
+        android:tag="lookbook"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignTop="@+id/bubble8"
+        android:layout_alignRight="@+id/bubble5" />
+    <TextView
+        android:text="Lookbook"
+        android:tag="lookbook"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble9"
+        android:layout_alignLeft="@+id/bubble9"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble9_label" />
+
+
+
+    <View
+        android:id="@+id/bubble17"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignTop="@+id/bubble9"
+        android:layout_alignLeft="@+id/bubble6" />
+    <TextView
+        android:text="Inspiration"
+        android:tag="inspiration"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble17"
+        android:layout_alignLeft="@+id/bubble17"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble17_label" />
+
+
+
+
+    <View
+        android:id="@+id/bubble11"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignLeft="@+id/bubble7"
+        android:layout_alignTop="@+id/bubble17" />
+    <TextView
+        android:text="Best Buys"
+        android:tag="0"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble11"
+        android:layout_alignLeft="@+id/bubble11"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble11_label" />
+    <View
+        android:id="@+id/bubble12"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_below="@+id/bubble8"
+        android:layout_alignLeft="@+id/bubble8"
+        android:layout_marginTop="35dp" />
+    <TextView
+        android:text="Living the Life"
+        android:tag="0"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble12"
+        android:layout_alignLeft="@+id/bubble12"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble12_label" />
+
+    <View
+        android:id="@+id/bubble13"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignTop="@+id/bubble12"
+        android:layout_alignLeft="@+id/bubble9" />
+    <TextView
+        android:text="Fitness"
+        android:tag="0"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble13"
+        android:layout_alignLeft="@+id/bubble13"
+        android:textSize="11sp"
+        android:id="@+id/bubble13_label"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center" />
+    <View
+        android:id="@+id/bubble14"
+        android:tag="interior-design"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignTop="@+id/bubble12"
+        android:layout_alignLeft="@+id/bubble17" />
+    <TextView
+        android:text="Interior Design"
+        android:tag="interior-design"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble14"
+        android:layout_alignLeft="@+id/bubble14"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:lineSpacingExtra="-3dp"
+        android:gravity="center"
+        android:id="@+id/bubble14_label" />
+    <View
+        android:id="@+id/bubble15"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_alignTop="@+id/bubble14"
+        android:layout_alignLeft="@+id/bubble11" />
+    <TextView
+        android:text="My Blogs"
+        android:tag="0"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble15"
+        android:layout_alignLeft="@+id/bubble15"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble15_label" />
+    <View
+        android:id="@+id/bubble16"
+        android:tag="travel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/ic_exercise"
+        android:layout_below="@+id/bubble12"
+        android:layout_alignLeft="@+id/bubble12"
+        android:layout_marginTop="35dp" />
+    <TextView
+        android:text="Travel"
+        android:tag="travel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bubble16"
+        android:layout_alignLeft="@+id/bubble16"
+        android:textSize="11sp"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="3dp"
+        android:maxLines="2"
+        android:gravity="center"
+        android:id="@+id/bubble16_label" />
+
+
+
+
+</RelativeLayout>

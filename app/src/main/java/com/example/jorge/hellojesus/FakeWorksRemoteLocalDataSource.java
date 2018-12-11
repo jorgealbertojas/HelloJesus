@@ -7,6 +7,7 @@ import android.view.View;
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.control.Control;
+import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
@@ -46,6 +47,12 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getHelloWord(@NonNull LoadHelloWordCallback callback, @NonNull String tip1, Context context) {
+
+    }
+
+
+    @Override
     public void getControlStatus1(@NonNull String key, @NonNull GetControlCallback callback) {
 
     }
@@ -62,6 +69,11 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
 
     @Override
     public void saveControl(@NonNull Control control) {
+
+    }
+
+    @Override
+    public void saveHelloWord(@NonNull HelloWord helloWord) {
 
     }
 
@@ -102,6 +114,11 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
 
     @Override
     public void deleteAllWords() {
+
+    }
+
+    @Override
+    public void deleteAllHelloWords() {
 
     }
 

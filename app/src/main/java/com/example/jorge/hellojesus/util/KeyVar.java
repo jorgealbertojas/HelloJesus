@@ -7,4 +7,6 @@ package com.example.jorge.hellojesus.util;
 public class KeyVar {
 
     public static String KEY_SING = "sing";
+
+    public static String storage = "/storage/emulated/0/";
 }

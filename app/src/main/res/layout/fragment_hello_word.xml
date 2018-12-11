@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".purchaseDetail.PurchaseDetailActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/ll_container"
+                android:layout_height="60dp">
+
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:padding="10dp"
+                        android:text="@string/key_music_write"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_down"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/border_text_view"
+                        android:padding="10dp"
+                        android:text="1"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_up"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_down"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_thumb_down_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_down"
+                        app:layout_constraintStart_toStartOf="@+id/tv_down" />
+
+
+                    <TextView
+                        android:id="@+id/tv_up"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/border_text_view"
+                        android:padding="10dp"
+                        android:text="1"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_up"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_thumb_up_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_up"
+                        app:layout_constraintStart_toStartOf="@+id/tv_up"
+ />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:layout_weight="0.03">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/rv_content_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:paddingBottom="@dimen/activity_horizontal_margin_content"
+                        android:paddingLeft="@dimen/activity_horizontal_margin_content"
+                        android:paddingRight="@dimen/activity_horizontal_margin_content"
+                        android:paddingTop="@dimen/activity_horizontal_margin_content"></android.support.v7.widget.RecyclerView>
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                    android:id="@+id/sep_playerView_Audio"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@null"
+                    app:player_layout_id="@layout/exo_player_background"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

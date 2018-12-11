@@ -33,7 +33,6 @@ public class ProgressPresenter implements ProgressContract.UserActionsListener {
 
         for (int i = 0 ; i < stringList.size(); i++){
             Word word = new Word(stringList.get(i).toString(), type,  sourceName, countTime,  statusSaid, statusWrite);
-
             mWordsRepository.saveWord(word);
         }
 

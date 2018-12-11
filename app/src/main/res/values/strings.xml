@@ -61,4 +61,9 @@
     <string name="msg_success_return_insert">Adicionado com sucesso!</string>
 
 
+    <string name="menu_circle_color">Color</string>
+    <string name="menu_circle_family">Family</string>
+    <string name="menu_circle_food">Food</string>
+
+
 </resources>

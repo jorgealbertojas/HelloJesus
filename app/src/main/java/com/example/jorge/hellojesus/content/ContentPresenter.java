@@ -121,10 +121,6 @@ public class ContentPresenter implements ContentContract.UserActionsListener {
                     listTime[i] = sumNext - sum;
                 }
             }
-
-
-
-
         }
 
         mContentContractView.setListTime(listTime);

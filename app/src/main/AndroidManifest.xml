@@ -32,7 +32,6 @@
         <activity android:name=".speech.SpeechActivity" />
 
         <service android:name=".speech.support.SpeechService" />
-
         <service android:name=".util.download.DownloadService" />
 
         <receiver android:name=".content.ContentFragment$MediaReceiver">
@@ -41,14 +40,18 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".progress.ProgressActivity"
-            android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".progress.ProgressActivity"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".word.WordActivity" />
         <activity android:name=".write.WriteActivity" />
         <activity
             android:name=".helpApp.HelpAppActivity"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".menuActivity.MenuWordActivity"></activity>
+        <activity android:name=".menuActivity.MenuWordActivity" />
+        <activity android:name=".menu_cycle.CycleActivity" />
+        <activity android:name=".helloWord.HelloWordActivity" />
+        <activity android:name=".tipWord.TipWordActivity" android:theme="@style/Theme.Transparent" />
     </application>
 
 </manifest>

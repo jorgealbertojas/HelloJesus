@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 
 
 import com.example.jorge.hellojesus.data.local.control.Control;
+import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public interface  WordDao {
      */
     @Query("SELECT * FROM Word ")
     List<Word> getWord();
+
+    @Query("SELECT * FROM HelloWord WHERE tip1 = :tip1  ")
+    List<HelloWord> getHelloWordTip1(String tip1);
 
     /**
      * Select a Purchase by id.
@@ -112,6 +116,9 @@ public interface  WordDao {
     @Query("SELECT * FROM Control WHERE key = :key ")
     Control getControlByHelpId(String key);
 
+    @Query("SELECT * FROM HelloWord WHERE wordName = :wordName ")
+    HelloWord getHelloWordId(String wordName);
+
     @Query("UPDATE Control SET status1 = :status1 WHERE key = :key")
     int updateStatus1(String key, String status1);
 
@@ -123,5 +130,9 @@ public interface  WordDao {
 
     @Query("UPDATE Control SET status4 = :status4 WHERE key = :key")
     int updateStatus4(String key, String status4);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertHelloWord(HelloWord helloWord);
 
 }

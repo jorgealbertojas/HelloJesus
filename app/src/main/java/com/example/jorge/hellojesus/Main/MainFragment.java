@@ -33,6 +33,7 @@ import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
 import com.example.jorge.hellojesus.helpApp.AppHelp;
+import com.example.jorge.hellojesus.menu_cycle.CycleActivity;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.util.ActivityUtils;
 import com.example.jorge.hellojesus.util.Common;
@@ -86,6 +87,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static boolean helpBoolean = false;
 
     private static FloatingActionButton fab;
+    private static FloatingActionButton fabCircle;
 
 
     private static LinearLayout Llmain ;
@@ -149,6 +151,8 @@ public class MainFragment extends Fragment implements MainContract.View {
         // Set up floating action button
         fab =
                 (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
+
+
         fab.setRippleColor(Common.getColorWithAlpha(newColorRed, 0.6f));
 
         // fab.setImageResource(R.drawable.ic_add);
@@ -160,6 +164,25 @@ public class MainFragment extends Fragment implements MainContract.View {
                 animation.setDuration(2000);
                 animation.start();
                 mPresenter.loadHelp(root,getContext());
+
+
+            }
+        });
+
+
+        fabCircle =
+                (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task_cycle_menu);
+
+
+        fabCircle.setRippleColor(Common.getColorWithAlpha(newColorRed, 0.6f));
+
+        // fab.setImageResource(R.drawable.ic_add);
+        fabCircle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CycleActivity.class);
+                startActivity(intent);
+
 
 
             }

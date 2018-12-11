@@ -17,6 +17,8 @@
     <!-- Components – Lists - Only text -->
     <dimen name="card_list_height">88dp</dimen>
 
+    <dimen name="text4_list_size">32sp</dimen>
+
     <dimen name="text1_list_size">16sp</dimen>
     <dimen name="text1_list_padding_left">4dp</dimen>
     <dimen name="text1_list_padding_top">4dp</dimen>
@@ -46,6 +48,8 @@
 
     <dimen name="background">60dp</dimen>
     <dimen name="background_padding">10dp</dimen>
+
+    <dimen name="mb_corner_radius_2">50dp</dimen>
 
 
 

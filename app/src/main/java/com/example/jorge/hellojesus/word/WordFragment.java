@@ -71,20 +71,7 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     private WordFragment.WordAdapter mListAdapter;
 
-    public static final String MESSAGE_PROGRESS = "message_progress";
-    public static final String BASE_STORAGE =  Environment.DIRECTORY_DOWNLOADS;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
-    private SimpleExoPlayer mExoPlayerAudio;
-    private Handler durationHandler = new Handler();
-    private SeekBar seekbar;
-
-    private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
-
-    private static SimpleExoPlayerView mPlayerView;
-    private MediaSessionCompat mMediaSession;
-    private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
 
     private TextView mTotalDown;
     private TextView mTotalUp;
@@ -95,11 +82,6 @@ public class WordFragment extends Fragment implements WordContract.View {
     private RecyclerView mRecyclerView;
 
     public static List<String> mWords;
-    public static int mTime;
-    public static String mMp3;
-
-    private static final int PROGRESS_COUNT = 18;
-
     private static Animation mShowFab;
     private static Animation mHideFab;
     private static Animation mRotateFab;
@@ -117,30 +99,14 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     private static Button mWord;
 
-    private StoriesProgressView storiesProgressView;
 
 
-    private int counter = 0;
-
-    private ProgressBar mProgressBar;
-    private ObjectAnimator mAnimation;
-
-    private long[] durations;
 
 
     long pressTime = 0;
     long limit = 5000;
 
-    private static int mPosition = 0;
 
-    int second;
-
-    private TextView mValueStart;
-    private TextView mValueEnd;
-
-    private int selected_item;
-
-    private static android.support.constraint.ConstraintLayout mText;
 
 
     public WordFragment() {
@@ -152,11 +118,9 @@ public class WordFragment extends Fragment implements WordContract.View {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     pressTime = System.currentTimeMillis();
-                    storiesProgressView.pause();
                     return false;
                 case MotionEvent.ACTION_UP:
                     long now = System.currentTimeMillis();
-                    storiesProgressView.resume();
                     return limit < now - pressTime;
             }
             return false;
@@ -207,24 +171,6 @@ public class WordFragment extends Fragment implements WordContract.View {
         mTotalDown = (TextView) root.findViewById(R.id.tv_down);
         mTotalUp = (TextView) root.findViewById(R.id.tv_up);
 
-        // Initialize the player view.
-        mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
-        seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
-        mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
-        mWord = (Button) root.findViewById(R.id.tv_word);
-        mValueStart = (TextView) root.findViewById(R.id.tv_start);
-        mValueEnd = (TextView) root.findViewById(R.id.tv_end);
-
-        mWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!((TextView) v).getTag().toString().equals("0")){
-                    ((TextView) v).setText(nextSpace(((TextView) v).getTag().toString(),((TextView) v)));
-                }
-
-            }
-        });
-
 
 
         SwipeRefreshLayout swipeRefreshLayout =
@@ -243,139 +189,19 @@ public class WordFragment extends Fragment implements WordContract.View {
 
 
 
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
 
-            }
-        });
-
-        mFabImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
-                mActionsListener.openBrowserImage(mContext,mWord);
-
-            }
-        });
-
-        mFabExplanation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
-                mActionsListener.openBrowserExplanation(mContext,mWord);
-
-            }
-        });
-
-        mFabTranslate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMenu();
-                mActionsListener.openBrowserTranslate(mContext,mWord);
-
-            }
-        });
 
 
         initRecyclerView(root);
 
         requestPermission();
 
-//        mActionsListener.loadingWords(mWords, getResources().getString(R.string.key_music_write),"true");
 
         return root;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static void toggleFabMenu() {
-        mFloatingActionButton.startAnimation(mRotateFab);
-        if (!mFabMenuOpen) {
-            mFloatingActionButton.setImageResource(R.drawable.ic_remove_circle_outline_white_24dp);
-            mLinearLayout.setVisibility(View.VISIBLE);
-            int centerX = mLinearLayout.getWidth() / 2;
-            int centerY = mLinearLayout.getHeight() / 2;
-            int startRadius = 0;
-            int endRadius = (int) Math.hypot(mLinearLayout.getWidth(), mLinearLayout.getHeight()) / 2;
-
-            // mLinearLayout.setVisibility(View.VISIBLE);
-            ViewAnimationUtils
-                    .createCircularReveal(
-                            mLinearLayout,
-                            centerX,
-                            centerY,
-                            startRadius,
-                            endRadius
-                    )
-                    .setDuration(1000)
-                    .start();
-        } else {
-            mFloatingActionButton.setImageResource(R.drawable.ic_add_circle_outline_white_24dp);
-            int centerX = mLinearLayout.getWidth() / 2;
-            int centerY = mLinearLayout.getHeight() / 2;
-            int startRadius = (int) Math.hypot(mLinearLayout.getWidth(), mLinearLayout.getHeight()) / 2;
-            int endRadius = 0;
-
-            Animator animator = ViewAnimationUtils
-                    .createCircularReveal(
-                            mLinearLayout,
-                            centerX,
-                            centerY,
-                            startRadius,
-                            endRadius
-                    );
-            animator.setDuration(1000);
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-            animator.start();
-        }
-        mFabMenuOpen = !mFabMenuOpen;
-    }
-
-    // @Override
-    //  public void openViewWord(Word content) {
-    //    Intent intent = new Intent(getActivity(), TopicActivity.class);
-
-    //     List<Integer> ii = content.getTopics();
-
-    //    Bundle bundle = new Bundle();
-    //     bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
-    //     intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
-    //      startActivity(intent);
-
-    //  }
 
 
-
-    /**
-     * Reset Session the Audio and the Video
-     */
-    private void resetSession() {
-
-        if (mExoPlayerAudio != null) {
-            mExoPlayerAudio.stop();
-        }
-
-        mExoPlayerAudio = null;
-
-    }
 
 
 
@@ -495,7 +321,7 @@ public class WordFragment extends Fragment implements WordContract.View {
                                 mWord.setText("");
                                 mActionsListener.HideFabButton(mFloatingActionButton, mHideFab, mWord);
                                 mFabMenuOpen = true;
-                                toggleFabMenu();
+
                             }
                         }
                     }
@@ -564,9 +390,6 @@ public class WordFragment extends Fragment implements WordContract.View {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView mWord;
-            public TextView mWordPortuguese;
-
-            private WordFragment.ItemListener mItemListener;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -650,10 +473,6 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     @Override
     public void ShowInformationWord(){
-        String totalDown = "0";
-        String totalUp = "0";
-
-
         mTotalDown.setText(mListAdapter.getItemCount());
         mTotalUp.setText(mListAdapter.getItemCount());
 

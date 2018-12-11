@@ -11,8 +11,10 @@ import android.widget.Toast;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.control.Control;
+import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.util.AppExecutors;
+import com.google.rpc.HelpOrBuilder;
 
 import java.util.List;
 
@@ -85,6 +87,7 @@ public class WordsLocalDataSource implements WordsDataSource {
 
     }
 
+
     @Override
     public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
         Runnable runnable = new Runnable() {
@@ -121,6 +124,29 @@ public class WordsLocalDataSource implements WordsDataSource {
                     public void run() {
                         if (purchase != null) {
                             callback.onWordLoaded(purchase);
+                        } else {
+                            callback.onDataNotAvailable();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void getHelloWord(@NonNull final LoadHelloWordCallback callback, @NonNull final String tip1, final Context context) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<HelloWord> wordList = mWordsDao.getHelloWordTip1(tip1);
+
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (wordList != null) {
+                            callback.onHelloWordLoaded(wordList,tip1,context);
                         } else {
                             callback.onDataNotAvailable();
                         }
@@ -221,6 +247,21 @@ public class WordsLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void saveHelloWord(@NonNull final HelloWord helloWord) {
+        checkNotNull(helloWord);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                HelloWord hellowordNew = mWordsDao.getHelloWordId(helloWord.getMwordName());
+                if (hellowordNew == null) {
+                    observeInsertControl(helloWord).subscribe(subscriberInsert);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+    }
+
+    @Override
     public void activateWord(@NonNull String productId, String Quantity) {
 
     }
@@ -314,6 +355,11 @@ public class WordsLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void deleteAllHelloWords() {
+
+    }
+
+    @Override
     public void deleteAllHelps() {
 
     }
@@ -397,6 +443,10 @@ public class WordsLocalDataSource implements WordsDataSource {
         return Observable.just(callObserveInsertControl(control));
     }
 
+    public Observable<Long> observeInsertControl(@NonNull HelloWord helloWord){
+        return Observable.just(callObserveInsertHelloWord(helloWord));
+    }
+
     public Observable<Long> observeInsertHelp(@NonNull Help help){
         return Observable.just(callObserveInsertHelp(help));
     }
@@ -454,6 +504,13 @@ public class WordsLocalDataSource implements WordsDataSource {
         return statusCommit;
     }
 
+    private long callObserveInsertHelloWord(@NonNull HelloWord helloWord){
+        long statusCommit = mWordsDao.insertHelloWord(helloWord);
+        subscriberInsert.onNext(statusCommit);
+        subscriberInsert.onCompleted();
+        return statusCommit;
+    }
+
     private long callObserveInsertHelp(@NonNull Help help){
         long statusCommit = mWordsDao.insertHelp(help);
         subscriberInsert.onNext(statusCommit);
@@ -480,14 +537,14 @@ public class WordsLocalDataSource implements WordsDataSource {
         @Override
         public void onError(Throwable e) {
             Log.e(TAG_ERROR, mContext.getResources().getString(R.string.msg_error_return));
-            showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
+           // showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
         }
 
         @Override
         public void onNext(Integer names) {
             Log.e(TAG_NORMAL,mContext.getResources().getString(R.string.msg_next_return));
             if (names > 0){
-                showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_update));
+                //showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_update));
             }
         }
     };
@@ -502,14 +559,14 @@ public class WordsLocalDataSource implements WordsDataSource {
         @Override
         public void onError(Throwable e) {
             Log.e(TAG_ERROR, mContext.getResources().getString(R.string.msg_error_return));
-            showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
+           // showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
         }
 
         @Override
         public void onNext(Long names) {
             Log.e(TAG_NORMAL,mContext.getResources().getString(R.string.msg_next_return));
             if (names > 0){
-                showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_insert));
+               // showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_insert));
             }
         }
     };
@@ -531,7 +588,7 @@ public class WordsLocalDataSource implements WordsDataSource {
         public void onNext(Integer names) {
             Log.e(TAG_NORMAL,mContext.getResources().getString(R.string.msg_next_return));
             if (names == 0){
-                showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_delete));
+               // showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_delete));
             }
         }
     };
@@ -545,14 +602,14 @@ public class WordsLocalDataSource implements WordsDataSource {
         @Override
         public void onError(Throwable e) {
             Log.e(TAG_ERROR, mContext.getResources().getString(R.string.msg_error_return));
-            showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
+            //showMessageEventLog(mContext.getResources().getString(R.string.msg_error_return));
         }
 
         @Override
         public void onNext(Integer names) {
             Log.e(TAG_NORMAL,mContext.getResources().getString(R.string.msg_next_return));
             if (names > 0){
-                showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_update));
+                //showMessageEventLog(mContext.getResources().getString(R.string.msg_success_return_update));
             }
         }
     };

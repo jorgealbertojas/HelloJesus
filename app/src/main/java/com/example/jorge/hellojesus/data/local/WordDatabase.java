@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.example.jorge.hellojesus.data.local.control.Control;
+import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.local.help.Help;
 
 /**
@@ -13,7 +14,7 @@ import com.example.jorge.hellojesus.data.local.help.Help;
  * Get Instance SQLLite
  */
 
-@Database(entities = {Word.class,Help.class, Control.class}, version = 1)
+@Database(entities = {Word.class,Help.class, Control.class, HelloWord.class}, version = 1)
 public abstract class WordDatabase  extends RoomDatabase {
 
     private static WordDatabase INSTANCE;
