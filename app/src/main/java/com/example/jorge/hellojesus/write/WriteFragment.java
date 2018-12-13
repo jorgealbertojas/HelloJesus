@@ -844,6 +844,7 @@ public class WriteFragment extends Fragment implements WriteContract.View, ExoPl
 
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 
                     changeStatus(false);
 

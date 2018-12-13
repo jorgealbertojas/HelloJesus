@@ -63,7 +63,27 @@
 
     <string name="menu_circle_color">Color</string>
     <string name="menu_circle_family">Family</string>
+    <string name="menu_circle_drinks">Drinks</string>
     <string name="menu_circle_food">Food</string>
+    <string name="menu_circle_fruit">Fruit</string>
+    <string name="menu_circle_body_parts">Body parts</string>
+
+    <string name="menu_circle_occupations">Occupations</string>
+    <string name="menu_circle_transports">Transports</string>
+    <string name="menu_circle_mobile">Mobile</string>
+    <string name="menu_circle_wild_animals">Wild animals</string>
+    <string name="menu_circle_sports">Sports</string>
+    <string name="menu_circle_vegetables">Vegetables</string>
+    <string name="menu_circle_places">Places</string>
+    <string name="menu_circle_rooms_of_the_house">Rooms of the House</string>
+    <string name="menu_circle_nationality">Nationality</string>
+    <string name="menu_circle_clothes">Clothes</string>
+    <string name="menu_circle_diseases">Diseases</string>
+    <string name="menu_circle_musical_instruments">Musical instruments</string>
+    <string name="menu_circle_numbers">Numbers</string>
+    <string name="menu_circle_religious_terms">Religious Terms</string>
+    <string name="menu_circle_important_words">Important_words</string>
+
 
 
 </resources>

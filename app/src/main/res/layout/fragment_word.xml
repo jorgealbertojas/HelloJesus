@@ -22,87 +22,40 @@
                 android:layout_height="60dp">
 
 
-                <android.support.constraint.ConstraintLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/colorPrimary"
-                    android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingTop="4dp">
 
                     <TextView
-                        android:id="@+id/tv_title"
+                        android:id="@+id/textValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:padding="10dp"
-                        android:text="@string/key_music_write"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_down"
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/border_text_view"
-                        android:padding="10dp"
-                        android:text="1"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_up"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_alignParentTop="true"
+                        android:layout_alignTop="@+id/ic_close"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/ic_close"
+                        android:padding="@dimen/text1_list_padding"
+                        android:text="Hello Word"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text4_list_size" />
 
                     <ImageView
-                        android:id="@+id/iv_down"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginBottom="8dp"
+                        android:id="@+id/ic_close"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="8dp"
-                        android:src="@drawable/ic_thumb_down_white_24dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_down"
-                        app:layout_constraintStart_toStartOf="@+id/tv_down" />
-
-
-                    <TextView
-                        android:id="@+id/tv_up"
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginEnd="10dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/border_text_view"
-                        android:padding="10dp"
-                        android:text="1"
-                        android:textAlignment="textEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_arrow_back_white_24dp" />
 
-                    <ImageView
-                        android:id="@+id/iv_up"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/ic_thumb_up_white_24dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_up"
-                        app:layout_constraintStart_toStartOf="@+id/tv_up"
- />
+                  />
 
-                </android.support.constraint.ConstraintLayout>
+
+                    />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

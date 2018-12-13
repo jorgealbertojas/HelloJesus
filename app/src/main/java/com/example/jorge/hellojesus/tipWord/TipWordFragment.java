@@ -177,8 +177,10 @@ public class TipWordFragment extends Fragment {
                         public void onAnimationEnd(Animator animation) {
 
                             super.onAnimationEnd(animation);
-                            getActivity().setVisible(false);
+                            view.setVisibility(View.INVISIBLE);
                             getActivity().finish();
+                            getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+
                         }
                     });
 

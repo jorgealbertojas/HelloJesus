@@ -1,5 +1,6 @@
 package com.example.jorge.hellojesus.helloWord;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -67,6 +68,8 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
     long pressTime = 0;
     long limit = 5000;
 
+    public static Activity mActivity;
+
     public HelloWordFragment() {
     }
 
@@ -87,13 +90,14 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
 
     public static HelloWordFragment newInstance(List<HelloWord> stringList) {
         mWords = stringList;
+
         return new HelloWordFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mActivity = getActivity();
         mActionsListener = new HelloWordPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()));
 
 
@@ -290,7 +294,7 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
                 mOpenTip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), TipWordActivity.class);
+                        Intent intent = new Intent(mActivity, TipWordActivity.class);
 
                         if (v != null){
                             v.getLocationInWindow(locationInScreen);
@@ -307,7 +311,9 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
                         intent.putExtra(EXTRA_Y, locationInScreen[1]);
                         intent.putExtra(EXTRA_WIDTH,v.getWidth()/2);
                         intent.putExtra(EXTRA_HELLO_WORD,(Parcelable) mListString.get(getAdapterPosition()));
-                        v.getContext().startActivity(intent);
+                        mActivity.startActivity(intent);
+                        mActivity.overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+
 
                     }
                 });

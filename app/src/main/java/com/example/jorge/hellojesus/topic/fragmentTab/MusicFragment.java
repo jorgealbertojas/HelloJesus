@@ -1,5 +1,6 @@
 package com.example.jorge.hellojesus.topic.fragmentTab;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -199,6 +200,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
         //intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
     }
 
     @Override
@@ -311,6 +313,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
+                    ((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }else{
                     mItemListener.onTopicClick(contents);
                     Intent intent = new Intent(v.getContext(), ContentActivity.class);
@@ -333,6 +336,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
+                    ((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }
             }
         }

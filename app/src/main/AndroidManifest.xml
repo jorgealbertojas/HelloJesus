@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +51,11 @@
         <activity android:name=".menuActivity.MenuWordActivity" />
         <activity android:name=".menu_cycle.CycleActivity" />
         <activity android:name=".helloWord.HelloWordActivity" />
-        <activity android:name=".tipWord.TipWordActivity" android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".tipWord.TipWordActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".login.LoginActivity"></activity>
     </application>
 
 </manifest>

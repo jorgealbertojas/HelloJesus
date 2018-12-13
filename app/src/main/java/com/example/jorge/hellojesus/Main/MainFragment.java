@@ -1,5 +1,7 @@
 package com.example.jorge.hellojesus.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,8 @@ import com.example.jorge.hellojesus.menu_cycle.CycleActivity;
 import com.example.jorge.hellojesus.topic.TopicActivity;
 import com.example.jorge.hellojesus.util.ActivityUtils;
 import com.example.jorge.hellojesus.util.Common;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -88,6 +92,7 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     private static FloatingActionButton fab;
     private static FloatingActionButton fabCircle;
+    private static FloatingActionMenu fabMenu;
 
 
     private static LinearLayout Llmain ;
@@ -114,9 +119,17 @@ public class MainFragment extends Fragment implements MainContract.View {
         super.onResume();
        // mPresenter.loadingMain();
         if (helpBoolean){
-            ObjectAnimator animation = ObjectAnimator.ofFloat(fab, "translationX", 0);
+            ObjectAnimator animation = ObjectAnimator.ofFloat(fabMenu, "translationX", 0);
             animation.setDuration(2000);
             animation.start();
+            animation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    fabMenu.close(false);
+                }
+            });
+
+
         }
         helpBoolean = false;
     }
@@ -153,14 +166,15 @@ public class MainFragment extends Fragment implements MainContract.View {
                 (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
 
 
-        fab.setRippleColor(Common.getColorWithAlpha(newColorRed, 0.6f));
+        fabMenu = (FloatingActionMenu) getActivity().findViewById(R.id.multiple_actions_down);
+
 
         // fab.setImageResource(R.drawable.ic_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 helpBoolean = true;
-                ObjectAnimator animation = ObjectAnimator.ofFloat(fab, "translationX", fab.getHeight() * 2);
+                ObjectAnimator animation = ObjectAnimator.ofFloat(fabMenu, "translationX", fabMenu.getHeight() * 2);
                 animation.setDuration(2000);
                 animation.start();
                 mPresenter.loadHelp(root,getContext());
@@ -170,18 +184,20 @@ public class MainFragment extends Fragment implements MainContract.View {
         });
 
 
+
+
+
         fabCircle =
                 (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task_cycle_menu);
 
-
-        fabCircle.setRippleColor(Common.getColorWithAlpha(newColorRed, 0.6f));
 
         // fab.setImageResource(R.drawable.ic_add);
         fabCircle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CycleActivity.class);
-                startActivity(intent);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 
 
 
