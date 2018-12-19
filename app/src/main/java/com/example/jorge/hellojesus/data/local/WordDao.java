@@ -25,6 +25,9 @@ public interface  WordDao {
     @Query("SELECT * FROM Word ")
     List<Word> getWord();
 
+    @Query("SELECT * FROM Word where statussaid = '0' ")
+    List<Word> getWordWrong();
+
     @Query("SELECT * FROM HelloWord WHERE tip1 = :tip1  ")
     List<HelloWord> getHelloWordTip1(String tip1);
 
@@ -52,8 +55,14 @@ public interface  WordDao {
     /**
      * Update the complete status of a Word Sais
      */
-    @Query("UPDATE Word SET statussaid = :statusSaid WHERE word = :word")
-    int updateSatusSaid(String statusSaid, String word);
+    @Query("UPDATE Word SET statussaid = :statusSaid WHERE word = :word ")
+    int updateSatusSaid(String word, String statusSaid);
+
+
+
+
+    @Query("UPDATE Word SET word = :word WHERE word = :counttime")
+    int updateSatusQuantity(String word, String counttime);
 
     /**
      * Insert a Purchase in the database. If the Purchase already exists, replace it.
@@ -88,11 +97,7 @@ public interface  WordDao {
 
 
 
-    /**
-     * Update for finalize of the shopping
-     */
-    @Query("UPDATE Word SET statussaid = :statusSaid WHERE word = :word")
-    int updateFinalizeWords(String statusSaid, String word);
+
 
     @Query("SELECT * FROM Help ")
     List<Help> getHelp();

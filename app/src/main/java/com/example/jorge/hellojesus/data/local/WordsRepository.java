@@ -81,6 +81,27 @@ public class WordsRepository implements WordsDataSource {
     }
 
     @Override
+    public void getWordsWrong(@NonNull final LoadWordCallback callback) {
+        checkNotNull(callback);
+
+        // Query the local storage if available. If not, query the network.
+        mWordsLocalDataSource.getWordsWrong(new LoadWordCallback() {
+
+            @Override
+            public void onWordLoaded(List<Word> wordList) {
+                refreshCacheWord(wordList);
+                callback.onWordLoaded(new ArrayList<>(mCachedWords.values()));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getWordsFromRemoteDataSource(callback);
+            }
+        });
+
+    }
+
+    @Override
     public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
         checkNotNull(callback);
 
@@ -198,6 +219,45 @@ public class WordsRepository implements WordsDataSource {
         checkNotNull(word);
         mWordsRemoteDataSource.saveWord(word);
         mWordsLocalDataSource.saveWord(word);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedWords == null) {
+            mCachedWords = new LinkedHashMap<>();
+        }
+        mCachedWords.put(word.getId(), word);
+    }
+
+    @Override
+    public void saveWordQuantity(@NonNull Word word) {
+        checkNotNull(word);
+        mWordsRemoteDataSource.saveWordQuantity(word);
+        mWordsLocalDataSource.saveWordQuantity(word);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedWords == null) {
+            mCachedWords = new LinkedHashMap<>();
+        }
+        mCachedWords.put(word.getId(), word);
+    }
+
+    @Override
+    public void saveWordWrite(@NonNull Word word, @NonNull String quantity) {
+        checkNotNull(word);
+        mWordsRemoteDataSource.saveWordWrite(word,quantity);
+        mWordsLocalDataSource.saveWordWrite(word,quantity);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedWords == null) {
+            mCachedWords = new LinkedHashMap<>();
+        }
+        mCachedWords.put(word.getId(), word);
+    }
+
+    @Override
+    public void saveWordSaid(@NonNull Word word, @NonNull String quantity) {
+        checkNotNull(word);
+        mWordsRemoteDataSource.saveWordSaid(word,quantity);
+        mWordsLocalDataSource.saveWordSaid(word,quantity);
 
         // Do in memory cache update to keep the app UI up to date
         if (mCachedWords == null) {

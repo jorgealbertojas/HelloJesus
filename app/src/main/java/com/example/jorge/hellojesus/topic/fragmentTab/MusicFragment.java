@@ -313,7 +313,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
-                    ((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+                   // ((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }else{
                     mItemListener.onTopicClick(contents);
                     Intent intent = new Intent(v.getContext(), ContentActivity.class);
@@ -336,7 +336,7 @@ public class MusicFragment  extends Fragment implements TopicContract.View {
 
                     intent.putExtra(EXTRA_BUNDLE_CONTENT, bundle);
                     v.getContext().startActivity(intent);
-                    ((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+                    //((Activity) v.getContext()).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }
             }
         }

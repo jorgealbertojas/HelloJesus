@@ -27,6 +27,8 @@ public interface MainContract extends HelpContract {
 
     interface UserActionsListener  extends BasePresenter {
 
+        void loadWordWrong(@NonNull final Context context);
+
         void loadingMain();
 
         void saveHelp(Help help);

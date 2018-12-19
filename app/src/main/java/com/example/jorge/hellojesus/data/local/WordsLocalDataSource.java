@@ -87,6 +87,29 @@ public class WordsLocalDataSource implements WordsDataSource {
 
     }
 
+    @Override
+    public void getWordsWrong(@NonNull final LoadWordCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<Word> wordList = mWordsDao.getWordWrong();
+
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (wordList != null) {
+                            callback.onWordLoaded(wordList);
+                        } else {
+                            callback.onDataNotAvailable();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
 
     @Override
     public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {
@@ -202,6 +225,57 @@ public class WordsLocalDataSource implements WordsDataSource {
         mAppExecutors.diskIO().execute(saveRunnable);
 
     }
+
+    @Override
+    public void saveWordQuantity(@NonNull final Word word) {
+        checkNotNull(word);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Word wordNew = mWordsDao.getWordByCarId(word.getWord());
+                if (wordNew != null) {
+                    String quantity = Integer.toString(Integer.parseInt(wordNew.getCountTime()) + 1);
+                    observeUpdateQuantity(word.getWord(), quantity).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+
+    }
+
+    @Override
+    public void saveWordWrite(@NonNull final Word word, @NonNull final String quantity) {
+        checkNotNull(word);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Word wordNew = mWordsDao.getWordByCarId(word.getWord());
+                if (wordNew != null) {
+                        observeUpdateWrite(word.getWord(), quantity).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+
+    }
+
+    @Override
+    public void saveWordSaid(@NonNull final Word word, @NonNull final String quantity) {
+        checkNotNull(word);
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Word wordNew = mWordsDao.getWordByCarId(word.getWord());
+                if (wordNew != null) {
+                    observeUpdateSaid(word.getWord(), quantity).subscribe(subscriberUpdate);
+                }
+            }
+        };
+        mAppExecutors.diskIO().execute(saveRunnable);
+
+    }
+
+
 
 
 
@@ -431,6 +505,18 @@ public class WordsLocalDataSource implements WordsDataSource {
         return Observable.just(callObserveUpdate(word));
     }
 
+    public Observable<Integer> observeUpdateQuantity(@NonNull String word, @NonNull String  quantity){
+        return Observable.just(callObserveUpdateQuantity(word,quantity));
+    }
+
+    public Observable<Integer> observeUpdateWrite(@NonNull String word, @NonNull String  quantity){
+        return Observable.just(callObserveUpdateWrite(word,quantity));
+    }
+
+    public Observable<Integer> observeUpdateSaid(@NonNull String word, @NonNull String  quantity){
+        return Observable.just(callObserveUpdateSaid(word,quantity));
+    }
+
     public Observable<Integer> observeUpdateControl(@NonNull String word ){
         return Observable.just(callObserveUpdate(word));
     }
@@ -472,14 +558,38 @@ public class WordsLocalDataSource implements WordsDataSource {
         return 0;
     }
 
-    private int callObserveUpdate(@NonNull String word){
-     //   int i = mWordsDao.updateQuantity(shoppingId, quantity);
-     //   subscriberUpdate.onNext(i);
-     //   subscriberUpdate.onCompleted();
-     //   return i;
+    private int callObserveUpdateWrite(@NonNull String word, @NonNull String quantity){
+        int i = mWordsDao.updateSatusWrite(word, quantity);
+        subscriberUpdate.onNext(i);
+        subscriberUpdate.onCompleted();
+        return i;
 
+     }
+
+    private int callObserveUpdateSaid(@NonNull String word, @NonNull String quantity){
+        int i = mWordsDao.updateSatusSaid(word, quantity);
+        subscriberUpdate.onNext(i);
+        subscriberUpdate.onCompleted();
+        return i;
+
+    }
+
+    private int callObserveUpdateQuantity(@NonNull String word, @NonNull String quantity){
+        int i = mWordsDao.updateSatusQuantity(word, quantity);
+        subscriberUpdate.onNext(i);
+        subscriberUpdate.onCompleted();
+        return i;
+
+    }
+
+    private int callObserveUpdate(@NonNull String word){
+       // int i = mWordsDao.updateSatusSaid(shoppingId, quantity);
+       // subscriberUpdate.onNext(i);
+       // subscriberUpdate.onCompleted();
+       // return i;
         return 0;
     }
+
 
 
     private int callObserveUpdateControl1(@NonNull Control control, String status1){

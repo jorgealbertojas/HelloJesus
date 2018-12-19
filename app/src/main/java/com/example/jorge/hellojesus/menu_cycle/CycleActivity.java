@@ -34,6 +34,7 @@ import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 public class CycleActivity extends AppCompatActivity {
 
     public static String EXTRA_HELLO_WORD = "HELLO_WORD";
+    public static String EXTRA_HELLO_WORD_TIP = "EXTRA_HELLO_WORD_TIP";
     public static String EXTRA_BUNDLE_HELLO_WORD = "BUNDLE_HELLO_WORD";
 
     private static WordsRepository mWordsRepository;
@@ -103,7 +104,7 @@ public class CycleActivity extends AppCompatActivity {
 
         view02 = (ImageView) findViewById(R.id.bubble2);
         view02.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view02.setTag("COLOR");
+        view02.setTag("FAMILY");
         view02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,7 +269,7 @@ public class CycleActivity extends AppCompatActivity {
 
         view17 = (ImageView) findViewById(R.id.bubble19);
         view17.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view17.setTag("COLOR");
+        view17.setTag("FAMILY");
         view17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -329,6 +330,7 @@ public class CycleActivity extends AppCompatActivity {
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList(EXTRA_HELLO_WORD, (ArrayList<? extends Parcelable>) helloWordList);
+                    bundle.putString(EXTRA_HELLO_WORD_TIP, tip1);
                     intent.putExtra(EXTRA_BUNDLE_HELLO_WORD, bundle);
                     context.startActivity(intent);
                     ((Activity) context).overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);

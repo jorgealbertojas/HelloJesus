@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_BUNDLE_HELLO_WORD;
 import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_HELLO_WORD;
+import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_HELLO_WORD_TIP;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 
@@ -23,7 +24,7 @@ public class HelloWordActivity extends AppCompatActivity {
 
     private ArrayList<HelloWord> mListString;
     private Bundle mBundle;
-
+    private String mTip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +32,13 @@ public class HelloWordActivity extends AppCompatActivity {
 
         mBundle = getIntent().getBundleExtra(EXTRA_BUNDLE_HELLO_WORD);
         mListString = mBundle.getParcelableArrayList(EXTRA_HELLO_WORD);
+        mTip = mBundle.getString(EXTRA_HELLO_WORD_TIP);
 
 
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(HelloWordFragment.newInstance(mListString));
+                initFragment(HelloWordFragment.newInstance(mListString,mTip));
             }
         }
 

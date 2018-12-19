@@ -70,6 +70,8 @@ public interface WordsDataSource {
 
     void getWords(@NonNull LoadWordCallback callback);
 
+    void getWordsWrong(@NonNull LoadWordCallback callback);
+
 
 
     void getHelp(@NonNull LoadHelpCallback callback, View root, final Context context);
@@ -81,6 +83,12 @@ public interface WordsDataSource {
     void getControlStatus1(@NonNull String key , @NonNull GetControlCallback callback);
 
     void saveWord(@NonNull Word word);
+
+    void saveWordQuantity(@NonNull Word word);
+
+    void saveWordWrite(@NonNull Word word, @NonNull final String quantity);
+
+    void saveWordSaid(@NonNull Word word, @NonNull final String quantity);
 
     void saveHelp(@NonNull Help help);
 

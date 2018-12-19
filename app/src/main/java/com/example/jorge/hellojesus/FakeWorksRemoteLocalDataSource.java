@@ -36,6 +36,11 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getWordsWrong(@NonNull LoadWordCallback callback) {
+
+    }
+
+    @Override
     public void getHelp(@NonNull LoadHelpCallback callback, @NonNull View root, @NonNull Context context) {
 
     }
@@ -59,6 +64,21 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
 
     @Override
     public void saveWord(@NonNull Word word) {
+
+    }
+
+    @Override
+    public void saveWordQuantity(@NonNull Word word) {
+
+    }
+
+    @Override
+    public void saveWordWrite(@NonNull Word word, @NonNull String quantity) {
+
+    }
+
+    @Override
+    public void saveWordSaid(@NonNull Word word, @NonNull String quantity) {
 
     }
 

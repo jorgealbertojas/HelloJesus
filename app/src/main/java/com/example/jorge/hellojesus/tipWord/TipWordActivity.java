@@ -15,6 +15,7 @@ import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.util.Common;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TipWordActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class TipWordActivity extends AppCompatActivity {
     private String EXTRA_Y = "EXTRA_Y";
     private String EXTRA_WIDTH = "EXTRA_WIDTH";
     private String EXTRA_HELLO_WORD = "EXTRA_HELLO_WORD";
+    private String EXTRA_POSITION_LIST = "EXTRA_POSITION_LIST";
 
     private static View mContainer;
 
@@ -37,11 +39,12 @@ public class TipWordActivity extends AppCompatActivity {
         locationInScreen[0] = getIntent().getExtras().getInt(EXTRA_X);
         locationInScreen[1] = getIntent().getExtras().getInt(EXTRA_Y);
         int widht = (int) getIntent().getExtras().getInt(EXTRA_WIDTH);
-        HelloWord helloWord = (HelloWord) getIntent().getExtras().getParcelable(EXTRA_HELLO_WORD);
+        List<String> stringList = (List<String>) getIntent().getExtras().getSerializable(EXTRA_HELLO_WORD);
+        int position = (int) getIntent().getExtras().getInt(EXTRA_POSITION_LIST);
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(TipWordFragment.newInstance(locationInScreen[0],locationInScreen[1],widht,helloWord));
+                initFragment(TipWordFragment.newInstance(locationInScreen[0],locationInScreen[1],widht,stringList,position));
             }
         }
 

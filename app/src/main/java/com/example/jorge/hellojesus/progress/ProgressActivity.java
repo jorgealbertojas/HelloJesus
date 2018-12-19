@@ -66,8 +66,8 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
     private static String mTotalMissing, mTotalSaidCorrect, mTotalSaid, mTotalMistake;
 
     private static String CONST_TIME = "1";
-    private static Boolean CONST_SAID = false;
-    private static Boolean CONST_WRITE = false;
+    private static String CONST_SAID = "0";
+    private static String CONST_WRITE = "0";
 
     private static CardView cardViewProgress;
 
@@ -172,7 +172,13 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
         List<String> result = new ArrayList<>();
         result = countPoint(mListCorrect,mListListen,0);
 
-        mActionsListener.saveWord(result,mType,mSourceName,CONST_TIME, Boolean.toString(CONST_SAID), Boolean.toString(CONST_WRITE));
+        mSourceName = mSourceName.replace(",","");
+        mSourceName = mSourceName.replace(".","");
+        mSourceName = mSourceName.replace("!","");
+        mSourceName = mSourceName.replace("?","");
+
+
+        mActionsListener.saveWord(result,mType,mSourceName,CONST_TIME, CONST_SAID, CONST_WRITE);
 
         mTotalSaidCorrect = Integer.toString(mTotal - result.size());
         mTotalMistake = Integer.toString(Integer.parseInt(mTotalSaid) - Integer.parseInt(mTotalSaidCorrect));

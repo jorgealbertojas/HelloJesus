@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -20,19 +22,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".splash.SplashActivity">
+        <activity
+            android:name=".splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".topic.TopicActivity" />
-        <activity android:name=".content.ContentActivity" />
-        <activity android:name=".speech.SpeechActivity" />
+        <activity
+            android:name=".topic.TopicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".content.ContentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".speech.SpeechActivity"
+            android:screenOrientation="portrait" />
 
-        <service android:name=".speech.support.SpeechService" />
-        <service android:name=".util.download.DownloadService" />
+        <service
+            android:name=".speech.support.SpeechService"
+            android:screenOrientation="portrait" />
+        <service
+            android:name=".util.download.DownloadService"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".content.ContentFragment$MediaReceiver">
             <intent-filter>
@@ -42,20 +56,50 @@
 
         <activity
             android:name=".progress.ProgressActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".word.WordActivity" />
-        <activity android:name=".write.WriteActivity" />
+        <activity
+            android:name=".word.WordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".write.WriteActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".helpApp.HelpAppActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".menuActivity.MenuWordActivity" />
-        <activity android:name=".menu_cycle.CycleActivity" />
-        <activity android:name=".helloWord.HelloWordActivity" />
+        <activity
+            android:name=".menuActivity.MenuWordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".menu_cycle.CycleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".helloWord.HelloWordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".tipWord.TipWordActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".login.LoginActivity"></activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".widgets.MyWidgetProvider">
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <activity android:name=".widgets.WidgetActivity"></activity>
     </application>
 
 </manifest>

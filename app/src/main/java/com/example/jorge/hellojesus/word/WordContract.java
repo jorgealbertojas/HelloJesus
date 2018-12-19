@@ -8,7 +8,10 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.jorge.hellojesus.BasePresenter;
+import com.example.jorge.hellojesus.BaseView;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.main.MainContract;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
@@ -23,7 +26,7 @@ import jp.shts.android.storiesprogressview.StoriesProgressView;
 
 public class WordContract{
 
-    interface View {
+    interface View extends BaseView<WordContract.UserActionsListener> {
 
         void showWord(List<String> stringList);
 
@@ -41,7 +44,13 @@ public class WordContract{
         void setLoadingIndicator(boolean active);
     }
 
-    interface UserActionsListener {
+    interface UserActionsListener  extends BasePresenter {
+
+        void saveWordQuantity(String wordName ,String type,  String sourceName, String countTime,  String statusSaid, String statusWrite);
+
+        void saveWordWrite(String wordName ,String type,  String sourceName, String countTime,  String statusSaid, String statusWrite);
+
+        void saveWordSaid(String wordName ,String type,  String sourceName, String countTime,  String statusSaid, String statusWrite);
 
         void loadingWords(List<String> stringList);
 

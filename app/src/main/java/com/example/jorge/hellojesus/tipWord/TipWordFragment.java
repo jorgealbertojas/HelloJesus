@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.helloWord.HelloWordContract;
+import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.util.buttonAnimation.MorphingButton;
 
 import java.util.List;
@@ -54,12 +55,15 @@ public class TipWordFragment extends Fragment {
     private int mMorphCounter5 = 1;
     private int mMorphCounter6 = 1;
 
-    private static HelloWord mHelloWord;
+    private static List<String> mHelloWord;
 
     private TextView mTextValue;
 
-    public static TipWordFragment newInstance(int x, int y, int width, HelloWord helloWord) {
-        mHelloWord = helloWord;
+    private static int mPosition = 0;
+
+    public static TipWordFragment newInstance(int x, int y, int width, List<String> stringList, int position) {
+        mHelloWord = stringList;
+        mPosition = position;
         locationInScreen[0] = x;
         locationInScreen[1] = y;
         mWidth = width;
@@ -75,7 +79,9 @@ public class TipWordFragment extends Fragment {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mContainer = container;
 
+        final int newColorRed = getResources().getColor(R.color.colorAccent);
 
+        container.setBackgroundColor(Common.getColorWithAlpha(newColorRed, 0.8f));
 
         if (container != null) {
             doCircularReveal(container);
@@ -84,14 +90,14 @@ public class TipWordFragment extends Fragment {
 
 
         mTextValue = (TextView) view.findViewById(R.id.textValue);
-        mTextValue.setText(mHelloWord.getMwordName());
+        mTextValue.setText(mHelloWord.get(mPosition));
 
 
-        final MorphingButton btnMorph1 = (MorphingButton) view.findViewById(R.id.btnMorph1);
+/*        final MorphingButton btnMorph1 = (MorphingButton) view.findViewById(R.id.btnMorph1);
         btnMorph1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onMorphButton1Clicked(btnMorph1,mHelloWord.getMtip1());
+        //        onMorphButton1Clicked(btnMorph1,mHelloWord.getMtip1());
             }
         });
 
@@ -99,7 +105,7 @@ public class TipWordFragment extends Fragment {
         btnMorph2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onMorphButton2Clicked(btnMorph2, mHelloWord.getMtip2());
+               // onMorphButton2Clicked(btnMorph2, mHelloWord.getMtip2());
             }
         });
 
@@ -107,9 +113,9 @@ public class TipWordFragment extends Fragment {
         btnMorph3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onMorphButton3Clicked(btnMorph3, mHelloWord.getMtip3());
+              //  onMorphButton3Clicked(btnMorph3, mHelloWord.getMtip3());
             }
-        });
+        });*/
 
         final MorphingButton btnMorph4 = (MorphingButton) view.findViewById(R.id.btnMorph4);
         btnMorph4.setOnClickListener(new View.OnClickListener() {
@@ -139,9 +145,9 @@ public class TipWordFragment extends Fragment {
         });
 
 
-        morphToFailure(btnMorph1, 0);
-        morphToFailure(btnMorph2, 0);
-        morphToFailure(btnMorph3, 0);
+     //   morphToFailure(btnMorph1, 0);
+     //   morphToFailure(btnMorph2, 0);
+     //   morphToFailure(btnMorph3, 0);
         morphToFailureImage(btnMorph4, 0);
         morphToFailureExplanation(btnMorph5, 0);
         morphToFailureTranslate(btnMorph6, 0);

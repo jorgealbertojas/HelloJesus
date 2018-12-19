@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_widget_layout"
+            android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_alignParentTop="true"
+                    android:duplicateParentState="true"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="000"
+                    android:layout_alignStart="@+id/empty_view"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    >
+
+                        <requestFocus
+                            android:duplicateParentState="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true" />
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/empty_view"
+                    android:layout_marginTop="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/selector_login_button_blue"
+                    android:padding="@dimen/text1_list_padding"
+                    android:layout_below="@+id/update"
+                    android:textAlignment="center"
+                    android:textColor="@color/mb_white"
+                    android:textSize="@dimen/text4_list_size" />
+
+                <ImageView
+                    android:id="@+id/button_enter1"
+                    android:layout_alignStart="@+id/empty_view"
+                    android:layout_below="@+id/empty_view"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:padding="10dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/selector_login_button_blue"
+                    android:src="@drawable/ic_collections_white_24dp"
+ />
+
+                <ImageView
+                    android:id="@+id/button_enter2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:padding="10dp"
+                    android:layout_alignTop="@+id/button_enter1"
+                    android:layout_toRightOf="@+id/button_enter1"
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/selector_login_button_blue"
+                    android:src="@drawable/ic_g_translate_white_24dp"
+      />
+
+                <ImageView
+                    android:id="@+id/button_enter3"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:padding="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_alignTop="@+id/button_enter2"
+                    android:layout_toRightOf="@+id/button_enter2"
+                    android:background="@drawable/selector_login_button_blue"
+                    android:src="@drawable/ic_translate_white_24dp"
+ />
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignEnd="@id/empty_view"
+                    android:src="@mipmap/ic_main_icon"
+               />
+
+
+        </RelativeLayout>
+</LinearLayout>

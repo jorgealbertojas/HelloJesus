@@ -40,6 +40,25 @@ public class WordPresenter implements WordContract.UserActionsListener {
 
 
     @Override
+    public void saveWordQuantity(String wordName, String type, String sourceName, String countTime, String statusSaid, String statusWrite) {
+        Word word = new Word(wordName, type,  countTime, sourceName,  statusSaid, statusWrite);
+
+        mWordsRepository.saveWordQuantity(word);
+    }
+
+    @Override
+    public void saveWordWrite(String wordName, String type, String sourceName, String countTime, String statusSaid, String statusWrite) {
+        Word word = new Word(wordName, type,  countTime, sourceName,  statusSaid, statusWrite);
+        mWordsRepository.saveWordWrite(word, statusWrite);
+    }
+
+    @Override
+    public void saveWordSaid(String wordName, String type, String sourceName, String countTime, String statusSaid, String statusWrite) {
+        Word word = new Word(wordName, type,  countTime, sourceName,  statusSaid, statusWrite);
+        mWordsRepository.saveWordSaid(word, statusSaid);
+    }
+
+    @Override
     public void loadingWords(List<String> stringList) {
 
     }
@@ -214,9 +233,15 @@ public class WordPresenter implements WordContract.UserActionsListener {
     }
 
 
+    @Override
+    public void start() {
 
+    }
 
+    @Override
+    public void loadHelp(View root, Context context) {
 
+    }
 }
 
 

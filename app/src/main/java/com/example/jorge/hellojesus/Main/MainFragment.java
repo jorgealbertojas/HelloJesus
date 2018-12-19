@@ -94,6 +94,8 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static FloatingActionButton fabCircle;
     private static FloatingActionMenu fabMenu;
 
+    private static FloatingActionButton fabWord;
+
 
     private static LinearLayout Llmain ;
 
@@ -203,6 +205,18 @@ public class MainFragment extends Fragment implements MainContract.View {
 
             }
         });
+
+
+        fabWord = (FloatingActionButton) getActivity().findViewById(R.id.fab_word);
+        fabWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mPresenter.loadWordWrong(getContext());
+
+            }
+        });
+
 
 
         mPresenter.loadingMain();

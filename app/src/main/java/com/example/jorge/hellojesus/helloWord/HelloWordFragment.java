@@ -35,6 +35,8 @@ import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.tipWord.TipWordActivity;
 import com.example.jorge.hellojesus.word.WordFragment;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -50,23 +52,25 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
-    private TextView mTotalDown;
-    private TextView mTotalUp;
+   // private TextView mTotalDown;
+   // private TextView mTotalUp;
 
     private RecyclerView mRecyclerView;
 
     public static List<HelloWord> mWords;
 
-
+    public static String mTip;
 
     private static Context mContext;
 
-
+    private static ImageView ivClose;
 
     private static LinearLayout llcontainer;
 
     long pressTime = 0;
     long limit = 5000;
+
+    public static TextView textValue;
 
     public static Activity mActivity;
 
@@ -88,8 +92,13 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
         }
     };
 
-    public static HelloWordFragment newInstance(List<HelloWord> stringList) {
+    public static HelloWordFragment newInstance(List<HelloWord> stringList, String tip) {
+
         mWords = stringList;
+        mTip = tip;
+        if (stringList != null){
+           mTip = mTip + " - " + Integer.toString(stringList.size());
+        }
 
         return new HelloWordFragment();
     }
@@ -99,9 +108,6 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
         mActionsListener = new HelloWordPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()));
-
-
-
         mListAdapter = new HelloWordFragment.HelloWordAdapter(mWords);
 
     }
@@ -121,8 +127,8 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         View root = inflater.inflate(R.layout.fragment_hello_word, container, false);
 
-        mTotalDown = (TextView) root.findViewById(R.id.tv_down);
-        mTotalUp = (TextView) root.findViewById(R.id.tv_up);
+      //  mTotalDown = (TextView) root.findViewById(R.id.tv_down);
+      //  mTotalUp = (TextView) root.findViewById(R.id.tv_up);
 
         llcontainer = (LinearLayout) root.findViewById(R.id.ll_container);
 
@@ -145,7 +151,16 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
         });
 
 
+        ivClose = (ImageView) root.findViewById(R.id.ic_close);
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
 
+        textValue = (TextView) root.findViewById(R.id.textValue);
+        textValue.setText(mTip);
 
 
 
@@ -254,6 +269,7 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
             private String EXTRA_Y = "EXTRA_Y";
             private String EXTRA_WIDTH = "EXTRA_WIDTH";
             private String EXTRA_HELLO_WORD = "EXTRA_HELLO_WORD";
+            private String EXTRA_POSITION_LIST = "EXTRA_POSITION_LIST";
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -307,10 +323,18 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
                             locationInScreen[1] = lastPositionY;
                         }
 
+                        List<String> mListStringNew =  new ArrayList<>();
+
+
+                        for (int i =0; i < mListString.size(); i++){
+                            mListStringNew.add(mListString.get(i).getMwordName());
+                        }
+
                         intent.putExtra(EXTRA_X, locationInScreen[0]);
                         intent.putExtra(EXTRA_Y, locationInScreen[1]);
                         intent.putExtra(EXTRA_WIDTH,v.getWidth()/2);
-                        intent.putExtra(EXTRA_HELLO_WORD,(Parcelable) mListString.get(getAdapterPosition()));
+                        intent.putExtra(EXTRA_HELLO_WORD,(Serializable) mListStringNew);
+                        intent.putExtra(EXTRA_POSITION_LIST,getAdapterPosition());
                         mActivity.startActivity(intent);
                         mActivity.overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 
@@ -370,8 +394,8 @@ public class HelloWordFragment extends Fragment implements HelloWordContract.Vie
 
     @Override
     public void ShowInformationHelloWord(){
-        mTotalDown.setText(mListAdapter.getItemCount());
-        mTotalUp.setText(mListAdapter.getItemCount());
+       // mTotalDown.setText(mListAdapter.getItemCount());
+       // mTotalUp.setText(mListAdapter.getItemCount());
 
     }
 

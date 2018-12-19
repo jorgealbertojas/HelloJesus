@@ -3,12 +3,14 @@ package com.example.jorge.hellojesus.main;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
+import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.local.control.Control;
@@ -20,11 +22,14 @@ import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.helpApp.HelpAppActivity;
 import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.util.EspressoIdlingResource;
+import com.example.jorge.hellojesus.word.WordActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -126,6 +131,48 @@ public class MainPresenter implements MainContract.UserActionsListener {
     @Override
     public void start() {
        // loadTasks(false);
+    }
+
+    @Override
+    public void loadWordWrong(final Context context) {
+
+        // The network request might be handled in a different thread so make sure Espresso knows
+        // that the app is busy until the response is handled.
+        EspressoIdlingResource.increment();
+
+        mWordsRepository.getWordsWrong(new WordsDataSource.LoadWordCallback() {
+
+            @Override
+            public void onWordLoaded(List<Word> wordList) {
+                List<String> arrayList = new ArrayList<>();
+
+                // This callback may be called twice, once for the cache and once for loading
+                // the data from the server API, so we check before decrementing, otherwise
+                // it throws "Counter has been corrupted!" exception.
+                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                    EspressoIdlingResource.decrement(); // Set app as idle.
+                }
+
+                for (Word word : wordList) {
+                    arrayList.add(word.getWord());
+                }
+
+                Intent intent = new Intent(context, WordActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_WORD, (Serializable) arrayList);
+                intent.putExtra(EXTRA_BUNDLE_WORD, bundle);
+                context.startActivity(intent);
+
+            }
+
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+
+        });
     }
 
     @Override

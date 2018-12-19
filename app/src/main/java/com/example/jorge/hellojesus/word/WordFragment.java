@@ -4,17 +4,20 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -38,8 +41,11 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -48,12 +54,18 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
+import com.example.jorge.hellojesus.main.MainContract;
+import com.example.jorge.hellojesus.tipWord.TipWordActivity;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by jorge on 21/04/2018.
@@ -73,8 +85,10 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
-    private TextView mTotalDown;
-    private TextView mTotalUp;
+    private static LinearLayout llcontainer;
+
+   // private TextView mTotalDown;
+   // private TextView mTotalUp;
 
 
 
@@ -99,7 +113,7 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     private static Button mWord;
 
-
+    private static Activity mActivity;
 
 
 
@@ -136,6 +150,9 @@ public class WordFragment extends Fragment implements WordContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mActivity = getActivity();
+
+
         mActionsListener = new WordPresenter(this, Injection.provideWordsRepository(getActivity().getApplicationContext()));
 
         mListAdapter = new WordFragment.WordAdapter(mWords);
@@ -161,6 +178,9 @@ public class WordFragment extends Fragment implements WordContract.View {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         View root = inflater.inflate(R.layout.fragment_word, container, false);
 
+        llcontainer = (LinearLayout) root.findViewById(R.id.ll_container);
+
+
         mLinearLayout = (LinearLayout) root.findViewById(R.id.fabContainerLayout);
 
         mFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.fab_function);
@@ -168,8 +188,8 @@ public class WordFragment extends Fragment implements WordContract.View {
         mFabExplanation = (FloatingActionButton) root.findViewById(R.id.fab_explanation);
         mFabTranslate = (FloatingActionButton) root.findViewById(R.id.fab_translate);
 
-        mTotalDown = (TextView) root.findViewById(R.id.tv_down);
-        mTotalUp = (TextView) root.findViewById(R.id.tv_up);
+       // mTotalDown = (TextView) root.findViewById(R.id.tv_down);
+       // mTotalUp = (TextView) root.findViewById(R.id.tv_up);
 
 
 
@@ -244,6 +264,11 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     }
 
+    @Override
+    public void setPresenter(WordContract.UserActionsListener presenter) {
+        mActionsListener = checkNotNull(presenter);
+    }
+
 
     private static class WordAdapter extends RecyclerView.Adapter<WordFragment.WordAdapter.ViewHolder> {
 
@@ -284,6 +309,7 @@ public class WordFragment extends Fragment implements WordContract.View {
             viewHolder.mWord.setTypeface(null, Typeface.BOLD);
             viewHolder.mWord.setText(word);
 
+/*
             viewHolder.mWord.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
 
@@ -338,6 +364,7 @@ public class WordFragment extends Fragment implements WordContract.View {
 
                 System.out.println(ss);
             }
+*/
 
 
             //viewHolder.mRelativeLayout = Common.createTagDynamic(viewHolder.mRelativeLayout,arr, mContext, true);
@@ -390,13 +417,93 @@ public class WordFragment extends Fragment implements WordContract.View {
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             public TextView mWord;
+            public ImageView mOpenTip;
+            public ImageView mWordOK;
+
+            private int[] locationInScreen = new int[]{0,0};
+            private int lastPositionX = 0;
+            private int lastPositionY = 0;
+
+            private String EXTRA_X = "EXTRA_X";
+            private String EXTRA_Y = "EXTRA_Y";
+            private String EXTRA_WIDTH = "EXTRA_WIDTH";
+            private String EXTRA_HELLO_WORD = "EXTRA_HELLO_WORD";
+            private String EXTRA_POSITION_LIST = "EXTRA_POSITION_LIST";
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mWord = (TextView) itemView.findViewById(R.id.tv_word);
                 mWord.setTypeface(null, Typeface.NORMAL);
 
+                mWordOK = (ImageView) itemView.findViewById(R.id.iv_up);
+                mWordOK.setTag("0");
+                mWordOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (v.getTag().equals("0")) {
+                            v.setTag("1");
+                            mActionsListener.saveWordSaid(mListString.get(getAdapterPosition()), "","","", "0", "");
+                            RotateAnimation rotate = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                            rotate.setDuration(1000);
+                            rotate.setInterpolator(new LinearInterpolator());
+                            v.startAnimation(rotate);
+                            ((ImageView) v).setImageResource(R.drawable.ic_thumb_down_white_24dp);
+                            ((ImageView) v).setColorFilter(v.getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
+
+
+                        }else{
+                            v.setTag("0");
+                            mActionsListener.saveWordSaid(mListString.get(getAdapterPosition()), "","","", "1", "");
+                            RotateAnimation rotate = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                            rotate.setDuration(1000);
+                            rotate.setInterpolator(new LinearInterpolator());
+                            v.startAnimation(rotate);
+                            ((ImageView) v).setImageResource(R.drawable.ic_thumb_up_white_24dp);
+                            ((ImageView) v).setColorFilter(v.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+                        }
+
+                    }
+                });
+
+
+
+
+                mOpenTip = (ImageView) itemView.findViewById(R.id.iv_down);
+
+                mOpenTip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mActivity, TipWordActivity.class);
+
+                        mActionsListener.saveWordQuantity(mListString.get(getAdapterPosition()), "","","", "", "");
+
+                        if (v != null){
+                            v.getLocationInWindow(locationInScreen);
+                            lastPositionX = locationInScreen[0];
+                            lastPositionY = locationInScreen[1];
+                            locationInScreen[0] = locationInScreen[0] + v.getMeasuredWidth() / 2;
+                            locationInScreen[1] = locationInScreen[1] + llcontainer.getMeasuredHeight() / 2;
+                        }else{
+                            locationInScreen[0] = lastPositionX;
+                            locationInScreen[1] = lastPositionY;
+                        }
+
+                        intent.putExtra(EXTRA_X, locationInScreen[0]);
+                        intent.putExtra(EXTRA_Y, locationInScreen[1]);
+                        intent.putExtra(EXTRA_WIDTH,v.getWidth()/2);
+                        intent.putExtra(EXTRA_HELLO_WORD,(Serializable) mListString);
+                        intent.putExtra(EXTRA_POSITION_LIST,getAdapterPosition());
+                        mActivity.startActivity(intent);
+                        mActivity.overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+
+
+                    }
+                });
+
+
+
                 itemView.setOnClickListener(this);
+
             }
 
             @Override
@@ -473,10 +580,12 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     @Override
     public void ShowInformationWord(){
-        mTotalDown.setText(mListAdapter.getItemCount());
-        mTotalUp.setText(mListAdapter.getItemCount());
+       // mTotalDown.setText(mListAdapter.getItemCount());
+       // mTotalUp.setText(mListAdapter.getItemCount());
 
     }
+
+
 
 }
 

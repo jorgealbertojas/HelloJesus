@@ -69,22 +69,26 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+                try {
+                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
 
-                Pair<View, String> p1 = Pair.create((View) icon_main, "icon_main");
+                    Pair<View, String> p1 = Pair.create((View) icon_main, "icon_main");
 
-                ActivityOptionsCompat options =
+                    ActivityOptionsCompat options =
 
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(SplashActivity.this,
-                                p1);
-                startActivity(i,options.toBundle());
-                //overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(SplashActivity.this,
+                                    p1);
+                    startActivity(i, options.toBundle());
+                    //overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 
-                // Intent i2 = new Intent(SplashActivity.this, login.class);
-                // startActivity(i2);
+                    // Intent i2 = new Intent(SplashActivity.this, login.class);
+                    // startActivity(i2);
 
-                // close this activity
-                finish();
+                    // close this activity
+                    finish();
+                } catch (Exception e) {
+                    finish();
+                }
 
 
 
