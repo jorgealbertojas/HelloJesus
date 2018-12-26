@@ -28,6 +28,9 @@ public interface  WordDao {
     @Query("SELECT * FROM Word where statussaid = '0' ")
     List<Word> getWordWrong();
 
+    @Query("SELECT * FROM Word where statussaid = '1' ")
+    List<Word> getWordCorrect();
+
     @Query("SELECT * FROM HelloWord WHERE tip1 = :tip1  ")
     List<HelloWord> getHelloWordTip1(String tip1);
 
@@ -50,16 +53,13 @@ public interface  WordDao {
      * Update the complete status of a Word Write
      */
     @Query("UPDATE Word SET statuswrite = :statusWrite WHERE word = :word")
-    int updateSatusWrite(String statusWrite, String word);
+    int updateSatusWrite(String word, String statusWrite);
 
     /**
      * Update the complete status of a Word Sais
      */
     @Query("UPDATE Word SET statussaid = :statusSaid WHERE word = :word ")
     int updateSatusSaid(String word, String statusSaid);
-
-
-
 
     @Query("UPDATE Word SET word = :word WHERE word = :counttime")
     int updateSatusQuantity(String word, String counttime);

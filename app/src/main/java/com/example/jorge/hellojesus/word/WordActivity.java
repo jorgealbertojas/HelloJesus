@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD_CHECK;
 
 
 /**
@@ -26,6 +27,7 @@ public class WordActivity extends AppCompatActivity
     {
 
         private List<String> mListString;
+        private String opcao;
         private Bundle mBundle;
 
         @Override
@@ -35,10 +37,14 @@ public class WordActivity extends AppCompatActivity
 
         mBundle = getIntent().getBundleExtra(EXTRA_BUNDLE_WORD);
         mListString = (List<String>) mBundle.getSerializable(EXTRA_WORD);
+        opcao = mBundle.getString(EXTRA_WORD_CHECK);
+        if (opcao == null){
+            opcao = "0";
+        }
 
         if (null == savedInstanceState) {
             if (Common.isOnline(this)) {
-                initFragment(WordFragment.newInstance(mListString));
+                initFragment(WordFragment.newInstance(mListString,opcao));
             }
         }
 

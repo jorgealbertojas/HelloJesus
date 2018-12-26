@@ -83,7 +83,6 @@ public class WordsRepository implements WordsDataSource {
     @Override
     public void getWordsWrong(@NonNull final LoadWordCallback callback) {
         checkNotNull(callback);
-
         // Query the local storage if available. If not, query the network.
         mWordsLocalDataSource.getWordsWrong(new LoadWordCallback() {
 
@@ -99,6 +98,25 @@ public class WordsRepository implements WordsDataSource {
             }
         });
 
+    }
+
+    @Override
+    public void getWordsCorrect(@NonNull final LoadWordCallback callback) {
+        checkNotNull(callback);
+        // Query the local storage if available. If not, query the network.
+        mWordsLocalDataSource.getWordsCorrect(new LoadWordCallback() {
+
+            @Override
+            public void onWordLoaded(List<Word> wordList) {
+                refreshCacheWord(wordList);
+                callback.onWordLoaded(new ArrayList<>(mCachedWords.values()));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getWordsFromRemoteDataSource(callback);
+            }
+        });
     }
 
     @Override

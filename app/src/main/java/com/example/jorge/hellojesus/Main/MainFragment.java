@@ -90,11 +90,13 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     private static boolean helpBoolean = false;
 
-    private static FloatingActionButton fab;
-    private static FloatingActionButton fabCircle;
+
     private static FloatingActionMenu fabMenu;
 
+    private static FloatingActionButton fabCheck;
     private static FloatingActionButton fabWord;
+    private static FloatingActionButton fabNoCheck;
+    private static FloatingActionButton fabHelp;
 
 
     private static LinearLayout Llmain ;
@@ -164,15 +166,11 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         final int newColorRed = getResources().getColor(R.color.red);
         // Set up floating action button
-        fab =
-                (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
-
 
         fabMenu = (FloatingActionMenu) getActivity().findViewById(R.id.multiple_actions_down);
 
-
-        // fab.setImageResource(R.drawable.ic_add);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabHelp = (FloatingActionButton) getActivity().findViewById(R.id.fab_help);
+        fabHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 helpBoolean = true;
@@ -180,44 +178,37 @@ public class MainFragment extends Fragment implements MainContract.View {
                 animation.setDuration(2000);
                 animation.start();
                 mPresenter.loadHelp(root,getContext());
-
-
             }
         });
-
-
-
-
-
-        fabCircle =
-                (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task_cycle_menu);
-
-
-        // fab.setImageResource(R.drawable.ic_add);
-        fabCircle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CycleActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-
-
-
-            }
-        });
-
 
         fabWord = (FloatingActionButton) getActivity().findViewById(R.id.fab_word);
         fabWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mPresenter.loadWordWrong(getContext());
-
+                Intent intent = new Intent(getActivity(), CycleActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+                fabMenu.close(false);
             }
         });
 
+        fabNoCheck = (FloatingActionButton) getActivity().findViewById(R.id.fab_no_check);
+        fabNoCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.loadWordWrong(getContext());
+                fabMenu.close(false);
+            }
+        });
 
+        fabCheck = (FloatingActionButton) getActivity().findViewById(R.id.fab_check);
+        fabCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.loadWordCorrect(getContext());
+                fabMenu.close(false);
+            }
+        });
 
         mPresenter.loadingMain();
         // Insert HELP for all Screen

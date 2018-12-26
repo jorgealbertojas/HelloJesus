@@ -41,6 +41,11 @@ public class FakeWorksRemoteLocalDataSource implements WordsDataSource {
     }
 
     @Override
+    public void getWordsCorrect(@NonNull LoadWordCallback callback) {
+
+    }
+
+    @Override
     public void getHelp(@NonNull LoadHelpCallback callback, @NonNull View root, @NonNull Context context) {
 
     }

@@ -172,10 +172,12 @@ public class ProgressActivity extends AppCompatActivity implements ProgressContr
         List<String> result = new ArrayList<>();
         result = countPoint(mListCorrect,mListListen,0);
 
-        mSourceName = mSourceName.replace(",","");
-        mSourceName = mSourceName.replace(".","");
-        mSourceName = mSourceName.replace("!","");
-        mSourceName = mSourceName.replace("?","");
+        if (mSourceName != null) {
+            mSourceName = mSourceName.replace(",", "");
+            mSourceName = mSourceName.replace(".", "");
+            mSourceName = mSourceName.replace("!", "");
+            mSourceName = mSourceName.replace("?", "");
+        }
 
 
         mActionsListener.saveWord(result,mType,mSourceName,CONST_TIME, CONST_SAID, CONST_WRITE);

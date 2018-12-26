@@ -30,6 +30,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD_CHECK;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -161,9 +162,50 @@ public class MainPresenter implements MainContract.UserActionsListener {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(EXTRA_WORD, (Serializable) arrayList);
+                bundle.putString(EXTRA_WORD_CHECK, "0");
                 intent.putExtra(EXTRA_BUNDLE_WORD, bundle);
+
                 context.startActivity(intent);
 
+            }
+
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+
+        });
+    }
+
+    @Override
+    public void loadWordCorrect(final Context context) {
+        // The network request might be handled in a different thread so make sure Espresso knows
+        // that the app is busy until the response is handled.
+        EspressoIdlingResource.increment();
+
+        mWordsRepository.getWordsCorrect(new WordsDataSource.LoadWordCallback() {
+
+            @Override
+            public void onWordLoaded(List<Word> wordList) {
+                List<String> arrayList = new ArrayList<>();
+
+                // This callback may be called twice, once for the cache and once for loading
+                // the data from the server API, so we check before decrementing, otherwise
+                // it throws "Counter has been corrupted!" exception.
+                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                    EspressoIdlingResource.decrement(); // Set app as idle.
+                }
+                for (Word word : wordList) {
+                    arrayList.add(word.getWord());
+                }
+
+                Intent intent = new Intent(context, WordActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(EXTRA_WORD, (Serializable) arrayList);
+                bundle.putString(EXTRA_WORD_CHECK, "1");
+                intent.putExtra(EXTRA_BUNDLE_WORD, bundle);
+                context.startActivity(intent);
             }
 
 

@@ -44,7 +44,7 @@
                 android:id="@+id/multiple_actions_down"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                 app:menu_fab_label="Choose an action"
+                app:menu_fab_label="Choose an action"
                 app:fab_colorNormal="@color/color_login_button"
                 app:fab_colorPressed="@color/color_login_buttonpress"
 
@@ -64,38 +64,43 @@
 
 
             <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab_add_task"
+                    android:id="@+id/fab_no_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_help"
-                    android:scaleType="fitXY"
-                    app:fab_label="Edit an item"
+                    android:src="@mipmap/ic_no_check"
+                    android:layout_margin="15dp"
+                    android:scaleType="fitCenter"
+                    app:fab_label="@string/fab_i_do_know"
                     app:fab_size="normal"/>
 
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab_add_task_cycle_menu"
+                    android:id="@+id/fab_check"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_word"
-                    app:fab_label="Edit an item"
+                    android:src="@mipmap/ic_write"
+                    android:layout_margin="15dp"
+                    android:scaleType="fitCenter"
+                    app:fab_label="@string/fab_i_know"
                     app:fab_size="normal" />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_word"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_write"
-                    android:scaleType="fitXY"
-                    app:fab_label="Edit an item"
+                    android:src="@mipmap/ic_word"
+                    android:layout_margin="15dp"
+                    android:scaleType="fitCenter"
+                    app:fab_label="@string/fab_dictionary"
                     app:fab_size="normal"  />
 
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/buscar"
+                    android:id="@+id/fab_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_write"
-                    android:scaleType="fitXY"
-                    app:fab_label="Edit an item"
+                    android:src="@mipmap/ic_help"
+                    android:layout_margin="15dp"
+                    android:scaleType="fitCenter"
+                    app:fab_label="@string/fab_help"
                     app:fab_size="normal" />
 
             </com.github.clans.fab.FloatingActionMenu>

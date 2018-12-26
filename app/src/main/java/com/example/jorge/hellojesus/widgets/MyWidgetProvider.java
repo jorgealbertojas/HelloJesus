@@ -1,16 +1,15 @@
 package com.example.jorge.hellojesus.widgets;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.RemoteViews;
 
 import com.example.jorge.hellojesus.Injection;
@@ -18,31 +17,24 @@ import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.tipWord.TipWordActivity;
 import com.example.jorge.hellojesus.util.EspressoIdlingResource;
-import com.example.jorge.hellojesus.word.WordActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
-
 public class MyWidgetProvider extends AppWidgetProvider {
 
-    private Context mContext;
-    private AppWidgetManager mAppWidgetManager;
-    private int[] mAppWidgetIds;
+    private static Context mContext;
+    private static AppWidgetManager mAppWidgetManager;
+    private static int[] mAppWidgetIds;
 
     private static WordsRepository mWordsRepository;
 
-    RemoteViews remoteViews;
+    private static RemoteViews remoteViews;
 
-    static String word = "Jesus";
-    static List<String> arrayList;
+    private static String word = "Jesus";
+    private static List<String> arrayList;
 
     public final String WIDGET_WORD = "WIDGET_WORD";
     public final String WIDGET_OPCAO = "WIDGET_OPCAO";
@@ -50,6 +42,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
     private static final String SYNC_CLICKED1    = "automaticWidgetSyncButtonClick1";
     private static final String SYNC_CLICKED2    = "automaticWidgetSyncButtonClick2";
     private static final String SYNC_CLICKED3    = "automaticWidgetSyncButtonClick3";
+    private static final String SYNC_CLICKED4    = "automaticWidgetSyncButtonClick4";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -76,7 +69,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         // that the app is busy until the response is handled.
         EspressoIdlingResource.increment();
 
-        mWordsRepository.getWords(new WordsDataSource.LoadWordCallback() {
+        mWordsRepository.getWordsWrong(new WordsDataSource.LoadWordCallback() {
 
             @Override
             public void onWordLoaded(List<Word> wordList) {
@@ -110,39 +103,50 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
     private void putDataWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, List<Word> listWord) {
         // Get all ids
-        ComponentName thisWidget = new ComponentName(context,
-                MyWidgetProvider.class);
-        int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        if (context != null && appWidgetManager != null ) {
+            ComponentName thisWidget = new ComponentName(context,
+                    MyWidgetProvider.class);
+            int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
 
-        int x = 0;
+            int x = 0;
 
 
-        for (int widgetId : allWidgetIds) {
-            // create some random data
+            for (int widgetId : allWidgetIds) {
+                // create some random data
 
-            x = (new Random().nextInt(listWord.size() - 1));
-            word = listWord.get(x).getWord() ;
-            // Set the text
-            remoteViews.setTextViewText(R.id.update, "Words: " + (Integer.toString(listWord.size())));
+                x = (new Random().nextInt(listWord.size() - 1));
+                word = listWord.get(x).getWord();
+                // Set the text
+                remoteViews.setTextViewText(R.id.update, (Integer.toString(listWord.size())));
 
-            remoteViews.setTextViewText(R.id.empty_view, (word));
+                remoteViews.setTextViewText(R.id.empty_view, (word));
 
-            // Register an onClickListener
-            Intent intent = new Intent(context, MyWidgetProvider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+                    // Register an onClickListener
+                Intent intent = new Intent(context, MyWidgetProvider.class);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.empty_view, pendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.button_enter1, getPendingSelfIntent(context, SYNC_CLICKED1));
-            remoteViews.setOnClickPendingIntent(R.id.button_enter2, getPendingSelfIntent(context, SYNC_CLICKED1));
-            remoteViews.setOnClickPendingIntent(R.id.button_enter3, getPendingSelfIntent(context, SYNC_CLICKED1));
 
-            appWidgetManager.updateAppWidget(widgetId, remoteViews);
+                registeOnClick(context, intent, appWidgetIds);
+
+                appWidgetManager.updateAppWidget(widgetId, remoteViews);
+            }
         }
+    }
+
+
+    public void registeOnClick(Context context, Intent intent, int[] appWidgetIds){
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.empty_view, pendingIntent);
+
+        remoteViews.setOnClickPendingIntent(R.id.button_enter1, getPendingSelfIntent(context, SYNC_CLICKED1));
+        remoteViews.setOnClickPendingIntent(R.id.button_enter2, getPendingSelfIntent(context, SYNC_CLICKED2));
+        remoteViews.setOnClickPendingIntent(R.id.button_enter3, getPendingSelfIntent(context, SYNC_CLICKED3));
+        remoteViews.setOnClickPendingIntent(R.id.button_ok, getPendingSelfIntent(context, SYNC_CLICKED4));
     }
 
     @Override
@@ -154,10 +158,19 @@ public class MyWidgetProvider extends AppWidgetProvider {
             loadWord2(context,1);
         }else if (SYNC_CLICKED2.equals(intent.getAction())) {
             loadWord2(context,2);
-        }else {
-            if (SYNC_CLICKED3.equals(intent.getAction())) {
+        }else if (SYNC_CLICKED3.equals(intent.getAction())) {
                 loadWord2(context,3);
-            }
+        }else if (SYNC_CLICKED4.equals(intent.getAction())) {
+            registeOnClick(context,intent,mAppWidgetIds);
+            Word wordnew = new Word(word, "", "", "", "","");
+            mWordsRepository = Injection.provideWordsRepository(context.getApplicationContext());
+            mWordsRepository.saveWordSaid(wordnew, "1");
+            RotateAnimation rotate = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotate.setDuration(1000);
+            rotate.setInterpolator(new LinearInterpolator());
+
+            onUpdate(context,mAppWidgetManager,mAppWidgetIds);
+
         }
     }
 

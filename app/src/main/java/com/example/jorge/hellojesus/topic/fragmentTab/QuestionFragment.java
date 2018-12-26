@@ -36,6 +36,7 @@ import java.util.List;
 
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
+import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD_CHECK;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -432,6 +433,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
                    Bundle bundle = new Bundle();
                    bundle.putSerializable(EXTRA_WORD, (Serializable) stringList);
+                   bundle.putString(EXTRA_WORD_CHECK, "1");
                    intent.putExtra(EXTRA_BUNDLE_WORD, bundle);
                    v.getContext().startActivity(intent);
 

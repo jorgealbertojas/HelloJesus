@@ -110,6 +110,29 @@ public class WordsLocalDataSource implements WordsDataSource {
         mAppExecutors.diskIO().execute(runnable);
     }
 
+    @Override
+    public void getWordsCorrect(@NonNull final LoadWordCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<Word> wordList = mWordsDao.getWordCorrect();
+
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (wordList != null) {
+                            callback.onWordLoaded(wordList);
+                        } else {
+                            callback.onDataNotAvailable();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
 
     @Override
     public void getHelp(@NonNull final LoadHelpCallback callback, final View root, final Context context) {

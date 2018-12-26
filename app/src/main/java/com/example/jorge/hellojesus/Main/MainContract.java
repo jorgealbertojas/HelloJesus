@@ -29,6 +29,8 @@ public interface MainContract extends HelpContract {
 
         void loadWordWrong(@NonNull final Context context);
 
+        void loadWordCorrect(@NonNull final Context context);
+
         void loadingMain();
 
         void saveHelp(Help help);

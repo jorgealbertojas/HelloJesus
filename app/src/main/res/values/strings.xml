@@ -84,5 +84,13 @@
     <string name="menu_circle_religious_terms">Religious Terms</string>
     <string name="menu_circle_important_words">Important_words</string>
 
+    <string name="title_words_correct">I learned</string>
+    <string name="title_words_wrong">I do not know</string>
+    <string name="title_words"> words</string>
+
+    <string name="fab_i_do_know">I do not know these words</string>
+    <string name="fab_i_know">I learned these words</string>
+    <string name="fab_dictionary">Dictionary</string>
+    <string name="fab_help">I need help</string>
 
 </resources>

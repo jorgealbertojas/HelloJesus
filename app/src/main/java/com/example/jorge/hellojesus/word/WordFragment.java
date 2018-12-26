@@ -77,7 +77,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WordFragment extends Fragment implements WordContract.View {
 
     public static String EXTRA_WORD = "WORD";
+    public static String EXTRA_WORD_CHECK = "WORD_CHECK";
     public static String EXTRA_BUNDLE_WORD = "BUNDLE_WORD";
+
+    public ImageView ic_close;
 
     private static WordContract.UserActionsListener mActionsListener;
 
@@ -86,12 +89,6 @@ public class WordFragment extends Fragment implements WordContract.View {
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private static LinearLayout llcontainer;
-
-   // private TextView mTotalDown;
-   // private TextView mTotalUp;
-
-
-
 
     private RecyclerView mRecyclerView;
 
@@ -105,6 +102,8 @@ public class WordFragment extends Fragment implements WordContract.View {
     private static FloatingActionButton mFabExplanation;
     private static FloatingActionButton mFabTranslate;
 
+    private static TextView mTextValue;
+
     private static  Boolean mFabMenuOpen = false;
 
     private static LinearLayout mLinearLayout;
@@ -115,7 +114,7 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     private static Activity mActivity;
 
-
+    private static String mOpcao = "0";
 
     long pressTime = 0;
     long limit = 5000;
@@ -141,7 +140,8 @@ public class WordFragment extends Fragment implements WordContract.View {
         }
     };
 
-    public static WordFragment newInstance(List<String> stringList) {
+    public static WordFragment newInstance(List<String> stringList,String opcao) {
+        mOpcao = opcao;
         mWords = stringList;
         return new WordFragment();
     }
@@ -187,6 +187,30 @@ public class WordFragment extends Fragment implements WordContract.View {
         mFabImage = (FloatingActionButton) root.findViewById(R.id.fab_image);
         mFabExplanation = (FloatingActionButton) root.findViewById(R.id.fab_explanation);
         mFabTranslate = (FloatingActionButton) root.findViewById(R.id.fab_translate);
+
+        ic_close = (ImageView) root.findViewById(R.id.ic_close);
+        ic_close.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               getActivity().finish();
+            }
+        });
+
+        mTextValue = (TextView) root.findViewById(R.id.textValue);
+        if (mWords != null){
+            if (mWords.size() > 1) {
+                if (mOpcao.equals("1")) {
+                    mTextValue.setText(getResources().getString(R.string.title_words_correct) + " " + Integer.toString(mWords.size()) + " " + getResources().getString(R.string.title_words));
+                } else {
+                    mTextValue.setText(getResources().getString(R.string.title_words_wrong) + " " + Integer.toString(mWords.size()) + " " + getResources().getString(R.string.title_words));
+                }
+            }else{
+                if (mOpcao.equals("1")) {
+                    mTextValue.setText(getResources().getString(R.string.title_words_correct) + " " + Integer.toString(mWords.size()));
+                } else {
+                    mTextValue.setText(getResources().getString(R.string.title_words_wrong) + " " + Integer.toString(mWords.size()));
+                }
+            }
+        }
 
        // mTotalDown = (TextView) root.findViewById(R.id.tv_down);
        // mTotalUp = (TextView) root.findViewById(R.id.tv_up);
@@ -436,23 +460,31 @@ public class WordFragment extends Fragment implements WordContract.View {
                 mWord.setTypeface(null, Typeface.NORMAL);
 
                 mWordOK = (ImageView) itemView.findViewById(R.id.iv_up);
-                mWordOK.setTag("0");
+
+                if (mOpcao.equals("0")){
+                    mWordOK.setImageResource(R.drawable.ic_thumb_down_white_24dp);
+                    mWordOK.setColorFilter(mWordOK.getResources().getColor(R.color.color_login_button), PorterDuff.Mode.SRC_IN);
+
+                }else{
+                    mWordOK.setImageResource(R.drawable.ic_thumb_up_white_24dp);
+                    mWordOK.setColorFilter(mWordOK.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+                }
+
+                mWordOK.setTag(mOpcao);
                 mWordOK.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (v.getTag().equals("0")) {
-                            v.setTag("1");
+                        if (v.getTag().equals("1")) {
+                            v.setTag("0");
                             mActionsListener.saveWordSaid(mListString.get(getAdapterPosition()), "","","", "0", "");
                             RotateAnimation rotate = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                             rotate.setDuration(1000);
                             rotate.setInterpolator(new LinearInterpolator());
                             v.startAnimation(rotate);
                             ((ImageView) v).setImageResource(R.drawable.ic_thumb_down_white_24dp);
-                            ((ImageView) v).setColorFilter(v.getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
-
-
+                            ((ImageView) v).setColorFilter(v.getResources().getColor(R.color.color_login_button), PorterDuff.Mode.SRC_IN);
                         }else{
-                            v.setTag("0");
+                            v.setTag("1");
                             mActionsListener.saveWordSaid(mListString.get(getAdapterPosition()), "","","", "1", "");
                             RotateAnimation rotate = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                             rotate.setDuration(1000);
@@ -461,9 +493,9 @@ public class WordFragment extends Fragment implements WordContract.View {
                             ((ImageView) v).setImageResource(R.drawable.ic_thumb_up_white_24dp);
                             ((ImageView) v).setColorFilter(v.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
                         }
-
                     }
                 });
+
 
 
 

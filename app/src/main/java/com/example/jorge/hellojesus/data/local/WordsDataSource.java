@@ -72,7 +72,7 @@ public interface WordsDataSource {
 
     void getWordsWrong(@NonNull LoadWordCallback callback);
 
-
+    void getWordsCorrect(@NonNull LoadWordCallback callback);
 
     void getHelp(@NonNull LoadHelpCallback callback, View root, final Context context);
 

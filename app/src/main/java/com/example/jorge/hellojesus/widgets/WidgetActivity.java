@@ -12,6 +12,9 @@ import com.example.jorge.hellojesus.R;
 
 public class WidgetActivity extends AppCompatActivity {
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +34,14 @@ public class WidgetActivity extends AppCompatActivity {
         }
 
 
+
     }
 
+    @Override
+    protected void onResume() {
+        finish();
+        super.onResume();
+    }
 
     public void openBrowserImage(Context context, String word) {
         String url = "https://www.google.com.br/search?hl=pt-BR&tbm=isch&source=hp&biw=1080&bih=1765&ei=X_Z8Wu-8K4iiwgTsvqKADw&q=" + word + "&oq=" + word + "&gs_l=img.3...2937.4111.0.4927.0.0.0.0.0.0.0.0..0.0....0...1ac.1.64.img..0.0.0....0.dYQYv-zXKss";
