@@ -1,6 +1,7 @@
 package com.example.jorge.hellojesus.speech;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -9,6 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
@@ -91,8 +95,28 @@ public class SpeechActivity extends AppCompatActivity implements MessageDialogFr
     }
 
     private void showPermissionMessageDialog() {
-        MessageDialogFragment
-                .newInstance(getString(R.string.permission_message))
-                .show(getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);
+
+
+        LayoutInflater factory2 = LayoutInflater.from(this);
+        final View deleteDialogView2 = factory2.inflate(
+                R.layout.dialog_permission, null);
+        final AlertDialog deleteDialog2 = new AlertDialog.Builder(this).create();
+        deleteDialog2.setView(deleteDialogView2);
+
+        TextView nTextView2 = (TextView) deleteDialogView2.findViewById(R.id.txt_dia);
+        nTextView2.setText(getString(R.string.permission_message));
+
+        deleteDialogView2.findViewById(R.id.btn_yes).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                deleteDialog2.dismiss();
+            }
+        });
+
+        deleteDialog2.show();
+     //   MessageDialogFragment
+     //           .newInstance(getString(R.string.permission_message))
+     //           .show(getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);
     }
 }

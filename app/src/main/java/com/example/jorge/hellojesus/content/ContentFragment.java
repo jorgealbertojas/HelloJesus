@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -573,9 +574,29 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     }
 
     private void showPermissionMessageDialog() {
-        MessageDialogFragment
+
+
+        LayoutInflater factory2 = LayoutInflater.from(getActivity());
+        final View deleteDialogView2 = factory2.inflate(
+                R.layout.dialog_permission, null);
+        final AlertDialog deleteDialog2 = new AlertDialog.Builder(getActivity()).create();
+        deleteDialog2.setView(deleteDialogView2);
+
+        TextView nTextView2 = (TextView) deleteDialogView2.findViewById(R.id.txt_dia);
+        nTextView2.setText(getString(R.string.permission_message));
+
+        deleteDialogView2.findViewById(R.id.btn_yes).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                deleteDialog2.dismiss();
+            }
+        });
+
+        deleteDialog2.show();
+       /* MessageDialogFragment
                 .newInstance(getString(R.string.permission_message))
-                .show(getActivity().getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);
+                .show(getActivity().getSupportFragmentManager(), FRAGMENT_MESSAGE_DIALOG);*/
     }
 
     @Override
@@ -1107,6 +1128,19 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
                     REQUEST_RECORD_AUDIO_PERMISSION);
         }
+
+        // Start listening to voices
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.RECORD_AUDIO)) {
+            showPermissionMessageDialog();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+
+
     }
 
 
@@ -1127,6 +1161,16 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 showPermissionMessageDialog();
             }
         }else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (permissions.length == 1 && grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                showPermissionMessageDialog();
+            }
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

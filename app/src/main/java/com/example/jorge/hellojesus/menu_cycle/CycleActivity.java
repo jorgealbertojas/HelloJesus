@@ -58,6 +58,12 @@ public class CycleActivity extends AppCompatActivity {
     private ImageView view18;
     private ImageView view19;
     private ImageView view20;
+    private ImageView view21;
+    private ImageView view22;
+    private ImageView view23;
+    private ImageView view24;
+    private ImageView view25;
+
 
     private ImageView ivClose;
 
@@ -92,8 +98,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view01 = (ImageView) findViewById(R.id.bubble0_img);
-        view01.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view01.setTag("COLOR");
+        //view01.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view01.setTag("A");
         view01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +109,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view02 = (ImageView) findViewById(R.id.bubble2);
-        view02.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view02.setTag("FAMILY");
+        //view02.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view02.setTag("B");
         view02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,8 +120,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view03 = (ImageView) findViewById(R.id.bubble3);
-        view03.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view03.setTag("COLOR");
+        //view03.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view03.setTag("C");
         view03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,8 +131,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view04 = (ImageView) findViewById(R.id.bubble4);
-        view04.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view04.setTag("COLOR");
+        //view04.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view04.setTag("D");
         view04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,8 +142,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view05 = (ImageView) findViewById(R.id.bubble5);
-        view05.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view05.setTag("COLOR");
+        //view05.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view05.setTag("E");
         view05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,8 +153,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view06 = (ImageView) findViewById(R.id.bubble6);
-        view06.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view06.setTag("COLOR");
+        //view06.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view06.setTag("F");
         view06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,8 +164,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view07 = (ImageView) findViewById(R.id.bubble7);
-        view07.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view07.setTag("COLOR");
+        //view07.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view07.setTag("G");
         view07.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,8 +175,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view08 = (ImageView) findViewById(R.id.bubble8);
-        view08.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view08.setTag("COLOR");
+        //view08.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view08.setTag("H");
         view08.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,8 +186,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view09 = (ImageView) findViewById(R.id.bubble9);
-        view09.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view09.setTag("COLOR");
+        //view09.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view09.setTag("I");
         view09.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,8 +197,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view10 = (ImageView) findViewById(R.id.bubble11);
-        view10.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view10.setTag("COLOR");
+        //view10.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view10.setTag("J");
         view10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,8 +208,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view11 = (ImageView) findViewById(R.id.bubble12);
-        view11.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view11.setTag("COLOR");
+        //view11.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view11.setTag("K");
         view11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,8 +219,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view12 = (ImageView) findViewById(R.id.bubble13);
-        view12.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view12.setTag("COLOR");
+        //view12.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view12.setTag("L");
         view12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,8 +230,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view13 = (ImageView) findViewById(R.id.bubble14);
-        view13.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view13.setTag("COLOR");
+        //view13.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view13.setTag("M");
         view13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,8 +241,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view14 = (ImageView) findViewById(R.id.bubble15);
-        view14.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view14.setTag("COLOR");
+        //view14.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view14.setTag("N");
         view14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,8 +252,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view15 = (ImageView) findViewById(R.id.bubble16);
-        view15.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view15.setTag("COLOR");
+        //view15.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view15.setTag("O");
         view15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,8 +263,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view16 = (ImageView) findViewById(R.id.bubble17);
-        view16.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view16.setTag("COLOR");
+        //view16.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view16.setTag("P");
         view16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,8 +274,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view17 = (ImageView) findViewById(R.id.bubble19);
-        view17.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view17.setTag("FAMILY");
+        //view17.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view17.setTag("Q");
         view17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,8 +285,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view18 = (ImageView) findViewById(R.id.bubble20);
-        view18.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view18.setTag("COLOR");
+        //view18.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view18.setTag("R");
         view18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,8 +296,8 @@ public class CycleActivity extends AppCompatActivity {
 
 
         view19 = (ImageView) findViewById(R.id.bubble21);
-        view19.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view19.setTag("FAMILY");
+        //view19.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view19.setTag("S");
         view19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -300,9 +306,59 @@ public class CycleActivity extends AppCompatActivity {
         });
 
         view20 = (ImageView) findViewById(R.id.bubble22);
-        view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
-        view20.setTag("FAMILY");
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view20.setTag("T");
         view20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadHelloWord(v.getTag().toString(),CycleActivity.this);
+            }
+        });
+
+        view21 = (ImageView) findViewById(R.id.bubble23);
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view21.setTag("U");
+        view21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadHelloWord(v.getTag().toString(),CycleActivity.this);
+            }
+        });
+
+        view22 = (ImageView) findViewById(R.id.bubble24);
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view22.setTag("V");
+        view22.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadHelloWord(v.getTag().toString(),CycleActivity.this);
+            }
+        });
+
+        view23 = (ImageView) findViewById(R.id.bubble25);
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view23.setTag("X");
+        view24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadHelloWord(v.getTag().toString(),CycleActivity.this);
+            }
+        });
+
+        view24 = (ImageView) findViewById(R.id.bubble26);
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view24.setTag("Y");
+        view24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadHelloWord(v.getTag().toString(),CycleActivity.this);
+            }
+        });
+
+        view25 = (ImageView) findViewById(R.id.bubble27);
+        //view20.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+        view25.setTag("Z");
+        view25.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadHelloWord(v.getTag().toString(),CycleActivity.this);

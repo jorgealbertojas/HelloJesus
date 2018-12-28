@@ -83,7 +83,7 @@
                     app:fab_label="@string/fab_i_know"
                     app:fab_size="normal" />
 
-                <com.github.clans.fab.FloatingActionButton
+<!--                <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_word"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:layout_margin="15dp"
                     android:scaleType="fitCenter"
                     app:fab_label="@string/fab_dictionary"
-                    app:fab_size="normal"  />
+                    app:fab_size="normal"  />-->
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_help"

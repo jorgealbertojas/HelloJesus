@@ -32,7 +32,18 @@ public class ProgressPresenter implements ProgressContract.UserActionsListener {
     public void saveWord(List<String> stringList, String type,  String sourceName, String countTime,  String statusSaid, String statusWrite) {
 
         for (int i = 0 ; i < stringList.size(); i++){
-            Word word = new Word(stringList.get(i).toString(), type,  countTime,sourceName,  statusSaid, statusWrite);
+
+
+            String Name = stringList.get(i).toString();
+
+            if (Name != null) {
+                Name = Name.replace(",", "");
+                Name = Name.replace(".", "");
+                Name = Name.replace("!", "");
+                Name = Name.replace("?", "");
+            }
+
+            Word word = new Word(Name, type,  countTime,sourceName,  statusSaid, statusWrite);
             mWordsRepository.saveWord(word);
         }
 

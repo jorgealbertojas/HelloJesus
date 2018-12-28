@@ -1,0 +1,15 @@
+package com.example.jorge.hellojesus.util.about;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.example.jorge.hellojesus.R;
+
+public class AboutActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+    }
+}

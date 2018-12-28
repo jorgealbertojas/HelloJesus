@@ -189,6 +189,16 @@
       "key":"baskets-credit-reais-teste",
       "value":"12",
       "last":"0"
+    },
+    {
+      "key":"iv_close",
+      "value":"Sai do sistema\n\nE utilisado para sair da tela, voltando para a tela anterior",
+      "last":"0"
+    },
+    {
+      "key":"card_view",
+      "value":"Vercículo e Anúncio. \n\nUma palavra da biblia nova todo dia dia e Anúncios que terão data de inico e expiração",
+      "last":"1"
     }
   ]
 }

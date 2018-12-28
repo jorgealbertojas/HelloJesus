@@ -94,7 +94,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static FloatingActionMenu fabMenu;
 
     private static FloatingActionButton fabCheck;
-    private static FloatingActionButton fabWord;
+   // private static FloatingActionButton fabWord;
     private static FloatingActionButton fabNoCheck;
     private static FloatingActionButton fabHelp;
 
@@ -181,16 +181,16 @@ public class MainFragment extends Fragment implements MainContract.View {
             }
         });
 
-        fabWord = (FloatingActionButton) getActivity().findViewById(R.id.fab_word);
-        fabWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CycleActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-                fabMenu.close(false);
-            }
-        });
+      //  fabWord = (FloatingActionButton) getActivity().findViewById(R.id.fab_word);
+     //   fabWord.setOnClickListener(new View.OnClickListener() {
+     //       @Override
+     //       public void onClick(View v) {
+    //            Intent intent = new Intent(getActivity(), CycleActivity.class);
+    //            getActivity().startActivity(intent);
+    //            getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+   //             fabMenu.close(false);
+   //         }
+   //     });
 
         fabNoCheck = (FloatingActionButton) getActivity().findViewById(R.id.fab_no_check);
         fabNoCheck.setOnClickListener(new View.OnClickListener() {

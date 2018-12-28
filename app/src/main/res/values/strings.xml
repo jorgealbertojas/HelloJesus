@@ -3,9 +3,8 @@
 
     <!-- String Menu  -->
     <string name="main_menu">English curse</string>
-    <string name="item_home">Home</string>
-    <string name="item_word">Word</string>
-    <string name="item_setting">Setting</string>
+    <string name="item_credit">Vercículo/Anúncios</string>
+    <string name="item_about">Sobre</string>
 
     <!-- String Tab Fragment  -->
     <string name="category_bible">Bible</string>
@@ -92,5 +91,8 @@
     <string name="fab_i_know">I learned these words</string>
     <string name="fab_dictionary">Dictionary</string>
     <string name="fab_help">I need help</string>
+
+    <string name="ad_start">Iniciada em</string>
+    <string name="ad_end">Finalizado em</string>
 
 </resources>

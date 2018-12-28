@@ -99,7 +99,10 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name=".widgets.WidgetActivity"></activity>
+        <activity android:name=".widgets.WidgetActivity" />
+        <activity android:name=".util.about.AboutActivity" />
+        <activity android:name=".ad.AdActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

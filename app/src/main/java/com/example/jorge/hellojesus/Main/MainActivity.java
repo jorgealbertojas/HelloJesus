@@ -1,6 +1,7 @@
 package com.example.jorge.hellojesus.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.IdlingResource;
@@ -11,24 +12,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.local.help.Help;
-import com.example.jorge.hellojesus.helpApp.AppHelp;
-import com.example.jorge.hellojesus.helpApp.HelpPresenter;
-import com.example.jorge.hellojesus.menuActivity.MenuWordActivity;
-import com.example.jorge.hellojesus.topic.fragmentTab.QuestionFragment;
-import com.example.libjavafortest.myClass;
-import com.google.gson.Gson;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.example.jorge.hellojesus.ad.AdActivity;
+import com.example.jorge.hellojesus.util.about.AboutActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         initFragment(MainFragment.newInstance());
+
+        Intent intent =
+                new Intent(MainActivity.this, AdActivity.class);
+        startActivity(intent);
 
 /*        TopicsFragment tasksFragment =
                 (TopicsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
@@ -114,20 +107,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.list_menu_item_home:
-                                // Do nothing, we're already on that screen
+                            case R.id.list_menu_credit:
+                                Intent intent1 = new Intent(MainActivity.this, AdActivity.class);
+                                startActivity(intent1);
                                 break;
-                            case R.id.list_menu_word:
+                            case R.id.list_menu_about:
                             //    initFragment(QuestionFragment.newInstance());
-
                                 Intent intent =
-                                         new Intent(MainActivity.this, MenuWordActivity.class);
+                                         new Intent(MainActivity.this, AboutActivity.class);
                                  startActivity(intent);
-                                break;
-                            case R.id.list_menu_item_setting:
-                                // Intent intent =
-                                //         new Intent(TasksActivity.this, StatisticsActivity.class);
-                                // startActivity(intent);
                                 break;
                             default:
                                 break;

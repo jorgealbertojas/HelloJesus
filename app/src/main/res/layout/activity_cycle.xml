@@ -68,26 +68,11 @@
             android:tag="0"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/ic_color"
+            android:src="@mipmap/ic_letter_a"
             android:background="@drawable/duplicates_notif"
             android:layout_weight="25"
 />
     </RelativeLayout>
-    <TextView
-        android:id="@+id/bubble0_label"
-        android:tag="0"
-        android:text="@string/menu_circle_color"
-        android:layout_width="65dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bubble0"
-        android:layout_alignLeft="@+id/bubble0"
-        android:layout_marginLeft="-10dp"
-        android:textSize="11sp"
-            android:layout_marginTop="3dp"
-        android:textColor="@color/colorPrimary"
-        android:maxLines="2"
-        android:gravity="center"
-        android:alpha="1" />
 
     <ImageView
         android:id="@+id/bubble19"
@@ -95,27 +80,11 @@
         android:layout_below="@+id/linearLayout2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_family"
+        android:src="@mipmap/ic_letter_b"
         android:background="@drawable/duplicates_notif"
         android:layout_alignRight="@+id/vertical_line"
         android:layout_marginTop="30dp"
         android:layout_marginRight="15dp"/>
-
-    <TextView
-        android:text="@string/menu_circle_family"
-        android:tag="0"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bubble19"
-        android:layout_alignLeft="@+id/bubble19"
-        android:textSize="11sp"
-
-        android:layout_marginLeft="-10dp"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="3dp"
-        android:maxLines="2"
-        android:gravity="center"
-        android:id="@+id/bubble19_label" />
 
 
     <ImageView
@@ -123,156 +92,64 @@
         android:tag="streetstyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_drink"
+        android:src="@mipmap/ic_letter_c"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble19"
         android:layout_toRightOf="@+id/bubble19"
         android:layout_marginLeft="15dp" />
-
-    <TextView
-        android:id="@+id/bubble2_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble2"
-        android:layout_below="@+id/bubble2"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:lineSpacingExtra="-2dp"
-        android:maxLines="2"
-        android:tag="Drinks"
-        android:text="@string/menu_circle_drinks"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble3"
         android:tag=""
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_fruit"
+        android:src="@mipmap/ic_letter_d"
         android:background="@drawable/duplicates_notif"
         android:layout_toRightOf="@+id/bubble2"
         android:layout_alignTop="@+id/bubble2"
         android:layout_marginLeft="30dp" />
-
-    <TextView
-        android:id="@+id/bubble3_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble3"
-        android:layout_below="@+id/bubble3"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:lineSpacingExtra="-3dp"
-        android:maxLines="2"
-        android:tag="food-and-drink"
-        android:text="@string/menu_circle_fruit"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble4"
         android:tag="catwalk"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_body"
+        android:src="@mipmap/ic_letter_e"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble0"
         android:clickable="true"
         android:layout_alignLeft="@+id/bubble0"
         android:layout_marginTop="35dp" />
 
-    <TextView
-        android:id="@+id/bubble4_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble4"
-        android:layout_below="@+id/bubble4"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="catwalk"
-        android:text="@string/menu_circle_body_parts"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
-
     <ImageView
         android:id="@+id/bubble5"
         android:tag="tutorials"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_profession"
+        android:src="@mipmap/ic_letter_f"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble4"
         android:layout_alignRight="@+id/bubble19" />
-
-    <TextView
-        android:id="@+id/bubble5_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble5"
-        android:layout_below="@+id/bubble5"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="tutorials"
-        android:text="@string/menu_circle_occupations"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble6"
         android:tag="trends"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_car"
+        android:src="@mipmap/ic_letter_g"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble5"
         android:layout_alignLeft="@+id/bubble2" />
-
-    <TextView
-        android:id="@+id/bubble6_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble6"
-        android:layout_below="@+id/bubble6"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="trends"
-        android:text="@string/menu_circle_transports"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble7"
         android:tag="video"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_mobile"
+        android:src="@mipmap/ic_letter_h"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble6"
         android:layout_alignLeft="@+id/bubble3" />
-
-    <TextView
-        android:id="@+id/bubble7_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble7"
-        android:layout_below="@+id/bubble7"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="video"
-        android:text="@string/menu_circle_mobile"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble8"
@@ -280,304 +157,175 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/duplicates_notif"
-        android:src="@mipmap/ic_pet"
+        android:src="@mipmap/ic_letter_i"
         android:layout_below="@+id/bubble4"
         android:layout_alignRight="@+id/bubble4"
         android:layout_marginTop="35dp" />
 
-    <TextView
-        android:id="@+id/bubble8_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble8"
-        android:layout_below="@+id/bubble8"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="beauty"
-        android:text="@string/menu_circle_wild_animals"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble9"
         android:tag="lookbook"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_sports"
+        android:src="@mipmap/ic_letter_j"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble8"
         android:layout_alignRight="@+id/bubble5" />
-
-    <TextView
-        android:id="@+id/bubble9_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble9"
-        android:layout_below="@+id/bubble9"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="lookbook"
-        android:text="@string/menu_circle_sports"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
-
-
 
     <ImageView
         android:id="@+id/bubble17"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_vegetables"
+        android:src="@mipmap/ic_letter_k"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble9"
         android:layout_alignLeft="@+id/bubble6" />
-
-    <TextView
-        android:id="@+id/bubble17_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble17"
-        android:layout_below="@+id/bubble17"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="inspiration"
-        android:text="@string/menu_circle_vegetables"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
-
-
-
 
     <ImageView
         android:id="@+id/bubble11"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_places"
+        android:src="@mipmap/ic_letter_l"
         android:background="@drawable/duplicates_notif"
         android:layout_alignLeft="@+id/bubble7"
         android:layout_alignTop="@+id/bubble17" />
 
-    <TextView
-        android:id="@+id/bubble11_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble11"
-        android:layout_below="@+id/bubble11"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="0"
-        android:text="@string/menu_circle_places"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble12"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_rooms_of_the_house"
+        android:src="@mipmap/ic_letter_m"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble8"
         android:layout_alignLeft="@+id/bubble8"
         android:layout_marginTop="35dp" />
 
-    <TextView
-        android:id="@+id/bubble12_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble12"
-        android:layout_below="@+id/bubble12"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="0"
-        android:text="@string/menu_circle_rooms_of_the_house"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble13"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_nationality"
+        android:src="@mipmap/ic_letter_n"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble9" />
 
-    <TextView
-        android:id="@+id/bubble13_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble13"
-        android:layout_below="@+id/bubble13"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="0"
-        android:text="@string/menu_circle_nationality"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble14"
         android:tag="interior-design"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_clothes"
+        android:src="@mipmap/ic_letter_o"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble17" />
 
-    <TextView
-        android:id="@+id/bubble14_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble14"
-        android:layout_below="@+id/bubble14"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:lineSpacingExtra="-3dp"
-        android:maxLines="2"
-        android:tag="interior-design"
-        android:text="@string/menu_circle_clothes"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble15"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_diseases"
+        android:src="@mipmap/ic_letter_p"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble14"
         android:layout_alignLeft="@+id/bubble11" />
 
-    <TextView
-        android:id="@+id/bubble15_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble15"
-        android:layout_below="@+id/bubble15"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="0"
-        android:text="@string/menu_circle_diseases"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble16"
         android:tag="travel"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_religious_terms"
+        android:src="@mipmap/ic_letter_q"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble12"
         android:layout_marginTop="35dp" />
 
-    <TextView
-        android:id="@+id/bubble16_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble16"
-        android:layout_below="@+id/bubble16"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="travel"
-        android:text="@string/menu_circle_religious_terms"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
 
     <ImageView
         android:id="@+id/bubble20"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_musical_instruments"
+        android:src="@mipmap/ic_letter_r"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble13" />
 
-    <TextView
-        android:id="@+id/bubble20_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble20"
-        android:layout_below="@+id/bubble20"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:tag="0"
-        android:text="@string/menu_circle_musical_instruments"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble21"
         android:tag="interior-design"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_numbers"
+        android:src="@mipmap/ic_letter_s"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble6" />
 
-    <TextView
-        android:id="@+id/bubble21_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble21"
-        android:layout_below="@+id/bubble21"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:lineSpacingExtra="-3dp"
-        android:maxLines="2"
-        android:tag="interior-design"
-        android:text="@string/menu_circle_numbers"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
     <ImageView
         android:id="@+id/bubble22"
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_important_words"
+        android:src="@mipmap/ic_letter_t"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble11" />
 
-    <TextView
-        android:id="@+id/bubble22_label"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bubble22"
-        android:layout_below="@+id/bubble22"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:maxLines="2"
+    <ImageView
+        android:id="@+id/bubble23"
+        android:tag="travel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_letter_u"
+        android:background="@drawable/duplicates_notif"
+        android:layout_below="@+id/bubble16"
+        android:layout_alignLeft="@+id/bubble16"
+        android:layout_marginTop="35dp" />
+
+    <ImageView
+        android:id="@+id/bubble24"
         android:tag="0"
-        android:text="@string/menu_circle_important_words"
-        android:textColor="@color/colorPrimary"
-        android:textSize="11sp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_letter_v"
+        android:background="@drawable/duplicates_notif"
+        android:layout_alignTop="@+id/bubble23"
+        android:layout_alignLeft="@+id/bubble13" />
 
+    <ImageView
+        android:id="@+id/bubble25"
+        android:tag="interior-design"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_letter_w"
+        android:background="@drawable/duplicates_notif"
+        android:layout_alignTop="@+id/bubble23"
+        android:layout_alignLeft="@+id/bubble6" />
 
+    <ImageView
+        android:id="@+id/bubble26"
+        android:tag="0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_letter_y"
+        android:background="@drawable/duplicates_notif"
+        android:layout_alignTop="@+id/bubble23"
+        android:layout_alignLeft="@+id/bubble11" />
 
+    <ImageView
+        android:id="@+id/bubble27"
+        android:tag="travel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_letter_z"
+        android:background="@drawable/duplicates_notif"
+        android:layout_below="@+id/bubble23"
+        android:layout_alignLeft="@+id/bubble23"
+        android:layout_marginTop="35dp" />
 
 </RelativeLayout>

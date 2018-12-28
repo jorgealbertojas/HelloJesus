@@ -3,16 +3,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/list_menu_item_home"
-        android:icon="@drawable/ic_home_white_24dp"
-        android:title="@string/item_home" />
+        android:id="@+id/list_menu_credit"
+        android:icon="@mipmap/ic_credit"
+        android:title="@string/item_credit" />
     <item
-        android:id="@+id/list_menu_word"
-        android:icon="@drawable/ic_check_white_24dp"
-        android:title="@string/item_word" />
-    <item
-        android:id="@+id/list_menu_item_setting"
-        android:icon="@drawable/ic_settings_white_24dp"
-        android:title="@string/item_setting" />
+        android:id="@+id/list_menu_about"
+        android:icon="@mipmap/ic_info"
+        android:title="@string/item_about" />
+
 
 </menu>
