@@ -226,6 +226,7 @@ public class MainPresenter implements MainContract.UserActionsListener {
             @Override
             public void onHelpLoaded(List<Help> helpList, View root, Context context) {
                 List<String> stringList = new ArrayList<String>();
+                List<String> stringListTemp = new ArrayList<String>();
                 List<Integer> stringListX = new ArrayList<Integer>();
                 List<Integer> stringListY = new ArrayList<Integer>();
                 List<String> stringListTOP= new ArrayList<String>();
@@ -244,19 +245,32 @@ public class MainPresenter implements MainContract.UserActionsListener {
                     valueID = Common.getResourceString(help.getMkey());
                     if (valueID != 0) {
                         View vievHelp2 = (View) root.findViewById(valueID);
+
+                        if (vievHelp2  == null){
+                            vievHelp2 = (View) root.getRootView().findViewById(valueID);
+                        }
+
+
+
+
                         if ((vievHelp2  != null) && (!stringList.contains(help.getMkey()))) {
                             vievHelp2.getLocationOnScreen(locationInScreen);
                             stringList.add(help.getMkey());
+                            stringListTemp.add(help.getMvalue());
                             stringListTOP.add(help.getMlast());
                             stringListX.add(locationInScreen[0]);
-                            stringListY.add(locationInScreen[1] - (vievHelp2.getHeight() / 2));
+                            int temp = locationInScreen[1] - (vievHelp2.getHeight() / 2);
+                            if (temp < 0){
+                                temp = temp * (-1);
+                            }
+                            stringListY.add(temp);
                         }
                     }
                     i++;
                 }
 
                 Intent intent = new Intent(context, HelpAppActivity.class);
-                intent.putExtra("HELP_ID", (Serializable) stringList);
+                intent.putExtra("HELP_ID", (Serializable) stringListTemp);
                 intent.putExtra("HELP_X", (Serializable) stringListX);
                 intent.putExtra("HELP_Y", (Serializable) stringListY);
                 intent.putExtra("HELP_TOP", (Serializable) stringListTOP);
