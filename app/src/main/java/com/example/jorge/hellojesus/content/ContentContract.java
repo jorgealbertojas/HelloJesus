@@ -28,7 +28,7 @@ public interface ContentContract {
 
             void showContent(List<Content> contents);
 
-            void showProgress(android.view.View root);
+            void showProgress(android.view.View root, int newPosition);
 
             void showAnimation();
 

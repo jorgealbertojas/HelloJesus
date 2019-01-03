@@ -27,26 +27,13 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingTop="4dp">
-        <ImageView
-            android:id="@+id/fab_back30"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="@dimen/fab_margin_content"
-            android:src="@drawable/ic_replay_white_24dp" />
-
-        <ImageView
-            android:id="@+id/fab_back5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="@dimen/fab_margin_content"
-            android:src="@drawable/ic_replay_30_white_24dp" />
 
         <ImageView
             android:id="@+id/fab_back"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="@dimen/fab_margin_content"
-            android:src="@drawable/ic_replay_5_white_24dp" />
+            android:src="@mipmap/ic_back_step" />
 
 
         <ImageButton
@@ -58,11 +45,11 @@
             style="@style/ExoMediaButton.Pause" />
 
         <ImageView
-            android:id="@+id/fab_next30"
+            android:id="@+id/fab_next"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="@dimen/fab_margin_content"
-            android:src="@drawable/ic_forward_30_white_24dp" />
+            android:src="@mipmap/ic_next_step" />
 
     </LinearLayout>
 

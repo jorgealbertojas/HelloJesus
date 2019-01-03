@@ -103,32 +103,34 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
     private void putDataWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, List<Word> listWord) {
         // Get all ids
-        if (context != null && appWidgetManager != null ) {
-            ComponentName thisWidget = new ComponentName(context,
-                    MyWidgetProvider.class);
-            int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        if (listWord.size() != 0) {
+            if (context != null && appWidgetManager != null) {
+                ComponentName thisWidget = new ComponentName(context,
+                        MyWidgetProvider.class);
+                int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
 
-            int x = 0;
+                int x = 0;
 
 
-            for (int widgetId : allWidgetIds) {
-                // create some random data
+                for (int widgetId : allWidgetIds) {
+                    // create some random data
 
-                x = (new Random().nextInt(listWord.size() - 1));
-                word = listWord.get(x).getWord();
-                // Set the text
-                remoteViews.setTextViewText(R.id.update, (Integer.toString(listWord.size())));
+                    x = (new Random().nextInt(listWord.size() - 1));
+                    word = listWord.get(x).getWord();
+                    // Set the text
+                    remoteViews.setTextViewText(R.id.update, (Integer.toString(listWord.size())));
 
-                remoteViews.setTextViewText(R.id.empty_view, (word));
+                    remoteViews.setTextViewText(R.id.empty_view, (word));
 
                     // Register an onClickListener
-                Intent intent = new Intent(context, MyWidgetProvider.class);
+                    Intent intent = new Intent(context, MyWidgetProvider.class);
 
 
-                registeOnClick(context, intent, appWidgetIds);
+                    registeOnClick(context, intent, appWidgetIds);
 
-                appWidgetManager.updateAppWidget(widgetId, remoteViews);
+                    appWidgetManager.updateAppWidget(widgetId, remoteViews);
+                }
             }
         }
     }

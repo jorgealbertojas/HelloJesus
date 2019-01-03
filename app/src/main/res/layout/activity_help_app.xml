@@ -19,13 +19,13 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="250dp">
 
             <TextView
                 android:id="@+id/text_explanation"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:text=" Título: Informação de Titulo \n\n T Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos Confira o histórico das suas recargas e acompanhe seu consumo de créditos"
+                android:layout_height="400dp"
+                android:text="Clicar no botão ajuda \n\n Você pode clicar no boão de ajuda para saber explicação sobre a funcionalidade \n\n UMA DICA PRECISOSA \n\n Caso queira tem contato toda vez com as palavras que você errou, você pode configurar o WIDGET na area de trabalho do seu aparelho. para saber mais: https://blog.meuquantum.com.br/aprenda-o-que-sao-e-como-usar-widgets-no-android/   "
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text1_list_size" />

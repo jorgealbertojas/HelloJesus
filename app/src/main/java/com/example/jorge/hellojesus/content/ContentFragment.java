@@ -45,6 +45,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -151,7 +152,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private static Button mWord;
 
-    private StoriesProgressView storiesProgressView;
+    private static StoriesProgressView storiesProgressView;
 
 
     private int counter = 0;
@@ -187,6 +188,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
 
     private static String mShowTranslate;
+
+    private ImageView fabNext;
+    private ImageView fabBack;
 
 
     public ContentFragment() {
@@ -276,7 +280,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadingContent(mContents, second);
+        mPresenter.loadingContent(mContents, mTime);
     }
 
 
@@ -329,7 +333,23 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         });
 
 
+        fabNext = root.findViewById(R.id.fab_next);
+        fabNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                onNextStep();
+            }
+        });
+
+        fabBack = root.findViewById(R.id.fab_back);
+        fabBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onPriorStep();
+            }
+        });
 
 
        // mPresenter.HideFabButton(mFloatingActionButton, mHideFab);
@@ -346,7 +366,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             @Override
             public void onRefresh() {
 
-                mPresenter.loadingContent(mContents,second);
+                mPresenter.loadingContent(mContents,mTime);
             }
         });
 
@@ -407,12 +427,88 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             mPresenter.loadingContent(mContents, mTime);
 
             showAnimation();
-            showProgress(root);
+            showProgress(root,mPosition);
         }
 
 
         return root;
     }
+
+
+    public void onPriorStep() {
+        mProgressBar.clearAnimation();
+        mPosition --;
+
+        storiesProgressView.pause();
+        storiesProgressView.bindViews();
+
+        mValueStart.setText(Integer.toString(mPosition +1));
+        mRecyclerView.scrollToPosition(mPosition);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mRecyclerView.setFocusable(true);
+        onPlayerStateChangedDuration(true);
+        showAnimation();
+        showProgress(root, mPosition);
+
+        mFabMenuOpen = true;
+        toggleFabMenu();
+
+
+    }
+
+    public void onNextStep() {
+        mProgressBar.clearAnimation();
+        mPosition ++;
+
+        storiesProgressView.pause();
+        storiesProgressView.bindViews();
+
+        mValueStart.setText(Integer.toString(mPosition +1));
+        mRecyclerView.scrollToPosition(mPosition);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mRecyclerView.setFocusable(true);
+        onPlayerStateChangedDuration(true);
+        showAnimation();
+        showProgress(root, mPosition);
+
+        mFabMenuOpen = true;
+        toggleFabMenu();
+
+
+    }
+
+    public void onPlayerStateChangedDuration(boolean playWhenReady) {
+        mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+        if (mPosition == 0) {
+            mExoPlayerAudio.seekTo(0);
+        } else if (mPosition == durations.length) {
+            //mExoPlayerAudio.seekTo(mListAdapter.getItem(mPosition).getTime() * 100, mPosition - 1);
+        } else {
+            mExoPlayerAudio.seekTo(getSumList(durations, mPosition-1));
+        }
+
+       // if (!playWhenReady) {
+       //     mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+        //} else {
+        mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+
+       // }
+    }
+
+    private long getSumList(long[] durations, int position){
+        int i = 0;
+        long sum = 0;
+        while (i <= position){
+            if (i < durations.length ) {
+                sum = sum + durations[i];
+            }else{
+                sum = mTime * 100;
+            }
+            i++;
+        }
+        return sum;
+    }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static void toggleFabMenu() {
@@ -605,9 +701,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     }
 
     @Override
-    public void showProgress(View root) {
+    public void showProgress(View root, int newPosition) {
         storiesProgressView = (StoriesProgressView) root.findViewById(R.id.stories);
         storiesProgressView.setStoriesCount(PROGRESS_COUNT);
+        storiesProgressView.setCurrent(newPosition);
         storiesProgressView.setStoriesCountWithDurations(durations);
         storiesProgressView.animate().translationX(20);
         storiesProgressView.setStoriesListener(this);
@@ -616,10 +713,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     @Override
     public void showAnimation() {
-        mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
-        mAnimation.setDuration (durations[mPosition]); //in milliseconds
-        mAnimation.setInterpolator (new DecelerateInterpolator());
-        mAnimation.start();
+        if (mPosition < durations.length){
+            mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
+            mAnimation.setDuration (durations[mPosition]); //in milliseconds
+            mAnimation.setInterpolator (new DecelerateInterpolator());
+            mAnimation.start();
+        }else{
+            storiesProgressView.pause();
+        }
 
 
     }
@@ -1270,7 +1371,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                         }
 
                         showAnimation();
-                        showProgress(root);
+                        showProgress(root,mPosition);
                     }
 
                 } else {

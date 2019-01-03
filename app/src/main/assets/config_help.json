@@ -2,192 +2,47 @@
   "config": [
     {
       "key":"iv_image_list",
-      "value":"Esse botapoe e para escolher novos resultados",
+      "value":"Inicar aula\n\n Ao clicar nesta imagem ou Card vai abrir 4 etapas, para mudar de Etapa, basta arrasta(swipe) para o lado e clicar na opção \n Depois de concluída as 4 Etapas desta aula a imagem ficará vermelha",
       "last":"0"
     },
     {
       "key":"tv_main_description",
-      "value":"Recarga",
-      "last":"0"
-    },
-    {
-      "key":"description_recarga",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
+      "value":"Descrição do conteúdo\n\n Um resumo de tudo que verá nesta aula, que são dividida nestas 4 Etapas abaixo:",
       "last":"0"
     },
     {
       "key":"tv_main_time",
-      "value":"12",
+      "value":"Tempo médio\n\n Tempo médio que dura toda a aula",
       "last":"0"
     },
     {
       "key":"imageView",
-      "value":"Franquia",
+      "value":"Ouvir e Ler a biblía\n\n Nesta 1º Etapa você vai OUVIR e LER. \n Você poderá apertar em PLAY, PAUSE, PROXIMO e ANTERIOR\n Você também pode clicar em qualquer palavra, depois clicar no botão azul de (+), para abrir três opções ver IMAGENS, EXPLICAÇÂO EM INGLÊS ou TRADUÇÃO\n Depois de concluída essa lição a imagem ficará vermelha",
       "last":"0"
     },
     {
       "key":"imageView2",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
+      "value":"Ouvir e Ler um louvor\n\n Nesta 2º Etapa você vai OUVIR e LER. \n Você poderá apertar em PLAY, PAUSE, PROXIMO e ANTERIOR\n Você também pode clicar em qualquer palavra, depois clicar no botão azul de (+), para abrir três opções ver IMAGENS, EXPLICAÇÂO EM INGLÊS ou TRADUÇÃO\n Depois de concluída essa lição a imagem ficará vermelha",
       "last":"0"
     },
     {
       "key":"imageView3",
-      "value":"10",
+      "value":"Escrever um louvor\n\n Nesta 3º Etapa você vai ESCREVER. \n Não é necessario acertar tudo para passar para próxima, pode deixar em branco e avançar, lembre-se o mais importnate e você melhorar a cada dia, mesmo que não acerte nada ou deixe em barnco, você vai ter contato com esse louvor novamente\n Depois de concluída essa lição a imagem ficará vermelha\n No final você verá um resultado de quantas palavras você acertou e quantas você errou. As que você acerou poderá tem contato novamente quando quiser, basta acessar o botão (A) acima da Ajuda(?). um contêm os erros e o outro o que você já marcou como aprendeu!",
       "last":"0"
     },
     {
       "key":"imageView4",
-      "value":"Franquia de Voz",
+      "value":"Cantar um louvor\n\n Nesta 4º Etapa você vai CANTAR. \n Não é necessario acertar tudo para passar para próxima, tente cantar mesmo que errado, lembre-se o mais importnate e você melhorar a cada dia, mesmo que não acerte nada, você vai ter contato com esse louvor novamente\n Depois de concluída essa lição a imagem ficará vermelha \n No final você verá um resultado de quantas palavras você acertou e quantas você errou. As que você acerou poderá tem contato novamente quando quiser, basta acessar o botão (A) acima da Ajuda(?). um contêm os erros e o outro o que você já marcou como aprendeu!",
       "last":"1"
     },
     {
       "key":"tv_main_name",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
+      "value":"Aula\n\n A aula tem varias etapas. \n Clique em qualquer lugar do Card(retângulo) para iniciar a aula, Vai abrir 4 etapas, para mudar de Etapa, basta arrasta(swipe) para o lado e clicar na opção desejada",
       "last":"0"
     },
     {
       "key":"text_explanation",
       "value":"1",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_ligações:tim",
-      "value":"Ligações – TIM",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_ligações:tim",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_ligações:outrasoperadoras(br)",
-      "value":"2",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_ligações:outrasoperadoras(br)",
-      "value":"Ligações - Outras operadoras (BR)",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_ligações:outrasoperadoras(br)",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_ligações:tim+outrasoperadoras(br)",
-      "value":"3",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_ligações:tim+outrasoperadoras(br)",
-      "value":"Ligações - TIM+Outras operadoras (BR)",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_ligações:tim+outrasoperadoras(br)",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_torpedos:tim+outras operadoras (br)",
-      "value":"4",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_torpedos:tim+outras operadoras (br)",
-      "value":"Torpedos – TIM-Outras operadoras (BR)",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_torpedos:tim+outras operadoras (br)",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_internet e torpedos:tim+outras operadoras (br)",
-      "value":"5",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_internet e torpedos:tim+outras operadoras (br)",
-      "value":"Internet e Torpedos – Tim-Outras operadoras (BR)",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_internet e torpedos:tim+outras operadoras (br)",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_uso livre:tim-tim/internet/torpedos",
-      "value":"6",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_uso livre:tim-tim/internet/torpedos",
-      "value":"Uso Livre – TIM-TIM/Internet/Torpedos",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_uso livre:tim-tim/internet/torpedos",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_uso livre:lig.(br)/torpedos(br)/internet",
-      "value":"7",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_uso livre:lig.(br)/torpedos(br)/internet",
-      "value":"Uso Livre – Lig.(BR)/Torpedos (BR)/Internet",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_uso livre:lig.(br)/torpedos(br)/internet",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_promocional_internet",
-      "value":"8",
-      "last":"0"
-    },
-    {
-      "key":"title_promocional_internet",
-      "value":"Internet",
-      "last":"0"
-    },
-    {
-      "key":"description_promocional_internet",
-      "value":"Confira o histórico das suas recargas e acompanhe seu consumo de créditos",
-      "last":"0"
-    },
-    {
-      "key":"code_ressarcimento_ressarcimento",
-      "value":"9",
-      "last":"0"
-    },
-    {
-      "key":"title_ressarcimento_ressarcimento",
-      "value":"Ressarcimento",
-      "last":"0"
-    },
-    {
-      "key":"baskets-credit",
-      "value":"13",
-      "last":"0"
-    },
-    {
-      "key":"baskets-credit-reais",
-      "value":"12",
-      "last":"0"
-    },
-    {
-      "key":"baskets-credit-reais-teste",
-      "value":"12",
       "last":"0"
     },
     {
