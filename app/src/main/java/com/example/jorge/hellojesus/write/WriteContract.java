@@ -1,14 +1,11 @@
 package com.example.jorge.hellojesus.write;
 
-import android.animation.ObjectAnimator;
 import android.net.Uri;
 
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import java.util.List;
-
-import jp.shts.android.storiesprogressview.StoriesProgressView;
 
 /**
  * Created by jorge on 06/04/2018.

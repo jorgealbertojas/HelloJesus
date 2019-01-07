@@ -52,10 +52,12 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
 
 
     @Override
-    public void loadingTopic() {
+    public void loadingTopic(final List<Integer> lisTopic) {
         mTopicServiceApi.getTopics(new TopicServiceApi.TopicServiceCallback<ListTopic<Topic>>(){
             @Override
             public void onLoaded(ListTopic listTopic) {
+
+
 
                 List<Topic>  topicListBible = new ArrayList<>();
                 List<Topic>  topicListMusic = new ArrayList<>();
@@ -64,7 +66,17 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
                 List<Topic>  topicListExercise = new ArrayList<>();
 
                 if (listTopic != null){
-                    List<Topic>  topicList = (List<Topic>) listTopic.items;
+                    List<Topic>  topicListtemp = (List<Topic>) listTopic.items;
+                    List<Topic>  topicList = new ArrayList<Topic>();
+
+                    for (int i = 0; i < topicListtemp.size(); i++){
+                        if (haveIdinThisTopic( topicListtemp.get(i).getId(), lisTopic)){
+                            topicList.add(topicListtemp.get(i));
+                        }
+                    }
+
+
+
                     for (int i = 0 ; i < topicList.size(); i++){
                         if (topicList.get(i).getType().equals("bible")){
                             topicListBible.add(topicList.get(i));
@@ -93,6 +105,19 @@ public class TopicPresenter  implements TopicContract.UserActionsListener {
                 mTopicContractView.showTopicExercise(topicListExercise);
             }
         });
+    }
+
+    private boolean haveIdinThisTopic(int id, List<Integer> lisTopic) {
+        int i = 0;
+        while (i < lisTopic.size()){
+            if (id == lisTopic.get(i)){
+                return true;
+            }
+            i++;
+        }
+        return false;
+
+
     }
 
     @Override

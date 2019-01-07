@@ -21,7 +21,7 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Créditos:\n\n Os audios e a letras da biblia foram tirados do Bible.is site: http://www.bible.is/dashboard \n\n A tradução das musicas Vagalume site: https://www.vagalume.com.br/ \n\n As músicas de Cantores: Lauren daigle, Kari Jobe, Hillsong entre outros \n\n Sugestões: Envie sugestões, caso seja aprovado essas melhorias, parte do seu login será divulgado nem uma sessão do aplicativo como uma homenagem!"
+        android:text="Créditos:\n\n Os audios e a letras da biblia foram tirados do Bible.is site: http://www.bible.is/dashboard \n\n A tradução das musicas Vagalume site: https://www.vagalume.com.br/ \n\n As músicas de Cantores: Lauren daigle, Kari Jobe, Hillsong entre outros \n\n Sugestões: Envie sugestões, caso seja aprovado essas melhorias, parte do seu login será divulgado nem uma sessão do aplicativo como uma homenagem! \n\n Desenvolvedor: jorgealbertojas@gmail.com"
         android:textColor="@color/white"
         android:textSize="14dp"
         android:padding="20dp"

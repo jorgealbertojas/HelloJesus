@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_BUNDLE_MAIN;
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_MAIN;
 import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -82,13 +84,16 @@ public class BibleFragment extends Fragment implements TopicContract.View {
         mListAdapter = new BibleFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mContext =  getContext();
         mNameTitle = getActivity().getIntent().getStringExtra(EXTRA_STRING_TITLE);
+
+        Bundle mBundle = getActivity().getIntent().getBundleExtra(EXTRA_BUNDLE_MAIN);
+        mIdTopics = (List<Integer>) mBundle.getSerializable(EXTRA_MAIN);
         mActionsListener = new TopicPresenter( new TopicServiceImpl(), this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mActionsListener.loadingTopic();
+        mActionsListener.loadingTopic(mIdTopics);
     }
 
 
@@ -110,7 +115,7 @@ public class BibleFragment extends Fragment implements TopicContract.View {
             @Override
             public void onRefresh() {
 
-                mActionsListener.loadingTopic();
+                mActionsListener.loadingTopic(mIdTopics);
             }
         });
 

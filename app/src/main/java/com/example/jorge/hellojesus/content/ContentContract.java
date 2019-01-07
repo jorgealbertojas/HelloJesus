@@ -14,8 +14,6 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.util.List;
 
-import jp.shts.android.storiesprogressview.StoriesProgressView;
-
 /**
  * Created by jorge on 27/02/2018.
  * Contract for support View amd Listener User of the Content
@@ -27,8 +25,6 @@ public interface ContentContract {
 
 
             void showContent(List<Content> contents);
-
-            void showProgress(android.view.View root, int newPosition);
 
             void showAnimation();
 
@@ -61,9 +57,9 @@ public interface ContentContract {
             // Play audio
             void initAudio();
 
-            void playAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator objectAnimator, StoriesProgressView storiesProgressView);
+            void playAudio(SimpleExoPlayer ExoPlayerAudio);
 
-            void pauseAudio(SimpleExoPlayer ExoPlayerAudio, ObjectAnimator objectAnimator, StoriesProgressView storiesProgressView);
+            void pauseAudio(SimpleExoPlayer ExoPlayerAudio);
 
             void ShowControllerAudio(SimpleExoPlayerView simpleExoPlayerView);
 

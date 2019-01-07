@@ -31,12 +31,15 @@ import com.example.jorge.hellojesus.main.MainActivity;
 
 
 import com.example.jorge.hellojesus.splash.SplashActivity;
+import com.example.jorge.hellojesus.util.createJson;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import android.support.annotation.NonNull;
+
+import java.io.IOException;
 
 import static com.example.jorge.hellojesus.util.download.Utility.TAG_LOGIN_FIREBASE;
 
@@ -70,6 +73,13 @@ public class LoginActivity extends AppCompatActivity
 
         // Login with FireBase
         mAuth = FirebaseAuth.getInstance();
+
+        createJson CrunchifyJSONFileWrite = new createJson();
+           try {
+                CrunchifyJSONFileWrite.main(this);
+           } catch (IOException e) {
+                e.printStackTrace();
+          }
 
 
         dm = getResources().getDisplayMetrics();

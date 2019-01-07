@@ -1,8 +1,6 @@
 package com.example.jorge.hellojesus.word;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -11,13 +9,10 @@ import android.widget.TextView;
 import com.example.jorge.hellojesus.BasePresenter;
 import com.example.jorge.hellojesus.BaseView;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.main.MainContract;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.util.List;
 
-import jp.shts.android.storiesprogressview.StoriesProgressView;
+
 
 /**
  * Created by jorge on 21/04/2018.

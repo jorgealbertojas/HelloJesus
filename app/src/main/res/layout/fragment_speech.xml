@@ -42,14 +42,6 @@
 
 
 
-                        <jp.shts.android.storiesprogressview.StoriesProgressView
-                            android:id="@+id/stories"
-                            android:layout_width="50dp"
-                            android:layout_height="1dp"
-                            android:layout_centerInParent="true">
-
-                        </jp.shts.android.storiesprogressview.StoriesProgressView>
-
 
                         <include
                             android:id="@+id/include_result"

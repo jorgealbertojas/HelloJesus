@@ -378,10 +378,10 @@ public class MainFragment extends Fragment implements MainContract.View {
                 mImage3 = (ImageView) itemView.findViewById(R.id.imageView3);
                 mImage4 = (ImageView) itemView.findViewById(R.id.imageView4);
 
-                titleBible = (TextView) itemView.findViewById(R.id.tv_title1);
-                titleMusic = (TextView) itemView.findViewById(R.id.tv_title2);
-                titleWrite = (TextView) itemView.findViewById(R.id.tv_title3);
-                titleExercise = (TextView) itemView.findViewById(R.id.tv_title4);
+                titleBible = (TextView) itemView.findViewById(R.id.tv_title4);
+                titleMusic = (TextView) itemView.findViewById(R.id.tv_title3);
+                titleWrite = (TextView) itemView.findViewById(R.id.tv_title2);
+                titleExercise = (TextView) itemView.findViewById(R.id.tv_title1);
 
                 itemView.setOnClickListener(this);
             }

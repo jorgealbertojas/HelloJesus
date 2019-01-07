@@ -53,7 +53,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.shts.android.storiesprogressview.StoriesProgressView;
+
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
@@ -63,7 +63,7 @@ import static android.content.Context.BIND_AUTO_CREATE;
  * Fragment for speech when write the word the user Talk
  */
 
-public class SpeechFragment extends Fragment implements SpeechContract.View, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
+public class SpeechFragment extends Fragment implements SpeechContract.View, MessageDialogFragment.Listener {
 
     public static final String EXTRA_LIST_CONTENT = "EXTRA_LIST_CONTENT";
     public static final String EXTRA_ARRAY_LIST_STRING = "EXTRA_ARRAY_LIST_STRING";
@@ -108,7 +108,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     private static LinearLayout mLinearLayout;
     private static Context mContext;
-    private StoriesProgressView storiesProgressView;
 
     private int counter = 0;
 
@@ -151,11 +150,11 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     pressTime = System.currentTimeMillis();
-                    storiesProgressView.pause();
+                    //storiesProgressView.pause();
                     return false;
                 case MotionEvent.ACTION_UP:
                     long now = System.currentTimeMillis();
-                    storiesProgressView.resume();
+                    //storiesProgressView.resume();
                     return limit < now - pressTime;
             }
             return false;
@@ -298,7 +297,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
         showProgress(root);
 
-        mPresenter.pauseAudio(storiesProgressView);
+        mPresenter.pauseAudio();
 
         onStart();
 
@@ -398,12 +397,12 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     @Override
     public void showProgress(View root) {
-        storiesProgressView = (StoriesProgressView) root.findViewById(R.id.stories);
-        storiesProgressView.setStoriesCount(PROGRESS_COUNT);
-        storiesProgressView.setStoriesCountWithDurations(durations);
-        storiesProgressView.animate().translationX(20);
-        storiesProgressView.setStoriesListener(this);
-        storiesProgressView.startStories();
+        //storiesProgressView = (StoriesProgressView) root.findViewById(R.id.stories);
+        //storiesProgressView.setStoriesCount(PROGRESS_COUNT);
+        //storiesProgressView.setStoriesCountWithDurations(durations);
+        //storiesProgressView.animate().translationX(20);
+        //storiesProgressView.setStoriesListener(this);
+        //storiesProgressView.startStories();
     }
 
 
@@ -415,7 +414,7 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     }
 
-    @Override
+    //@Override
     public void onNext() {
         if (statusPlay) {
 
@@ -445,13 +444,13 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
 
     }
 
-    @Override
+    //@Override
     public void onPrev() {
         if ((counter - 1) < 0) return;
 
     }
 
-    @Override
+   // @Override
     public void onComplete() {
 
     }
@@ -770,13 +769,13 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Sto
             mFloatingActionButton.setImageResource(R.drawable.ic_mic_white_24dp);
             mStatus.setVisibility(View.GONE);
             statusPlay = true;
-            mPresenter.playAudio(storiesProgressView);
+            mPresenter.playAudio();
         }else{
             mLoadingGif.setVisibility(View.GONE);
             mFloatingActionButton.setImageResource(R.drawable.ic_mic_off_white_24dp);
             mStatus.setVisibility(View.VISIBLE);
             statusPlay = false;
-            mPresenter.pauseAudio(storiesProgressView);
+            mPresenter.pauseAudio();
         }
     }
 

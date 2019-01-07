@@ -1,6 +1,8 @@
 package com.example.jorge.hellojesus.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
@@ -15,9 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.ad.AdActivity;
 import com.example.jorge.hellojesus.util.about.AboutActivity;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Fabric.with(this, new Crashlytics());
+
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        Crashlytics.setUserIdentifier(sharedPref.getString(getString(R.string.preference_key_email),null));
 
         //myClass myClass = new myClass();
 

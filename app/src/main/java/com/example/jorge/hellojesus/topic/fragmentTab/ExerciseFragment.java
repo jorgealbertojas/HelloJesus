@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_BUNDLE_MAIN;
+import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_MAIN;
 import static com.example.jorge.hellojesus.main.MainFragment.EXTRA_STRING_TITLE;
 import static com.example.jorge.hellojesus.topic.fragmentTab.BibleFragment.EXTRA_CONTENT_SOURCE_NAME;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -84,12 +86,14 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
         mListAdapter = new ExerciseFragment.TopicsAdapter(new ArrayList<Topic>(0), mItemListener);
         mActionsListener = new TopicPresenter(new TopicServiceImpl(), this);
         mNameTitle = getActivity().getIntent().getStringExtra(EXTRA_STRING_TITLE);
+        Bundle mBundle = getActivity().getIntent().getBundleExtra(EXTRA_BUNDLE_MAIN);
+        mIdTopics = (List<Integer>) mBundle.getSerializable(EXTRA_MAIN);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mActionsListener.loadingTopic();
+        mActionsListener.loadingTopic(mIdTopics);
     }
 
 
@@ -111,7 +115,7 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
             @Override
             public void onRefresh() {
 
-                mActionsListener.loadingTopic();
+                mActionsListener.loadingTopic(mIdTopics);
             }
         });
 

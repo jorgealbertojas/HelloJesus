@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'io.fabric'
 
 
 android {
@@ -180,10 +181,13 @@ dependencies {
     compile 'com.android.support:percent:26.1.0'
     compile 'com.daasuu:EasingInterpolator:1.0.0'
 
-
+    // Add dependency Crashlytics
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.android.gms:play-services-analytics:16.0.3'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
+
+    implementation "com.googlecode.json-simple:json-simple:1.1"
 
     compile project(path: ':libJavaForTest')
 

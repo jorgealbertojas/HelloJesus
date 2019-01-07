@@ -45,7 +45,7 @@ public interface TopicContract {
 
         void loadingWords(String type);
 
-        void loadingTopic();
+        void loadingTopic(List<Integer> integerList);
 
         void openDetail();
 

@@ -4,7 +4,7 @@ import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.local.control.Control;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import java.util.List;
-import jp.shts.android.storiesprogressview.StoriesProgressView;
+
 
 /**
  * Created by jorge on 16/03/2018.
@@ -109,18 +109,18 @@ public class SpeechPresenter implements SpeechContract.UserActionsListener {
     }
 
 
-    @Override
-    public void playAudio(StoriesProgressView storiesProgressView) {
+    //@Override
+    public void playAudio() {
 
-            storiesProgressView.resume();
+            //storiesProgressView.resume();
             onStart();
 
     }
 
-    @Override
-    public void pauseAudio(StoriesProgressView storiesProgressView) {
+    //@Override
+    public void pauseAudio() {
 
-            storiesProgressView.pause();
+            //storiesProgressView.pause();
             onStop();
 
     }

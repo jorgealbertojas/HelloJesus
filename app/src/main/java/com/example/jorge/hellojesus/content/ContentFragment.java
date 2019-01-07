@@ -4,9 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,7 +15,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,6 +31,7 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,15 +46,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
-import com.example.jorge.hellojesus.speech.support.SpeechService;
 import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.util.download.Download;
 import com.example.jorge.hellojesus.util.download.DownloadService;
@@ -84,22 +79,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import jp.shts.android.storiesprogressview.StoriesProgressView;
-
-import static android.content.Context.BIND_AUTO_CREATE;
-import static com.example.jorge.hellojesus.util.KeyVar.KEY_SING;
 import static com.example.jorge.hellojesus.util.download.Utility.BASE_STORAGE;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_DOWNLOAD;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION_NUMBER;
 import static com.example.jorge.hellojesus.util.download.Utility.FILE_DOWNLOAD_COMPLETE;
-import static com.example.jorge.hellojesus.util.download.Utility.TAG_INFORMATION;
 
 /**
  * Created by jorge on 27/02/2018.
  */
 
-public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, StoriesProgressView.StoriesListener, MessageDialogFragment.Listener {
+public class ContentFragment extends Fragment implements ContentContract.View, ExoPlayer.EventListener, MessageDialogFragment.Listener {
 
     public static final String MESSAGE_PROGRESS = "message_progress";
 
@@ -109,15 +99,14 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private SimpleExoPlayer mExoPlayerAudio;
     private Handler durationHandler = new Handler();
-    private SeekBar seekbar;
 
     private static double mTimeElapsed = 0, mFinalTime = 0,  mTimeLast = 0;
 
     private static SimpleExoPlayerView mPlayerView;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
 
+    private static ObjectAnimator mAnimation;
 
     private static ContentContract.UserActionsListener mPresenter;
 
@@ -152,13 +141,10 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     private static Button mWord;
 
-    private static StoriesProgressView storiesProgressView;
-
-
     private int counter = 0;
 
     private ProgressBar mProgressBar;
-    private ObjectAnimator mAnimation;
+
 
     private long[] durations;
 
@@ -167,8 +153,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     long limit = 5000;
 
     private static int mPosition = 0;
-
-    int second;
 
     private TextView mValueStart;
     private TextView mValueEnd;
@@ -202,11 +186,11 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     pressTime = System.currentTimeMillis();
-                    storiesProgressView.pause();
+                    //storiesProgressView.pause();
                     return false;
                 case MotionEvent.ACTION_UP:
                     long now = System.currentTimeMillis();
-                    storiesProgressView.resume();
+                    //storiesProgressView.resume();
                     return limit < now - pressTime;
             }
             return false;
@@ -247,7 +231,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     @Override
     public void onDestroy() {
         if (mPresenter != null){
-            mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+            mPresenter.pauseAudio(mExoPlayerAudio);
             mPresenter = null;
         }
 
@@ -314,7 +298,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) root.findViewById(R.id.sep_playerView_Audio);
-        seekbar = (SeekBar) root.findViewById(R.id.exo_progress);
+
         mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         mWord = (Button) root.findViewById(R.id.tv_word);
         mValueStart = (TextView) root.findViewById(R.id.tv_start);
@@ -427,7 +411,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             mPresenter.loadingContent(mContents, mTime);
 
             showAnimation();
-            showProgress(root,mPosition);
         }
 
 
@@ -436,49 +419,54 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
 
     public void onPriorStep() {
+        if (mPosition > 0){
+            mPosition --;
+        }
         mProgressBar.clearAnimation();
-        mPosition --;
-
-        storiesProgressView.pause();
-        storiesProgressView.bindViews();
-
+        mAnimation.removeAllListeners();
         mValueStart.setText(Integer.toString(mPosition +1));
         mRecyclerView.scrollToPosition(mPosition);
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mRecyclerView.setFocusable(true);
         onPlayerStateChangedDuration(true);
         showAnimation();
-        showProgress(root, mPosition);
-
         mFabMenuOpen = true;
         toggleFabMenu();
-
-
     }
 
     public void onNextStep() {
+
+        if (mPosition < mContents.size()){
+            mPosition ++;
+        }
+        mAnimation.removeAllListeners();
         mProgressBar.clearAnimation();
-        mPosition ++;
-
-        storiesProgressView.pause();
-        storiesProgressView.bindViews();
-
         mValueStart.setText(Integer.toString(mPosition +1));
         mRecyclerView.scrollToPosition(mPosition);
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mRecyclerView.setFocusable(true);
         onPlayerStateChangedDuration(true);
         showAnimation();
-        showProgress(root, mPosition);
-
         mFabMenuOpen = true;
         toggleFabMenu();
+    }
 
-
+    //@Override
+    public void onNext() {
+        mProgressBar.clearAnimation();
+        mAnimation.removeAllListeners();
+        mPosition ++;
+        mRecyclerView.scrollToPosition(mPosition);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mValueStart.setText(Integer.toString(mPosition + 1));
+        showAnimation();
+        mFabMenuOpen = true;
+        toggleFabMenu();
+        mRecyclerView.setFocusable(true);
     }
 
     public void onPlayerStateChangedDuration(boolean playWhenReady) {
-        mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+        mPresenter.pauseAudio(mExoPlayerAudio);
         if (mPosition == 0) {
             mExoPlayerAudio.seekTo(0);
         } else if (mPosition == durations.length) {
@@ -490,7 +478,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
        // if (!playWhenReady) {
        //     mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
         //} else {
-        mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+        mPresenter.playAudio(mExoPlayerAudio);
 
        // }
     }
@@ -533,6 +521,9 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                     .setDuration(1000)
                     .start();
         } else {
+            try {
+
+
             mFloatingActionButton.setImageResource(R.drawable.ic_add_circle_outline_white_24dp);
             int centerX = mLinearLayout.getWidth() / 2;
             int centerY = mLinearLayout.getHeight() / 2;
@@ -567,8 +558,13 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 }
             });
             animator.start();
+
+            }catch (Exception e) {
+                Log.wtf("DO THIS", " WHEN SAVE() FAILS");
+            }
         }
         mFabMenuOpen = !mFabMenuOpen;
+
     }
 
    // @Override
@@ -700,26 +696,38 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
         mListAdapter.replaceData(contents);
     }
 
-    @Override
-    public void showProgress(View root, int newPosition) {
-        storiesProgressView = (StoriesProgressView) root.findViewById(R.id.stories);
-        storiesProgressView.setStoriesCount(PROGRESS_COUNT);
-        storiesProgressView.setCurrent(newPosition);
-        storiesProgressView.setStoriesCountWithDurations(durations);
-        storiesProgressView.animate().translationX(20);
-        storiesProgressView.setStoriesListener(this);
-        storiesProgressView.startStories();
-    }
+
 
     @Override
     public void showAnimation() {
         if (mPosition < durations.length){
-            mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
+          //
+           // if (mAnimation == null){
+                mAnimation = ObjectAnimator.ofInt (mProgressBar, "progress", 0, 500); // see this max value coming back here, we animate towards that value
+           // }
+
             mAnimation.setDuration (durations[mPosition]); //in milliseconds
             mAnimation.setInterpolator (new DecelerateInterpolator());
             mAnimation.start();
+            mAnimation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    onNext();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
         }else{
-            storiesProgressView.pause();
+
         }
 
 
@@ -759,11 +767,17 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
         if (!playWhenReady){
             if (mPresenter != null) {
-                mPresenter.pauseAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+                mPresenter.pauseAudio(mExoPlayerAudio);
+                if (mAnimation != null && mAnimation.isStarted()) {
+                    mAnimation.pause();
+                }
             }
         }else{
             if (mPresenter != null) {
-                mPresenter.playAudio(mExoPlayerAudio, mAnimation, storiesProgressView);
+                mPresenter.playAudio(mExoPlayerAudio);
+                if (mAnimation != null && mAnimation.isPaused()) {
+                    mAnimation.resume();
+                }
             }
 
         }
@@ -905,27 +919,15 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     }
 
-    @Override
-    public void onNext() {
-        mProgressBar.clearAnimation();
-        mPosition ++;
-        mRecyclerView.scrollToPosition(mPosition);
-        mRecyclerView.getAdapter().notifyDataSetChanged();
-        mValueStart.setText(Integer.toString(mPosition + 1));
-        showAnimation();
-        mFabMenuOpen = true;
-        toggleFabMenu();
 
-        mRecyclerView.setFocusable(true);
-    }
 
-    @Override
+    //@Override
     public void onPrev() {
         if ((counter - 1) < 0) return;
 
     }
 
-    @Override
+    //@Override
     public void onComplete() {
 
     }
@@ -1371,7 +1373,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                         }
 
                         showAnimation();
-                        showProgress(root,mPosition);
+
                     }
 
                 } else {

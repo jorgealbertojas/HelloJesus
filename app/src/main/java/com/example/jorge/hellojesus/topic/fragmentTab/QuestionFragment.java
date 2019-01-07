@@ -227,7 +227,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
     @Override
     public void onResume() {
         super.onResume();
-        mActionsListener.loadingTopic();
+        mActionsListener.loadingTopic(null);
     }
 
 
@@ -249,7 +249,7 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
             @Override
             public void onRefresh() {
 
-                mActionsListener.loadingTopic();
+                mActionsListener.loadingTopic(null);
             }
         });
 

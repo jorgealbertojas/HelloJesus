@@ -34,13 +34,16 @@ public class TopicServiceImpl implements TopicServiceApi {
 
 
                     List<Topic> topicList =  new ArrayList<Topic>();
-                    Topic topic =  new Topic();
+
 
                     for (int i = 0; i < resultSearch.items.size(); i++){
                         if (resultSearch.items.get(i).getType().toString().equals("insert")){
 
+
                             resultSearch.items.get(i).setType("music");
 
+                            topicList =  new ArrayList<Topic>();
+                            Topic topic =  new Topic();
                             topic.setContent(resultSearch.items.get(i).getContent());
                             topic.setId(resultSearch.items.get(i).getId());
                             topic.setName("Sing");
