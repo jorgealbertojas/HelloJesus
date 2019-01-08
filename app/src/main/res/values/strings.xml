@@ -100,7 +100,7 @@
     <string name="login_e_mail">E-mail</string>
     <string name="login_password">Password</string>
     <string name="login_confirm_password">Confirm password</string>
-    <string name="login_not_exist">Usuário não cadastrado ou senha inválida!</string>
+    <string name="login_not_exist">Usuário não cadastrado ou senha inválida! ou Verifique a internet!</string>
     <string name="login_null">Entre com usuario e senha!</string>
     <string name="login_email_null">Entre com e-mail cadastrado!</string>
     <string name="login_email_send">E-mail enviado com sucesso!</string>

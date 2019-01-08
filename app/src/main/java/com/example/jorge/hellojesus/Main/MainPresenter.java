@@ -28,6 +28,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD_CHECK;
@@ -52,11 +54,13 @@ public class MainPresenter implements MainContract.UserActionsListener {
     }
 
     @Override
-    public void loadingMain() {
+    public void loadingMain(final ShimmerLayout shimmerText) {
 
         mMainServiceApi.getMain(new MainServiceApi.MainServiceCallback<ListMain<Main>>() {
             @Override
             public void onLoaded(ListMain<Main> mainListMain) {
+                shimmerText.stopShimmerAnimation();
+                shimmerText.setVisibility(View.GONE);
                     mMainContractView.showMain(mainListMain.items);
             }
 

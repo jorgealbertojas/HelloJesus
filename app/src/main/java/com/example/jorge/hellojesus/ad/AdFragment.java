@@ -37,6 +37,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AdFragment extends Fragment implements AdContract.View {
@@ -72,6 +74,8 @@ public class AdFragment extends Fragment implements AdContract.View {
     private static FloatingActionButton fabNoCheck;
     private static FloatingActionButton fabHelp;
 
+    private static ShimmerLayout shimmerText;
+
 
     private static LinearLayout Llad ;
 
@@ -103,6 +107,8 @@ public class AdFragment extends Fragment implements AdContract.View {
 
         Llad = (LinearLayout) root.findViewById(R.id.ll_ad);
 
+        shimmerText = (ShimmerLayout) root.findViewById(R.id.shimmer_layout);
+
 
         SwipeRefreshLayout swipeRefreshLayout =
                 (SwipeRefreshLayout) root.findViewById(R.id.refresh_layout);
@@ -113,10 +119,12 @@ public class AdFragment extends Fragment implements AdContract.View {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                mPresenter.loadingAd();
+                shimmerText.startShimmerAnimation();
+                mPresenter.loadingAd(shimmerText);
             }
         });
+
+
 
         fabMenu = (FloatingActionMenu) getActivity().findViewById(R.id.multiple_actions_down);
 
@@ -162,7 +170,8 @@ public class AdFragment extends Fragment implements AdContract.View {
         });
 
 
-        mPresenter.loadingAd();
+
+        mPresenter.loadingAd(shimmerText);
 
         initRecyclerView(root);
 

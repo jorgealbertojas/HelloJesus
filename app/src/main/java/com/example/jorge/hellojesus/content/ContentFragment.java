@@ -257,6 +257,12 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
             bManager.unregisterReceiver(broadcastReceiver);
         }
 
+        if (mAnimation != null) {
+            mAnimation.start();
+            mAnimation.pause();
+            mAnimation.removeAllListeners();
+        }
+
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(broadcastReceiver);
 
     }
@@ -454,8 +460,8 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     //@Override
     public void onNext() {
         mProgressBar.clearAnimation();
-        mAnimation.removeAllListeners();
         mPosition ++;
+        mAnimation.removeAllListeners();
         mRecyclerView.scrollToPosition(mPosition);
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mValueStart.setText(Integer.toString(mPosition + 1));

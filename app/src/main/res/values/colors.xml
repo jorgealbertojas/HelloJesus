@@ -20,4 +20,6 @@
     <color name="color_login_buttonpress">#EE3162</color>
     <color name="color_signup_button">#F2F2F2</color>
     <color name="color_signup_buttonpress">#EBEBEB</color>
+
+    <color name="shimmer_background_color">#b1b1b1</color>
 </resources>

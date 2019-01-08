@@ -58,6 +58,7 @@
     <dimen name="login_holder_height">25dp</dimen>
     <dimen name="login_horizontalline_spacing">10dp</dimen>
 
-
+    <dimen name="monogram_width">40dp</dimen>
+    <dimen name="monogram_height">80dp</dimen>
 
 </resources>

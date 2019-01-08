@@ -12,6 +12,8 @@ import com.example.jorge.hellojesus.helpApp.HelpContract;
 
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 /**
  * Created by jorge on 22/02/2018.
  */
@@ -31,7 +33,7 @@ public interface MainContract extends HelpContract {
 
         void loadWordCorrect(@NonNull final Context context);
 
-        void loadingMain();
+        void loadingMain(ShimmerLayout shimmerText);
 
         void saveHelp(Help help);
 

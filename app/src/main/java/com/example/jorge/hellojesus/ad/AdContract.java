@@ -11,6 +11,8 @@ import com.example.jorge.hellojesus.helpApp.HelpContract;
 
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 public interface AdContract extends HelpContract {
 
     interface View extends BaseView<AdContract.UserActionsListener> {
@@ -20,7 +22,7 @@ public interface AdContract extends HelpContract {
     }
 
     interface UserActionsListener  extends BasePresenter {
-        void loadingAd();
+        void loadingAd(ShimmerLayout shimmerText);
 
         void loadWordWrong(@NonNull final Context context);
 

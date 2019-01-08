@@ -50,6 +50,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -75,6 +77,8 @@ public class MainFragment extends Fragment implements MainContract.View {
     public static Activity mActivity;
 
     private Main mMain;
+
+    private static ShimmerLayout shimmerText;
 
     private int mPosition = 0;
 
@@ -149,8 +153,9 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         Llmain = (LinearLayout) root.findViewById(R.id.ll_main);
 
+        shimmerText = (ShimmerLayout) root.findViewById(R.id.shimmer_layout);
 
-        SwipeRefreshLayout swipeRefreshLayout =
+        final SwipeRefreshLayout swipeRefreshLayout =
                 (SwipeRefreshLayout) root.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getActivity(), R.color.colorPrimary),
@@ -159,10 +164,12 @@ public class MainFragment extends Fragment implements MainContract.View {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                mPresenter.loadingMain();
+                shimmerText.startShimmerAnimation();
+                mPresenter.loadingMain(shimmerText);
             }
         });
+
+        swipeRefreshLayout.setProgressViewEndTarget(false,0);
 
         final int newColorRed = getResources().getColor(R.color.red);
         // Set up floating action button
@@ -210,7 +217,7 @@ public class MainFragment extends Fragment implements MainContract.View {
             }
         });
 
-        mPresenter.loadingMain();
+        mPresenter.loadingMain(shimmerText);
         // Insert HELP for all Screen
         loadSessionConfig();
 

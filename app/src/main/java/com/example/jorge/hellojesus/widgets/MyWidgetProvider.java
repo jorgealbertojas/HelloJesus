@@ -119,6 +119,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
                     x = (new Random().nextInt(listWord.size() - 1));
                     word = listWord.get(x).getWord();
                     // Set the text
+
                     remoteViews.setTextViewText(R.id.update, (Integer.toString(listWord.size())));
 
                     remoteViews.setTextViewText(R.id.empty_view, (word));
@@ -136,9 +137,14 @@ public class MyWidgetProvider extends AppWidgetProvider {
     }
 
 
-    public void registeOnClick(Context context, Intent intent, int[] appWidgetIds){
+    public void registeOnClick(Context context, Intent intent, int[] appWidgetIds) {
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+
+        if (remoteViews == null){
+            remoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_layout);
+        }
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

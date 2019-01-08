@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD_CHECK;
@@ -43,11 +45,14 @@ public class AdPresenter implements AdContract.UserActionsListener {
     }
 
     @Override
-    public void loadingAd() {
-
+    public void loadingAd(final ShimmerLayout shimmerLayout) {
+        shimmerLayout.setVisibility(View.VISIBLE);
+        shimmerLayout.startShimmerAnimation();
         mAdServiceApi.getAd(new AdServiceApi.AdServiceCallback<ListAd<Ad>>() {
             @Override
             public void onLoaded(ListAd<Ad> adListAd) {
+                shimmerLayout.stopShimmerAnimation();
+                shimmerLayout.setVisibility(View.GONE);
                 mAdContractView.showAd(adListAd.items);
             }
 

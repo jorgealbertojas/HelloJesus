@@ -432,8 +432,6 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Mes
 
                         if (mPosition >= mListAdapter.mContent.size()) {
                             mFabNext.setVisibility(View.VISIBLE);
-
-
                         }
 
 
@@ -706,7 +704,9 @@ public class SpeechFragment extends Fragment implements SpeechContract.View, Mes
         stopVoiceRecorder();
 
         // Stop Cloud Speech API
-        mSpeechService.removeListener(mSpeechServiceListener);
+        if (mSpeechService != null){
+            mSpeechService.removeListener(mSpeechServiceListener);
+        }
         getActivity().unbindService(mServiceConnection);
         mSpeechService = null;
 
