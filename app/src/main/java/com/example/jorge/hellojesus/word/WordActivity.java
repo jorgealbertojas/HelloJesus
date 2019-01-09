@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.content.ContentFragment;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.util.Common;
 
 import java.util.List;

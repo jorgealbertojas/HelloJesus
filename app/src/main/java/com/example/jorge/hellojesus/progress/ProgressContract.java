@@ -3,7 +3,6 @@ package com.example.jorge.hellojesus.progress;
 import com.example.jorge.hellojesus.BasePresenter;
 import com.example.jorge.hellojesus.BaseView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

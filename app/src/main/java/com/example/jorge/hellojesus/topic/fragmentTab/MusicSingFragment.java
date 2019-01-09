@@ -195,10 +195,6 @@ public class MusicSingFragment extends Fragment implements TopicContract.View {
     public void showAllTopics() {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
-        //Bundle bundle = new Bundle();
-        // bundle.putSerializable(EXTRA_PRODUCT, null);
-
-        //intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
         startActivity(intent);
     }
 

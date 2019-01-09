@@ -8,9 +8,6 @@ import android.support.annotation.RequiresApi;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

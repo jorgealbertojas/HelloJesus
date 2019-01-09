@@ -22,4 +22,6 @@
     <color name="color_signup_buttonpress">#EBEBEB</color>
 
     <color name="shimmer_background_color">#b1b1b1</color>
+
+    <color name="gray_scale">#8affffff</color>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.jorge.hellojesus.content;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;

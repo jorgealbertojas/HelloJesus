@@ -307,65 +307,6 @@ public class WordFragment extends Fragment implements WordContract.View {
             viewHolder.mWord.setTypeface(null, Typeface.BOLD);
             viewHolder.mWord.setText(word);
 
-/*
-            viewHolder.mWord.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Layout layout = ((TextView) v).getLayout();
-                        int x = (int)event.getX();
-                        int y = (int)event.getY();
-                        if (layout!=null) {
-                            int line = layout.getLineForVertical(y);
-                            int offset = layout.getOffsetForHorizontal(line, x);
-
-                            String phase = ((TextView) v).getText().toString();
-                            String phaseRight = phase.toString().substring(offset, phase.length());
-
-                            int index1 = firstSpace(phaseRight);
-                            if (index1 < 0){
-                                index1 = phaseRight.length();
-                            }
-
-                            int index2 = 0;
-                            if (offset < phase.length()){
-                                index2 = priorSpace(phase, offset);
-                            }else{
-                                offset = phase.length() - 1;
-                                index2 = priorSpace(phase, offset);
-                            }
-
-
-                            if (index2 + 1 < index1 + offset) {
-                                mWord.setText(phase.toString().substring(index2, phase.length()));
-                                String word = phase.toString().substring(index2, index1 + offset);
-                                mWord.setText(word.replace(",",""));
-                                mActionsListener.ShowFabButton(mFloatingActionButton, mShowFab, mWord);
-                            }else{
-                                mWord.setText("");
-                                mActionsListener.HideFabButton(mFloatingActionButton, mHideFab, mWord);
-                                mFabMenuOpen = true;
-
-                            }
-                        }
-                    }
-                    return true;
-                }
-            });
-
-
-            String s = word;
-
-            String[] arr = s.split(" ");
-
-            for ( String ss : arr) {
-
-                System.out.println(ss);
-            }
-*/
-
-
-            //viewHolder.mRelativeLayout = Common.createTagDynamic(viewHolder.mRelativeLayout,arr, mContext, true);
 
 
         }
@@ -586,8 +527,6 @@ public class WordFragment extends Fragment implements WordContract.View {
 
     @Override
     public void ShowInformationWord(){
-       // mTotalDown.setText(mListAdapter.getItemCount());
-       // mTotalUp.setText(mListAdapter.getItemCount());
 
     }
 

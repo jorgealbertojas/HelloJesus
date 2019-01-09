@@ -1,6 +1,5 @@
 package com.example.jorge.hellojesus.topic.fragmentTab;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -79,27 +78,9 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-
-      //  mActionsListener.loadingTopic();
         mActionsListener = new TopicPresenter(Injection.provideWordsRepository(getActivity().getApplicationContext()), new TopicServiceImpl(), this);
         mActionsListener.loadingWords("QQQ");
         mListAdapter = new TopicsAdapter(new ArrayList<Topic>(0));
-
-       // mActionsListener.loadingWords("ddd");
-
-      //  showWords(mListContent);
-      //  topic.setContent(mListContent);
-
-
-       // topicList.add(topic);
-
-       // mListAdapter.setList(topicList);
-
-
-
-     //
 
     }
 
@@ -171,52 +152,11 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
         @Override
         public void onRemoveWordClick(String word) {
-        //    mPresenter.removeItemShopping(activatedPurchase, quantity);
-        //    if (mListAdapter.getCount() == 1 && quantity.equals("0")){
-        //        showCarsListEmpty();
-        //    }
 
         }
 
         @Override
         public void onFinalizeWordClick(String date) {
-/*            if (isPurchasesGreater()) {
-                if (!(mNoShoppingView.getVisibility() == View.VISIBLE)) {
-
-                    LayoutInflater factory = LayoutInflater.from(getContext());
-                    final View deleteDialogView = factory.inflate(
-                            R.layout.custom_dialog, null);
-                    final AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
-                    deleteDialog.setView(deleteDialogView);
-
-                    TextView nTextView = (TextView) deleteDialogView.findViewById(R.id.txt_dia);
-                    nTextView.setText(getContext().getResources().getString(R.string.conformation));
-
-                    deleteDialogView.findViewById(R.id.btn_yes).setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            mPresenter.finalizeShopping(date);
-                            deleteDialog.dismiss();
-                        }
-                    });
-                    deleteDialogView.findViewById(R.id.btn_no).setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            deleteDialog.dismiss();
-
-                        }
-                    });
-
-                    deleteDialog.show();
-                }else{
-                    showMessageEmpty();
-                }
-            }else{
-                showMessagePurchasesGreater();
-            }*/
-
 
         }
 
@@ -333,10 +273,6 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
     public void showAllTopics() {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
-        //Bundle bundle = new Bundle();
-        // bundle.putSerializable(EXTRA_PRODUCT, null);
-
-        //intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
         startActivity(intent);
     }
 
@@ -349,7 +285,6 @@ public class QuestionFragment extends Fragment implements TopicContract.View {
 
         public TopicsAdapter(List<Topic> topicList) {
             setList(topicList);
-          //  mItemListener = itemListener;
         }
 
         @Override

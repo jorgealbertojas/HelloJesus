@@ -2,7 +2,6 @@ package com.example.jorge.hellojesus.tipWord;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.util.Common;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class TipWordActivity extends AppCompatActivity {

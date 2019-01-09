@@ -109,6 +109,7 @@
     <string name="forget_password">Esqueci senha!</string>
 
 
+    <string name="mensagem01">Deseja sair da aplicação</string>
 
     <string name="preference_key_email">preference_key_email</string>
     <string name="preference_key_password">preference_key_password</string>

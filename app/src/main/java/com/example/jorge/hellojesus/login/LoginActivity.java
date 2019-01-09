@@ -74,12 +74,12 @@ public class LoginActivity extends AppCompatActivity
         // Login with FireBase
         mAuth = FirebaseAuth.getInstance();
 
-        createJson CrunchifyJSONFileWrite = new createJson();
-           try {
-                CrunchifyJSONFileWrite.main(this);
-           } catch (IOException e) {
-                e.printStackTrace();
-          }
+     //   createJson CrunchifyJSONFileWrite = new createJson();
+     //      try {
+     //           CrunchifyJSONFileWrite.main(this);
+     //      } catch (IOException e) {
+     //           e.printStackTrace();
+     //     }
 
 
         dm = getResources().getDisplayMetrics();

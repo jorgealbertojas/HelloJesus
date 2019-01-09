@@ -4,13 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.example.jorge.hellojesus.data.local.Word;
 import com.example.jorge.hellojesus.data.local.WordsDataSource;
-import com.example.jorge.hellojesus.data.local.WordsLocalDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.progress.ProgressContract;
 import com.example.jorge.hellojesus.util.EspressoIdlingResource;
 
 import java.util.ArrayList;

@@ -1,19 +1,13 @@
 package com.example.jorge.hellojesus.write;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.speech.SpeechFragment;
-import com.example.jorge.hellojesus.speech.support.MessageDialogFragment;
 import com.example.jorge.hellojesus.util.Common;
 
 import java.util.List;

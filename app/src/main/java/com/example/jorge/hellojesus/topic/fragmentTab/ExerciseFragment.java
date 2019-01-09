@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.content.ContentActivity;
 import com.example.jorge.hellojesus.data.onLine.topic.TopicServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Topic;
@@ -198,10 +197,6 @@ public class ExerciseFragment extends Fragment implements TopicContract.View {
     public void showAllTopics() {
         Intent intent = new Intent(getActivity(), TopicActivity.class);
 
-        //Bundle bundle = new Bundle();
-        // bundle.putSerializable(EXTRA_PRODUCT, null);
-
-        //intent.putExtra(EXTRA_BUNDLE_PRODUCT, bundle);
         startActivity(intent);
     }
 

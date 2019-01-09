@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.jorge.hellojesus.data.local.WordDatabase;
-import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsLocalDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
 import com.example.jorge.hellojesus.util.AppExecutors;

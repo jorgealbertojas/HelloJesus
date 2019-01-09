@@ -5,7 +5,6 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -27,7 +25,6 @@ import retrofit2.Retrofit;
 
 import static com.example.jorge.hellojesus.util.download.Utility.BASE_STORAGE;
 import static com.example.jorge.hellojesus.util.download.Utility.BASE_URL_IMAGE;
-import static com.example.jorge.hellojesus.util.download.Utility.BASE_URL_IMAGE_COMPLEMENT;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_DOWNLOAD;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION;
 import static com.example.jorge.hellojesus.util.download.Utility.EXTRA_POSITION_NUMBER;

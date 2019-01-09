@@ -68,7 +68,6 @@
             android:tag="0"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/ic_letter_a"
             android:background="@drawable/duplicates_notif"
             android:layout_weight="25"
 />
@@ -80,7 +79,6 @@
         android:layout_below="@+id/linearLayout2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_b"
         android:background="@drawable/duplicates_notif"
         android:layout_alignRight="@+id/vertical_line"
         android:layout_marginTop="30dp"
@@ -92,7 +90,6 @@
         android:tag="streetstyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_c"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble19"
         android:layout_toRightOf="@+id/bubble19"
@@ -103,7 +100,6 @@
         android:tag=""
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_d"
         android:background="@drawable/duplicates_notif"
         android:layout_toRightOf="@+id/bubble2"
         android:layout_alignTop="@+id/bubble2"
@@ -114,7 +110,6 @@
         android:tag="catwalk"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_e"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble0"
         android:clickable="true"
@@ -126,7 +121,6 @@
         android:tag="tutorials"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_f"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble4"
         android:layout_alignRight="@+id/bubble19" />
@@ -136,7 +130,6 @@
         android:tag="trends"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_g"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble5"
         android:layout_alignLeft="@+id/bubble2" />
@@ -146,7 +139,6 @@
         android:tag="video"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_h"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble6"
         android:layout_alignLeft="@+id/bubble3" />
@@ -157,7 +149,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/duplicates_notif"
-        android:src="@mipmap/ic_letter_i"
         android:layout_below="@+id/bubble4"
         android:layout_alignRight="@+id/bubble4"
         android:layout_marginTop="35dp" />
@@ -167,7 +158,6 @@
         android:tag="lookbook"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_j"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble8"
         android:layout_alignRight="@+id/bubble5" />
@@ -177,7 +167,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_k"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble9"
         android:layout_alignLeft="@+id/bubble6" />
@@ -187,7 +176,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_l"
         android:background="@drawable/duplicates_notif"
         android:layout_alignLeft="@+id/bubble7"
         android:layout_alignTop="@+id/bubble17" />
@@ -197,7 +185,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_m"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble8"
         android:layout_alignLeft="@+id/bubble8"
@@ -209,7 +196,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_n"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble9" />
@@ -219,7 +205,6 @@
         android:tag="interior-design"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_o"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble17" />
@@ -229,7 +214,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_p"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble14"
         android:layout_alignLeft="@+id/bubble11" />
@@ -239,7 +223,6 @@
         android:tag="travel"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_q"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble12"
         android:layout_alignLeft="@+id/bubble12"
@@ -251,7 +234,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_r"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble13" />
@@ -261,7 +243,6 @@
         android:tag="interior-design"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_s"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble6" />
@@ -271,7 +252,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_t"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble11" />
@@ -281,7 +261,6 @@
         android:tag="travel"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_u"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble16"
         android:layout_alignLeft="@+id/bubble16"
@@ -292,7 +271,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_v"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble23"
         android:layout_alignLeft="@+id/bubble13" />
@@ -302,7 +280,6 @@
         android:tag="interior-design"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_w"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble23"
         android:layout_alignLeft="@+id/bubble6" />
@@ -312,7 +289,6 @@
         android:tag="0"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_y"
         android:background="@drawable/duplicates_notif"
         android:layout_alignTop="@+id/bubble23"
         android:layout_alignLeft="@+id/bubble11" />
@@ -322,7 +298,6 @@
         android:tag="travel"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_letter_z"
         android:background="@drawable/duplicates_notif"
         android:layout_below="@+id/bubble23"
         android:layout_alignLeft="@+id/bubble23"

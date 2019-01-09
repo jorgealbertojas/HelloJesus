@@ -3,39 +3,27 @@ package com.example.jorge.hellojesus.tipWord;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
-import com.example.jorge.hellojesus.helloWord.HelloWordContract;
 import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.util.buttonAnimation.MorphingButton;
 
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -93,30 +81,6 @@ public class TipWordFragment extends Fragment {
         mTextValue.setText(mHelloWord.get(mPosition));
 
 
-/*        final MorphingButton btnMorph1 = (MorphingButton) view.findViewById(R.id.btnMorph1);
-        btnMorph1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-        //        onMorphButton1Clicked(btnMorph1,mHelloWord.getMtip1());
-            }
-        });
-
-        final MorphingButton btnMorph2 = (MorphingButton) view.findViewById(R.id.btnMorph2);
-        btnMorph2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // onMorphButton2Clicked(btnMorph2, mHelloWord.getMtip2());
-            }
-        });
-
-        final MorphingButton btnMorph3 = (MorphingButton) view.findViewById(R.id.btnMorph3);
-        btnMorph3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              //  onMorphButton3Clicked(btnMorph3, mHelloWord.getMtip3());
-            }
-        });*/
-
         final MorphingButton btnMorph4 = (MorphingButton) view.findViewById(R.id.btnMorph4);
         btnMorph4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,9 +109,6 @@ public class TipWordFragment extends Fragment {
         });
 
 
-     //   morphToFailure(btnMorph1, 0);
-     //   morphToFailure(btnMorph2, 0);
-     //   morphToFailure(btnMorph3, 0);
         morphToFailureImage(btnMorph4, 0);
         morphToFailureExplanation(btnMorph5, 0);
         morphToFailureTranslate(btnMorph6, 0);
@@ -221,16 +182,6 @@ public class TipWordFragment extends Fragment {
             }
         });
     }
-
-/*    private void onMorphButton1Clicked(final MorphingButton btnMorph) {
-        if (mMorphCounter1 == 0) {
-            mMorphCounter1++;
-            morphToSquare(btnMorph, getActivity().getResources().getInteger(R.integer.mb_animation));
-        } else if (mMorphCounter1 == 1) {
-            mMorphCounter1 = 0;
-            morphToSuccess(btnMorph);
-        }
-    }*/
 
     private void onMorphButton1Clicked(final MorphingButton btnMorph,String value) {
         if (mMorphCounter1 == 0) {

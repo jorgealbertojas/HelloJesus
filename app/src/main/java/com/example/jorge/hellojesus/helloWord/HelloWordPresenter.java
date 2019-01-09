@@ -2,10 +2,8 @@ package com.example.jorge.hellojesus.helloWord;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -15,21 +13,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
-import com.example.jorge.hellojesus.data.local.Word;
-import com.example.jorge.hellojesus.data.local.WordsDataSource;
 import com.example.jorge.hellojesus.data.local.WordsRepository;
-import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
-import com.example.jorge.hellojesus.menu_cycle.CycleActivity;
-import com.example.jorge.hellojesus.util.EspressoIdlingResource;
-import com.example.jorge.hellojesus.word.WordContract;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 
 public class HelloWordPresenter implements HelloWordContract.UserActionsListener {
 

@@ -12,7 +12,7 @@
 		<shape android:shape="rectangle">
 
 			<solid
-				android:color="@color/progress_primary">
+				android:color="@color/colorPrimary">
 			</solid>
 		</shape>
 	</item>

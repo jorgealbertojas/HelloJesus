@@ -2,7 +2,6 @@ package com.example.jorge.hellojesus.helpApp;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,22 +9,15 @@ import android.support.v7.widget.CardView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.util.Common;
-import com.example.jorge.hellojesus.util.MyBounceInterpolator;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 

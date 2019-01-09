@@ -134,15 +134,6 @@ public class Common {
                     public void onClick(View view) {
 
 
-                        // int adapterPosition = getAdapterPosition();
-                        // Content content = data.get(adapterPosition);
-                        //  mClickHandler.onClick(content);
-/*
-                        String url = "https://www.google.com.br/search?hl=pt-BR&tbm=isch&source=hp&biw=1080&bih=1765&ei=X_Z8Wu-8K4iiwgTsvqKADw&q=" + ((TextView) view).getText().toString() + "&oq=" + ((TextView) view).getText().toString() + "&gs_l=img.3...2937.4111.0.4927.0.0.0.0.0.0.0.0..0.0....0...1ac.1.64.img..0.0.0....0.dYQYv-zXKss";
-
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        CustomTabsIntent customTabsIntent = builder.build();
-                        customTabsIntent.launchUrl((Activity) context, Uri.parse(url));*/
                     }
 
                 };

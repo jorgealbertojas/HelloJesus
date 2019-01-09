@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.Word;
@@ -18,7 +17,6 @@ import com.example.jorge.hellojesus.data.local.help.Help;
 import com.example.jorge.hellojesus.data.onLine.main.MainServiceApi;
 import com.example.jorge.hellojesus.data.onLine.main.model.ListMain;
 import com.example.jorge.hellojesus.data.onLine.main.model.Main;
-import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.helpApp.HelpAppActivity;
 import com.example.jorge.hellojesus.util.Common;
 import com.example.jorge.hellojesus.util.EspressoIdlingResource;
@@ -281,16 +279,6 @@ public class MainPresenter implements MainContract.UserActionsListener {
 
                 context.startActivity(intent);
 
-/*                // The view may not be able to handle UI updates anymore
-                if (!mTopicContractView.isActive()) {
-                    return;
-                }
-                //if (showLoadingUI) {
-                if (true) {
-                    mTopicContractView.setLoadingIndicator(false);
-                }
-
-                processWords(arrayList);*/
             }
 
 

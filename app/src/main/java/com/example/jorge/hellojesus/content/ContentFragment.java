@@ -573,21 +573,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
 
     }
 
-   // @Override
-  //  public void openViewContent(Content content) {
-    //    Intent intent = new Intent(getActivity(), TopicActivity.class);
-
-   //     List<Integer> ii = content.getTopics();
-
-    //    Bundle bundle = new Bundle();
-   //     bundle.putSerializable(EXTRA_MAIN, (Serializable) main.getTopics());
-   //     intent.putExtra(EXTRA_BUNDLE_MAIN, bundle);
-  //      startActivity(intent);
-
-  //  }
-
-
-
 
     /**
      * Reset Session the Audio and the Video
@@ -644,9 +629,6 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
                 .setStyle(new NotificationCompat.MediaStyle()
                         .setMediaSession(mMediaSession.getSessionToken())
                         .setShowActionsInCompactView(0,1));
-
-//        mNotificationManager = (NotificationManager)  this.getActivity().getSystemService(NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(0, builder.build());
 
 
     }
@@ -962,7 +944,7 @@ public class ContentFragment extends Fragment implements ContentContract.View, E
     /**
      * Broadcast Receiver registered to receive the MEDIA_BUTTON intent coming from clients.
      */
-    public class MediaReceiver extends BroadcastReceiver {
+    public static class MediaReceiver extends BroadcastReceiver {
 
         public MediaReceiver() {
         }

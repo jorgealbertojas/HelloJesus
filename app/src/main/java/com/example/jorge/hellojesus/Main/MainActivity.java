@@ -1,6 +1,7 @@
 package com.example.jorge.hellojesus.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -44,12 +46,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         Crashlytics.setUserIdentifier(sharedPref.getString(getString(R.string.preference_key_email),null));
 
-        //myClass myClass = new myClass();
-
-        //int[] gg;
-        //gg = new int[] {1,3,6,4,1,2,3};
-
-        //myClass.main();
 
         // Set up the toolbar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,25 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 new Intent(MainActivity.this, AdActivity.class);
         startActivity(intent);
 
-/*        TopicsFragment tasksFragment =
-                (TopicsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (tasksFragment == null) {
-            // Create the fragment
-            tasksFragment = TopicsFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), tasksFragment, R.id.contentFrame);
-        }
 
-        // Create the presenter
-        mTasksPresenter = new TasksPresenter(
-                Injection.provideTasksRepository(getApplicationContext()), tasksFragment);
-
-        // Load previously saved state, if available.
-        if (savedInstanceState != null) {
-            TasksFilterType currentFiltering =
-                    (TasksFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
-            mTasksPresenter.setFiltering(currentFiltering);
-        }*/
     }
 
     @Override
@@ -153,6 +131,20 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name))
+                .setMessage(getString(R.string.mensagem01))
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        MainActivity.super.onBackPressed();
+                        finish();
+                    }
+                }).create().show();
     }
 
 }

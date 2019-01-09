@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,8 +27,6 @@ import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.ad.AdServiceImpl;
 import com.example.jorge.hellojesus.data.onLine.ad.model.Ad;
-
-import com.example.jorge.hellojesus.main.MainContract;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
@@ -140,16 +137,6 @@ public class AdFragment extends Fragment implements AdContract.View {
             }
         });
 
-        //  fabWord = (FloatingActionButton) getActivity().findViewById(R.id.fab_word);
-        //   fabWord.setOnClickListener(new View.OnClickListener() {
-        //       @Override
-        //       public void onClick(View v) {
-        //            Intent intent = new Intent(getActivity(), CycleActivity.class);
-        //            getActivity().startActivity(intent);
-        //            getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-        //             fabMenu.close(false);
-        //         }
-        //     });
 
         fabNoCheck = (FloatingActionButton) getActivity().findViewById(R.id.fab_no_check);
         fabNoCheck.setOnClickListener(new View.OnClickListener() {

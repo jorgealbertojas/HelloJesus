@@ -1,24 +1,20 @@
 package com.example.jorge.hellojesus.helloWord;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.local.helloWord.HelloWord;
 import com.example.jorge.hellojesus.util.Common;
-import com.example.jorge.hellojesus.word.WordFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_BUNDLE_HELLO_WORD;
 import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_HELLO_WORD;
 import static com.example.jorge.hellojesus.menu_cycle.CycleActivity.EXTRA_HELLO_WORD_TIP;
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_BUNDLE_WORD;
-import static com.example.jorge.hellojesus.word.WordFragment.EXTRA_WORD;
 
 public class HelloWordActivity extends AppCompatActivity {
 

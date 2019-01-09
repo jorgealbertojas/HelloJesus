@@ -8,22 +8,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jorge.hellojesus.Injection;
 import com.example.jorge.hellojesus.R;
 import com.example.jorge.hellojesus.data.onLine.topic.model.Content;
 import com.example.jorge.hellojesus.util.Common;
-import com.example.jorge.hellojesus.write.WritePresenter;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_ARRAY_LIST_STRING;
-import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_BUNDLE;
 import static com.example.jorge.hellojesus.speech.SpeechFragment.EXTRA_LIST_CONTENT;
 import static com.example.jorge.hellojesus.write.WriteFragment.EXTRA_SOURCE_NAME;
 import static com.example.jorge.hellojesus.write.WriteFragment.EXTRA_TYPE;
