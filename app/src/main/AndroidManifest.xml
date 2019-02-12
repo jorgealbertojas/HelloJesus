@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jorge.hellojesus">
+    package="com.softjads.jorge.hellojesus">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,17 +16,17 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <meta-data
         android:name="firebase_crashlytics_collection_enabled"
-        android:value="false" />
+        android:value="true" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_main_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_main_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".splash.SplashActivity"
+            android:name="com.softjads.jorge.hellojesus.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,63 +35,63 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".topic.TopicActivity"
+            android:name="com.softjads.jorge.hellojesus.topic.TopicActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".content.ContentActivity"
+            android:name="com.softjads.jorge.hellojesus.content.ContentActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".speech.SpeechActivity"
+            android:name="com.softjads.jorge.hellojesus.speech.SpeechActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".speech.support.SpeechService"
+            android:name="com.softjads.jorge.hellojesus.speech.support.SpeechService"
             android:screenOrientation="portrait" />
         <service
-            android:name=".util.download.DownloadService"
+            android:name="com.softjads.jorge.hellojesus.util.download.DownloadService"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".content.ContentFragment$MediaReceiver">
+        <receiver android:name="com.softjads.jorge.hellojesus.content.ContentFragment$MediaReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".progress.ProgressActivity"
+            android:name="com.softjads.jorge.hellojesus.progress.ProgressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".word.WordActivity"
+            android:name="com.softjads.jorge.hellojesus.word.WordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".write.WriteActivity"
+            android:name="com.softjads.jorge.hellojesus.write.WriteActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".helpApp.HelpAppActivity"
+            android:name="com.softjads.jorge.hellojesus.helpApp.HelpAppActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".menuActivity.MenuWordActivity"
+            android:name="com.softjads.jorge.hellojesus.menuActivity.MenuWordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".menu_cycle.CycleActivity"
+            android:name="com.softjads.jorge.hellojesus.menu_cycle.CycleActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".helloWord.HelloWordActivity"
+            android:name="com.softjads.jorge.hellojesus.helloWord.HelloWordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".tipWord.TipWordActivity"
+            android:name="com.softjads.jorge.hellojesus.tipWord.TipWordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".main.MainActivity"
+            android:name="com.softjads.jorge.hellojesus.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name="com.softjads.jorge.hellojesus.login.LoginActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".widgets.MyWidgetProvider">
+        <receiver android:name="com.softjads.jorge.hellojesus.widgets.MyWidgetProvider">
             android:permission="android.permission.BIND_REMOTEVIEWS" />
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -102,9 +102,9 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name=".widgets.WidgetActivity" />
-        <activity android:name=".util.about.AboutActivity" />
-        <activity android:name=".ad.AdActivity"
+        <activity android:name="com.softjads.jorge.hellojesus.widgets.WidgetActivity" />
+        <activity android:name="com.softjads.jorge.hellojesus.util.about.AboutActivity" />
+        <activity android:name="com.softjads.jorge.hellojesus.ad.AdActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

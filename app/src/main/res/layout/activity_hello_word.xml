@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jorge.hellojesus.content.ContentActivity">
+    tools:context="com.softjads.jorge.hellojesus.content.ContentActivity">
     <FrameLayout
         android:id="@+id/helloWordFrame"
         android:layout_width="match_parent"

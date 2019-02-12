@@ -27,6 +27,14 @@
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/Toolbar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            <Spinner
+                android:id="@+id/bible_spinner"
+                style="@style/SpinnerTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:overlapAnchor="false" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.design.widget.CoordinatorLayout
